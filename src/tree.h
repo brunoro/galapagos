@@ -7,7 +7,6 @@
 class Tree:
     public:
         Tree(QString line, QObject *parent);
-        ~Tree();
 
     private:
         int id;
