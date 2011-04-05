@@ -1,3 +1,6 @@
+#ifndef DEF_H 
+#define DEF_H
+
 #include <QHash>
 #include <QRegExp>
 #include <QStringList>
@@ -8,3 +11,5 @@ class Def:
         
         QHash<QString, int> ops;
         QStringList vars;
+
+#endif

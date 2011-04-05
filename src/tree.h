@@ -1,18 +1,26 @@
+#ifndef TREE_H
+#define TREE_H
+
 #include "node.h"
 
+#include <QList>
+#include <QPointF>
 #include <QString>
 #include <QVector>
-#include <QPointF>
 
 class Tree:
     public:
-        Tree(QString line, QObject *parent);
+        Tree(QString line, QVector<Tree*> parents, QObject *parent);
+
+        void draw(QPointF coord, int radius);
+        void addParent(Tree *parent);
+        void addOffspring(Tree *offspring);
 
     private:
         int id;
         Node *root;
         QVector<Node*> index;
-        QVector<Tree*> parents;
-        QVector<Tree*> offspring;
+        QList<Tree*> parents;
+        QList<Tree*> offspring;
 
-        void draw(QPointF coord, int radius);
+#endif
