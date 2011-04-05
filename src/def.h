@@ -8,10 +8,19 @@
 class Def
 {
     public:
-        Def(QString ops, QString vars);
+        Def(QString ops, QString vars, QString terms);
+
+        int isOp(QString str);
+        bool isVar(QString str);
+        bool isTerm(QString str);
         
+    private:
         QHash<QString, int> ops;
         QStringList vars;
+        QStringList terms;
 };
+
+/* global problem definition */
+//Def *definition;
 
 #endif

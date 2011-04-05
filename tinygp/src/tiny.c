@@ -115,12 +115,11 @@ char *logprint_indiv( char *buffer )
 {
   if ( *buffer < FSET_START )
     {
-      fprintf(runlog,  " x^%d", *buffer );
+      fprintf(runlog,  " x^%d ", *buffer );
       return( ++buffer );
     }
-  fprintf(runlog, " (%c",prim_print[*buffer - FSET_START]);
+  fprintf(runlog, " %c ",prim_print[*buffer - FSET_START]);
   buffer = logprint_indiv( logprint_indiv( ++buffer ) );
-  fprintf(runlog, ")");
   return( buffer );
 }
 

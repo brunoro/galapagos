@@ -1,10 +1,9 @@
 #include "node.h"
 
-Node::Node(NodeType nodetype, QString nodeinfo, QObject *parent)
+Node::Node(NodeType nodetype, QString nodeinfo)
 {
     type = nodetype;
     info = nodeinfo;
-    parentWidget = parent;
 }
 
 void Node::addSon(Node *son)

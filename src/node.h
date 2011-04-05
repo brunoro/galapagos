@@ -1,7 +1,6 @@
 #ifndef NODE_H 
 #define NODE_H
 
-#include <iostream>
 #include <QList>
 #include <QObject>
 #include <QPointF>
@@ -12,7 +11,7 @@ enum NodeType {OP, TERM, VAR};
 class Node
 {
     public:
-        Node(NodeType type, QString info, QObject *parent);
+        Node(NodeType type, QString info);
 
         void addSon(Node *son);
         void draw(QPointF coord);
@@ -21,7 +20,6 @@ class Node
         NodeType type;
         QString info;
         QList<Node*> sons;
-        QObject *parentWidget;
 };
 
 #endif
