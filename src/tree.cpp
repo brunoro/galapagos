@@ -1,8 +1,8 @@
 #include "tree.h"
 
-Tree::Tree(QString line, QObject *parent)
+Tree::Tree(QString line, int tree_id, QObject *parent)
 {
-    id = parent->getTreeId(); // TODO: implement function on GPVis 
+    id = tree_id;
 }
 
 void draw(QPointF coord, int radius)

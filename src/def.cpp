@@ -9,7 +9,7 @@ Def::Def(QString opstr, QString varstr)
 
     foreach(opiter, oplist)
     {
-        opturn = opiter.remove(QRegExp("(|)").split(","));
+        opturn = opiter.remove(QRegExp("(|)")).split(",");
         ops[opturn[0]] = opturn[1].toInt();
     }
 
@@ -17,7 +17,7 @@ Def::Def(QString opstr, QString varstr)
     QStringList varlist = varstr.split(" ");
     QString variter;
 
-    foreach(variter, varturn)
+    foreach(variter, varlist)
     {
         vars << variter;
     }

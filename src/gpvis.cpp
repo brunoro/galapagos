@@ -36,3 +36,13 @@ GPVis::GPVis(QWidget *parent)
     
     setLayout(grid);
 }
+
+int GPVis::newTreeId()
+{
+    return trees.count();
+}
+
+void GPVis::addTree(Tree *tree)
+{
+    trees.append(tree);
+}

@@ -5,11 +5,13 @@
 #include <QRegExp>
 #include <QStringList>
 
-class Def:
+class Def
+{
     public:
         Def(QString ops, QString vars);
         
         QHash<QString, int> ops;
         QStringList vars;
+};
 
 #endif

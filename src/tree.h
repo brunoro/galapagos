@@ -8,9 +8,10 @@
 #include <QString>
 #include <QVector>
 
-class Tree:
+class Tree
+{
     public:
-        Tree(QString line, QVector<Tree*> parents, QObject *parent);
+        Tree(QString line, int tree_id, QObject *parent);
 
         void draw(QPointF coord, int radius);
         void addParent(Tree *parent);
@@ -22,5 +23,6 @@ class Tree:
         QVector<Node*> index;
         QList<Tree*> parents;
         QList<Tree*> offspring;
+};
 
 #endif
