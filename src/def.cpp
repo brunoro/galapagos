@@ -5,7 +5,7 @@ Def::Def(QString opstr, QString varstr, QString termstr)
     /* iterates on operations on the form "(name, degree) (name2, degree2)" */
     QStringList oplist = opstr.split(QRegExp("\\s+")),
                 opturn; 
-    QString opiter;
+    const QString &opiter;
 
     foreach(opiter, oplist)
     {
@@ -15,7 +15,7 @@ Def::Def(QString opstr, QString varstr, QString termstr)
 
     /* iterates on variables on the form "var1 var2 var3" */
     QStringList varlist = varstr.split(QRegExp("\\s+"));
-    QString variter;
+    const QString &variter;
 
     foreach(variter, varlist)
     {
@@ -24,7 +24,7 @@ Def::Def(QString opstr, QString varstr, QString termstr)
 
     /* iterates on terminals on the form "term1 term2 term3" */
     QStringList termlist = termstr.split(QRegExp("\\s+"));
-    QString termitem;
+    const QString &termitem;
 
     foreach(termitem, termlist)
     {
