@@ -23,15 +23,16 @@ void Tree::addOffspring(Tree *offspring)
 
 Node *Tree::parseTree(QStringList nodes, int pos)
 {
+    extern Def *definition;
     Node *turn = NULL;
 
-    if (definition.isOp(nodes[pos]))
+    if (definition->isOp(nodes[pos]))
     {
         turn = new Node(OP, nodes[pos]);
         turn->addSon(parseTree(nodes, ++pos));
         turn->addSon(parseTree(nodes, ++pos));
     }
-    else if (definition.isVar(nodes[pos]))
+    else if (definition->isVar(nodes[pos]))
     {
         turn = new Node(VAR, nodes[pos]);
     }

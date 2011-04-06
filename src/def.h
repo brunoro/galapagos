@@ -20,7 +20,4 @@ class Def
         QStringList terms;
 };
 
-/* global problem definition */
-//Def *definition;
-
 #endif

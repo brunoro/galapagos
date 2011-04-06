@@ -20,21 +20,21 @@ void center(QWidget *widget, int w, int h)
 GPVis::GPVis(QWidget *parent)
     : QWidget(parent)
 {
-    int WIDTH = 800;
-    int HEIGHT = 600;
+    int WIDTH = 805;
+    int HEIGHT = 605;
     int SCENE_WIDTH = 800;
-    int SCENE_HEIGTH = 1200;
+    int SCENE_HEIGTH = 600;
 
     resize(WIDTH, HEIGHT);
     center(this, WIDTH, HEIGHT);
 
-    grid = new QGridLayout(this);
+    //grid = new QGridLayout(this);
 
     scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGTH, this);
     preview = new QGraphicsView(this);
     preview->setScene(scene);
     
-    setLayout(grid);
+    //setLayout(grid);
 }
 
 int GPVis::newTreeId()
