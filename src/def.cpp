@@ -2,7 +2,7 @@
 
 Def::Def(QString opstr, QString varstr, QString termstr)
 {
-    /* iterates on operations on the form "(name, degree) (name2, degree2)" */
+    /* iterates on operations on the form "(name,degree) (name2,degree2)" */
     QStringList oplist = opstr.split(QRegExp("\\s+")),
                 opturn; 
 

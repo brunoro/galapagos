@@ -111,6 +111,24 @@ char *print_indiv( char *buffer )
   return( buffer );
 }
 
+void logprint_definition()
+{
+    fprintf(runlog, "definition:\n");
+
+    /* ops */
+    fprintf(runlog, "\tops: (+,2) (-,2) (*,2) (/,2)\n");
+
+    /* vars */
+    fprintf(runlog, "\tvars: ");
+    int i;
+    for(i = 0; i < varnumber; i++)
+        fprintf(runlog, "x^%d ", i);
+    fprintf(runlog, "\n");
+
+    /* terms */
+    fprintf(runlog, "\tterms:\n");
+}
+
 char *logprint_indiv( char *buffer )
 {
   if ( *buffer < FSET_START )
@@ -237,6 +255,7 @@ int main(int argc, char **argv)
     printf("SEED=%ld\nMAXLEN=%d\nPSIZE=%d\nDEPTH=%d\nXOPROB=%g\nPMUT=%g\nGENS=%d\nTSIZE=%d",
     seed, MAX_LEN, POPSIZE, DEPTH, CROSSOVER_PROB, PMUT_PER_NODE, GENERATIONS, TSIZE );
     
+    logprint_definition();
     fprintf(runlog, "generation 0:\n");
     stats( fitness, pop, 0 );
     fprintf(runlog, "\n");
@@ -287,4 +306,6 @@ int main(int argc, char **argv)
     }
     printf("\n");
     fclose(runlog);
+
+    return 0;
 }
