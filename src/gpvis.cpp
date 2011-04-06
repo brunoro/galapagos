@@ -54,7 +54,63 @@ void GPVis::addTree(Tree *tree)
     trees.append(tree);
 }
 
-void readLogFile()
+void GPVis::readLogFile()
 {
+    fileFile = new QFile(fileField->text());
+    
+    /* check if file exists and can be read */
+    if(!fileFile->open(QIODevice::WriteOnly) | !fileFile->exists())
+    {
+        //TODO: implement exception if file doesnt exist
+        return;
+    }
+
+    QTextStream in(fileFile);
+    QString ops, vars, terms;
+    
+    fileBuffer = in.readLine();
+
+    if(fileBuffer.contains(QRegExp("definition:*.")))
+    {
+        while(!in.atEnd())
+        {
+            fileBuffer = in.readLine();
+
+            /* ops */
+            if(fileBuffer.contains(QRegExp("\tops:*.")))
+            {
+                ops = fileBuffer.remove(QRegExp("\tops:\\s"));
+                continue;
+            }
+
+            /* vars */
+            if(fileBuffer.contains(QRegExp("\tvars:*.")))
+            {
+                vars = fileBuffer.remove(QRegExp("\tvars:\\s"));
+                continue;
+            }
+            
+            /* terms */
+            if(fileBuffer.contains(QRegExp("\tterms:*.")))
+            {
+                terms = fileBuffer.remove(QRegExp("\tterms:\\s"));
+                continue;
+            }
+
+            /* end of definition */
+            if(fileBuffer.contains(QRegExp("generation*.")))
+            {
+                break;
+            }
+        }
+    }
+    else
+    {
+        // TODO: definition reading exception
+        return;
+    }
+
     extern Def *definition;
+    definition = new Def(ops, vars, terms);
+    
 }

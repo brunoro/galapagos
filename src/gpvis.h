@@ -10,12 +10,16 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGridLayout>
+#include <QHash>
 #include <QLabel>
 #include <QLineEdit>
 #include <QList>
 #include <QPushButton>
+#include <QRegExp>
 #include <QSlider>
 #include <QSpinBox>
+#include <QStringList>
+#include <QTextStream>
 #include <QWidget>
 
 class GPVis : public QWidget
@@ -42,7 +46,11 @@ class GPVis : public QWidget
         QSpinBox *genspin;
         QGraphicsView *preview;
         QGraphicsScene *scene;
+        
+        QFile *fileFile;
+        QString fileBuffer;
 
+    private slots:
         void readLogFile();
 };
 
