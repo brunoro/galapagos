@@ -6,10 +6,12 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
+#include <QFileDialog>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGridLayout>
 #include <QLabel>
+#include <QLineEdit>
 #include <QList>
 #include <QPushButton>
 #include <QSlider>
@@ -26,14 +28,22 @@ class GPVis : public QWidget
         int newTreeId();
         void addTree(Tree *tree);
 
+
     private:
         QList<Tree*> trees;
 
         QGridLayout *grid;
+
+        QPushButton *fileOpen,
+                    *fileSelect;
+        QLineEdit *fileField;
+
         QSlider *genslider;
         QSpinBox *genspin;
         QGraphicsView *preview;
         QGraphicsScene *scene;
+
+        void readLogFile();
 };
 
 #endif

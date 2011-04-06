@@ -22,19 +22,26 @@ GPVis::GPVis(QWidget *parent)
 {
     int WIDTH = 805;
     int HEIGHT = 605;
-    int SCENE_WIDTH = 800;
-    int SCENE_HEIGTH = 600;
+    int SCENE_WIDTH = 400;
+    int SCENE_HEIGTH = 300;
 
     resize(WIDTH, HEIGHT);
     center(this, WIDTH, HEIGHT);
-
-    //grid = new QGridLayout(this);
 
     scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGTH, this);
     preview = new QGraphicsView(this);
     preview->setScene(scene);
     
-    //setLayout(grid);
+    fileField = new QLineEdit(this);
+    fileSelect = new QPushButton("Select file", this);
+    fileOpen = new QPushButton("Read file", this);
+
+    grid = new QGridLayout(this);
+    grid->addWidget(preview, 0, 0, -1, 1);
+    grid->addWidget(fileField, 0, 1, 0, 2);
+    grid->addWidget(fileSelect, 1, 1);
+    grid->addWidget(fileOpen, 1, 2);
+    setLayout(grid);
 }
 
 int GPVis::newTreeId()
@@ -45,4 +52,9 @@ int GPVis::newTreeId()
 void GPVis::addTree(Tree *tree)
 {
     trees.append(tree);
+}
+
+void readLogFile()
+{
+    extern Def *definition;
 }
