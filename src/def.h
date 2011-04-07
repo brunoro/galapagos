@@ -1,6 +1,7 @@
 #ifndef DEF_H 
 #define DEF_H
 
+#include <QDebug>
 #include <QHash>
 #include <QRegExp>
 #include <QStringList>

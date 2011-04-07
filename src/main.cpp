@@ -12,5 +12,7 @@ int main(int argc, char **argv)
     window.setWindowTitle("GPVis");
     window.show();
 
+    window.test();
+
     return app.exec();
 }

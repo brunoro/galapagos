@@ -42,6 +42,9 @@ GPVis::GPVis(QWidget *parent)
     grid->addWidget(fileSelect, 1, 1);
     grid->addWidget(fileOpen, 1, 2);
     setLayout(grid);
+
+    connect(fileSelect, SIGNAL(clicked()), this, SLOT(openFileDialog()));
+    connect(fileOpen, SIGNAL(clicked()), this, SLOT(readLogFile()));
 }
 
 int GPVis::newTreeId()
@@ -57,29 +60,33 @@ void GPVis::addTree(Tree *tree)
 void GPVis::readLogFile()
 {
     fileFile = new QFile(fileField->text());
+    qDebug() << "GPVis::readLogFile : using file" << fileField->text();
+    //qDebug() << fileField->text();
     
-    /* check if file exists and can be read */
-    if(!fileFile->open(QIODevice::WriteOnly) | !fileFile->exists())
+    /* check if file and can be read */
+    if(!fileFile->open(QIODevice::ReadOnly | QIODevice::Text))
     {
         //TODO: implement exception if file doesnt exist
         return;
     }
 
-    QTextStream in(fileFile);
+    QTextStream fileStream(fileFile);
     QString ops, vars, terms;
     
-    fileBuffer = in.readLine();
+    QString fileBuffer = fileStream.readLine();
 
     if(fileBuffer.contains(QRegExp("definition:*.")))
     {
-        while(!in.atEnd())
+        qDebug() << "GPVis::readLogFile : found definition"; 
+        while(!fileStream.atEnd())
         {
-            fileBuffer = in.readLine();
+            fileBuffer = fileStream.readLine();
 
             /* ops */
             if(fileBuffer.contains(QRegExp("\tops:*.")))
             {
                 ops = fileBuffer.remove(QRegExp("\tops:\\s"));
+                qDebug() << "GPVis::readLogFile : found ops " << ops;
                 continue;
             }
 
@@ -87,6 +94,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\tvars:*.")))
             {
                 vars = fileBuffer.remove(QRegExp("\tvars:\\s"));
+                qDebug() << "GPVis::readLogFile : found vars " << vars;
                 continue;
             }
             
@@ -94,6 +102,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\tterms:*.")))
             {
                 terms = fileBuffer.remove(QRegExp("\tterms:\\s"));
+                qDebug() << "GPVis::readLogFile : found terms " << terms;
                 continue;
             }
 
@@ -112,5 +121,18 @@ void GPVis::readLogFile()
 
     extern Def *definition;
     definition = new Def(ops, vars, terms);
-    
+}
+
+void GPVis::openFileDialog()
+{
+    fileField->setText(QFileDialog::getOpenFileName(this,
+                                                    tr("Open log"),
+                                                    QDir::currentPath(),
+                                                    tr("All files (*.*)")));
+}
+
+void GPVis::test()
+{
+    fileField->setText("tinygp/test/problem.log");
+    QTest::mouseClick(fileOpen, Qt::LeftButton);
 }

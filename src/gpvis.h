@@ -19,6 +19,7 @@
 #include <QSlider>
 #include <QSpinBox>
 #include <QStringList>
+#include <QTest>
 #include <QTextStream>
 #include <QWidget>
 
@@ -31,6 +32,7 @@ class GPVis : public QWidget
 
         int newTreeId();
         void addTree(Tree *tree);
+        void test();
 
 
     private:
@@ -48,9 +50,10 @@ class GPVis : public QWidget
         QGraphicsScene *scene;
         
         QFile *fileFile;
-        QString fileBuffer;
-
+        QTextStream fileStream;
+        
     private slots:
+        void openFileDialog();
         void readLogFile();
 };
 
