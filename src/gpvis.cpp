@@ -77,7 +77,7 @@ void GPVis::readLogFile()
 
     if(fileBuffer.contains(QRegExp("definition:*.")))
     {
-        qDebug() << "GPVis::readLogFile : found definition"; 
+        qDebug() << "GPVis::readLogFile found definition"; 
         while(!fileStream.atEnd())
         {
             fileBuffer = fileStream.readLine();
@@ -85,7 +85,7 @@ void GPVis::readLogFile()
             /* ops */
             if(fileBuffer.contains(QRegExp("\tops:*.")))
             {
-                ops = fileBuffer.remove(QRegExp("\tops:\\s"));
+                ops = fileBuffer.remove(QRegExp("\tops:\\s*"));
                 qDebug() << "GPVis::readLogFile : found ops " << ops;
                 continue;
             }
@@ -93,7 +93,7 @@ void GPVis::readLogFile()
             /* vars */
             if(fileBuffer.contains(QRegExp("\tvars:*.")))
             {
-                vars = fileBuffer.remove(QRegExp("\tvars:\\s"));
+                vars = fileBuffer.remove(QRegExp("\tvars:\\s*"));
                 qDebug() << "GPVis::readLogFile : found vars " << vars;
                 continue;
             }
@@ -101,7 +101,7 @@ void GPVis::readLogFile()
             /* terms */
             if(fileBuffer.contains(QRegExp("\tterms:*.")))
             {
-                terms = fileBuffer.remove(QRegExp("\tterms:\\s"));
+                terms = fileBuffer.remove(QRegExp("\tterms:\\s*"));
                 qDebug() << "GPVis::readLogFile : found terms " << terms;
                 continue;
             }

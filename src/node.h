@@ -16,11 +16,10 @@ class Node
         void addSon(Node *son);
         void draw(QPointF coord);
 
-    private:
         NodeType type;
         QString info;
         QList<Node*> sons;
-        
+
         /* TODO: make gets/sets */
 };
 

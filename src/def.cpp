@@ -10,7 +10,7 @@ Def::Def(QString opstr, QString varstr, QString termstr)
     {
         if(opiter == "") break;
         opturn = opiter.remove(QRegExp("\\(|\\)")).split(",");
-        qDebug() << "Def::Def : adding op " << opturn;
+        qDebug() << "Def::Def adding op " << opturn;
         ops[opturn[0]] = opturn[1].toInt();
     }
 
@@ -20,7 +20,7 @@ Def::Def(QString opstr, QString varstr, QString termstr)
     foreach(const QString &variter, varlist)
     {
         if(variter == "") break;
-        qDebug() << "Def::Def : adding var " << variter;
+        qDebug() << "Def::Def adding var " << variter;
         vars << variter;
     }
 
@@ -30,7 +30,7 @@ Def::Def(QString opstr, QString varstr, QString termstr)
     foreach(const QString &termiter, termlist)
     {
         if(termiter == "") break;
-        qDebug() << "Def::Def : adding term " << termiter;
+        qDebug() << "Def::Def adding term " << termiter;
         terms << termiter;
     }
 }
@@ -38,16 +38,18 @@ Def::Def(QString opstr, QString varstr, QString termstr)
 /* returns the degree of an operation if it exists, otherwise returns 0 */
 int Def::isOp(QString str)
 {
-    qDebug() << "Def::isOp : str " << str << " ops[str] " << ops[str];
+    qDebug() << "Def::isOp " << str << " " << ops[str];
     return ops[str];
 }
 
 bool Def::isVar(QString str)
 {
-    return (vars.indexOf(str) > 0) ? true : false;
+    qDebug() << "Def::isVar " << str << " " << vars.indexOf(str);
+    return (vars.indexOf(str) >= 0) ? true : false;
 }
 
 bool Def::isTerm(QString str)
 {
-    return (terms.indexOf(str) > 0) ? true : false;
+    qDebug() << "Def::isTerm " << str << " " << terms.indexOf(str);
+    return (terms.indexOf(str) >= 0) ? true : false;
 }
