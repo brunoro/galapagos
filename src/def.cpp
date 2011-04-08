@@ -38,6 +38,7 @@ Def::Def(QString opstr, QString varstr, QString termstr)
 /* returns the degree of an operation if it exists, otherwise returns 0 */
 int Def::isOp(QString str)
 {
+    qDebug() << "Def::isOp : str " << str << " ops[str] " << ops[str];
     return ops[str];
 }
 

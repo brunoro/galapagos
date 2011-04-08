@@ -9,7 +9,7 @@
 #define MAX_INPUTS 10
 #define MAX_EXAMPLES 1000
 #define MAX_LEN 10000
-#define POPSIZE 10000
+#define POPSIZE 1000
 #define DEPTH   4
 #define PMUT_PER_NODE    0.02f
 #define CROSSOVER_PROB   0.9f
@@ -173,9 +173,7 @@ void stats( float *fitness, char **pop, int gen )
          gen, -favgpop,  -fitness[best],nodes_evaluated,avg_len);
   print_indiv( pop[best] );
     
-  fprintf(runlog, "\tbest: %d\n", best);
-  fprintf(runlog, "\t\t%f\t", fitness[best]);
-  logprint_indiv(pop[best]);
+  fprintf(runlog, "\tbest: %d\n", best, -fitness[best]);
 }
 
 int tournament( float *fitness, int tsize, char type )
@@ -257,8 +255,14 @@ int main(int argc, char **argv)
     
     logprint_definition();
     fprintf(runlog, "generation 0:\n");
+
+    for ( indivs = 0; indivs < POPSIZE; indivs ++ )
+    {
+        fprintf(runlog, "\tind: %d\t%f\t", indivs, -fitness[indivs]);
+        logprint_indiv(pop[indivs]);
+        fprintf(runlog, "\n");
+    }
     stats( fitness, pop, 0 );
-    fprintf(runlog, "\n");
 
     for ( gen = 1; gen < GENERATIONS; gen ++ )
     {
@@ -270,6 +274,14 @@ int main(int argc, char **argv)
           exit( 0 );
         }
         */
+
+        for ( indivs = 0; indivs < POPSIZE; indivs ++ )
+        {
+            fprintf(runlog, "\tind: %d\t%f\t", indivs, -fitness[indivs]);
+            logprint_indiv(pop[indivs]);
+            fprintf(runlog, "\n");
+        }
+
         for ( indivs = 0; indivs < POPSIZE; indivs ++ )
         {
             parent1 = tournament( fitness, TSIZE,1 );
@@ -280,26 +292,17 @@ int main(int argc, char **argv)
             if(drand48() > CROSSOVER_PROB)
             {
                 fprintf(runlog, "\tcrossover: %d %d -> %d\n", parent1, parent2, offspring );
-                fprintf(runlog, "\t\t%d\t%f\t", parent1, fitness[parent1]);
-                logprint_indiv(pop[parent1]);
-                fprintf(runlog, "\n\t\t%d\t%f\t", parent2, fitness[parent2]);
-                logprint_indiv(pop[parent2]);
-
                 pop[offspring] =  crossover( pop[parent1], pop[parent2] );
             }
             else
             {
                 fprintf(runlog, "\tmutation: %d -> %d\n", parent1, offspring );
-                fprintf(runlog, "\t\t%d\t%f\t", parent1, fitness[parent1]);
-                logprint_indiv(pop[parent1]);
-
                 pop[offspring] = mutation( pop[parent1], PMUT_PER_NODE );
             }
             fitness[offspring] = fitness_function( pop[offspring] );
 
-            fprintf(runlog, "\n\t\t%d\t%f\t", offspring, fitness[offspring]);
+            fprintf(runlog, "\t\t%d\t%f\t", offspring, -fitness[offspring]);
             logprint_indiv(pop[offspring]);
-        
             fprintf(runlog, "\n");
         }
         stats( fitness, pop, gen );

@@ -135,4 +135,11 @@ void GPVis::test()
 {
     fileField->setText("tinygp/test/problem.log");
     QTest::mouseClick(fileOpen, Qt::LeftButton);
+
+    Tree::test();
+    /*
+    QString line = QString("-  x^2  /  -  x^0  *  x^0  x^1  /  x^2  x^2");
+    Tree *test_tree = new Tree(line, -1, float(0.22222));
+    qDebug() << "Tree::test : " << test_tree->index;
+    */
 }

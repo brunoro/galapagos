@@ -20,6 +20,8 @@ class Node
         NodeType type;
         QString info;
         QList<Node*> sons;
+        
+        /* TODO: make gets/sets */
 };
 
 #endif
