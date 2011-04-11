@@ -60,7 +60,7 @@ void GPVis::addTree(Tree *tree)
 void GPVis::readLogFile()
 {
     fileFile = new QFile(fileField->text());
-    qDebug() << "GPVis::readLogFile : using file" << fileField->text();
+    qDebug() << "GPVis::readLogFile using file" << fileField->text();
     //qDebug() << fileField->text();
     
     /* check if file and can be read */
@@ -86,7 +86,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\tops:*.")))
             {
                 ops = fileBuffer.remove(QRegExp("\tops:\\s*"));
-                qDebug() << "GPVis::readLogFile : found ops " << ops;
+                qDebug() << "GPVis::readLogFile found ops " << ops;
                 continue;
             }
 
@@ -94,7 +94,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\tvars:*.")))
             {
                 vars = fileBuffer.remove(QRegExp("\tvars:\\s*"));
-                qDebug() << "GPVis::readLogFile : found vars " << vars;
+                qDebug() << "GPVis::readLogFile found vars" << vars;
                 continue;
             }
             
@@ -102,7 +102,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\tterms:*.")))
             {
                 terms = fileBuffer.remove(QRegExp("\tterms:\\s*"));
-                qDebug() << "GPVis::readLogFile : found terms " << terms;
+                qDebug() << "GPVis::readLogFile found terms" << terms;
                 continue;
             }
 
@@ -136,7 +136,7 @@ void GPVis::test()
     fileField->setText("tinygp/test/problem.log");
     QTest::mouseClick(fileOpen, Qt::LeftButton);
 
-    Tree::test();
+    Tree::test(scene);
     /*
     QString line = QString("-  x^2  /  -  x^0  *  x^0  x^1  /  x^2  x^2");
     Tree *test_tree = new Tree(line, -1, float(0.22222));
