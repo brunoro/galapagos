@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QGraphicsLineItem>
 #include <QList>
+#include <QPen>
 #include <QPointF>
 #include <QString>
 #include <QStringList>
@@ -44,9 +45,10 @@ class Tree
         QList<Tree*> parents;
         QList<Tree*> offspring;
         
-        void recursiveDraw(QGraphicsScene *canvas, Node *node, 
-                           QPointF coord, int step, 
-                           float areaAngle, float refAngle);
+        int recursiveDraw(QGraphicsScene *canvas, Node *node, 
+                          QPointF origin, QPointF coord,
+                          int step, int level,
+                          float areaAngle, float refAngle);
         Node *parseTree(QStringList nodes, int pos);
 };
 
