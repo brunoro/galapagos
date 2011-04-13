@@ -37,9 +37,8 @@ void Tree::recursiveDraw(QGraphicsScene *canvas, Node *node,
         sonAngle += hstep;
         
         /* connect son */
-        QGraphicsLineItem *line = new QGraphicsLineItem(QLineF(coord, sonCoord)); 
-        line->setZValue(0);
-        canvas->addItem(line);
+        Edge *edge = new Edge(node, sons[i]);
+        edge->draw(canvas);
     }
 }
 

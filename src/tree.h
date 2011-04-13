@@ -3,6 +3,7 @@
 
 #include "def.h"
 #include "node.h"
+#include "edge.h"
 
 #include <cmath>
 
@@ -38,6 +39,7 @@ class Tree
         float fitness;
         Node *root;
         QList<Node*> index;
+        QList<Edge*> edges;
         QList<Tree*> parents;
         QList<Tree*> offspring;
         

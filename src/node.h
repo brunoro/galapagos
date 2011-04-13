@@ -22,16 +22,17 @@ class Node
 
         void addSon(Node *son);
         void draw(QGraphicsScene *canvas, QPointF coord);
+        void update(QPointF coord);
 
         QList<Node*> getSons();
         NodeType getType();
         QString getInfo();
+        QPointF getCoord();
 
     private:
         NodeType type;
         QString info;
         QList<Node*> sons;
-        
         QGraphicsItem *text;
         QGraphicsItem *bound;
         QGraphicsItemGroup *nodeView;
