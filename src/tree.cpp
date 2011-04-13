@@ -12,7 +12,19 @@ Tree::Tree(QString line, int tree_id, float tree_fitness)
 void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
 {
     recursiveDraw(canvas, root, coord, step, 2*pi, pi/2);
-    return;
+
+    /* draw rings */
+    /* TODO: maximum depth */
+    for(int i = 0; i < 5; i++)
+    {
+        int radius = i*step;
+        QGraphicsEllipseItem *ellipse = new QGraphicsEllipseItem(coord.x() - radius,
+                                                                 coord.y() - radius,
+                                                                 radius * 2,
+                                                                 radius * 2);
+        ellipse->setZValue(0);
+        canvas->addItem(ellipse);
+    }
 }
 
 /* draw all sons from a node */

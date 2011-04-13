@@ -31,7 +31,8 @@ class Tree
         QList<Node*> getIndex();
         QList<Tree*> getParents();
         QList<Tree*> getOffspring();
-        
+
+        static void drawMany(QGraphicsScene *canvas, QList<Tree*> trees);
         static void test(QGraphicsScene *canvas);
 
     private:
