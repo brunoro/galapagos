@@ -3,6 +3,7 @@
 
 #include <QBrush>
 #include <QDebug>
+#include <QGraphicsEllipseItem>
 #include <QGraphicsItem>
 #include <QGraphicsItemGroup>
 #include <QGraphicsScene>
@@ -33,7 +34,7 @@ class Node
         
         QGraphicsItem *text;
         QGraphicsItem *bound;
-        QGraphicsItemGroup nodeView;
+        QGraphicsItemGroup *nodeView;
 };
 
 #endif

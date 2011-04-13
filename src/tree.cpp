@@ -11,8 +11,7 @@ Tree::Tree(QString line, int tree_id, float tree_fitness)
 /* TODO: add pens, brushes and constants */
 void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
 {
-    /* draw rings */
-    recursiveDraw(canvas, root, coord, step, 180, 360);
+    recursiveDraw(canvas, root, coord, step, 2*pi, pi/2);
     return;
 }
 
@@ -23,20 +22,24 @@ void Tree::recursiveDraw(QGraphicsScene *canvas, Node *node,
 {
     /* draw node */
     node->draw(canvas, coord);
+    qDebug() << "Tree::recursiveDraw" << coord << " " <<  areaAngle << " " <<  refAngle;
 
     QList<Node*> sons = node->getSons();
     float hstep = areaAngle / sons.length();
+    float sonAngle = refAngle - areaAngle/2 + hstep/2;
     for(int i = 0; i < sons.length(); i++ )
     {
-        int pointIter = i - (sons.length() + 2) / 2 + 1; 
         /* get son position */
-        QPointF sonCoord(coord.x() + step * cos(refAngle + pointIter * hstep),
-                         coord.y() + step * sin(refAngle + pointIter * hstep));
+        QPointF sonCoord(coord.x() + step * cosf(sonAngle),
+                         coord.y() + step * sinf(sonAngle));
         /* draw son */
-        recursiveDraw(canvas, sons[i], sonCoord, step, hstep, refAngle + pointIter * areaAngle);
-        qDebug() << "Tree::recursiveDraw" << i << pointIter << areaAngle << refAngle;
+        recursiveDraw(canvas, sons[i], sonCoord, step, hstep, sonAngle);
+        sonAngle += hstep;
+        
         /* connect son */
-        canvas->addLine(QLineF(coord, sonCoord)); 
+        QGraphicsLineItem *line = new QGraphicsLineItem(QLineF(coord, sonCoord)); 
+        line->setZValue(0);
+        canvas->addItem(line);
     }
 }
 
@@ -115,5 +118,5 @@ void Tree::test(QGraphicsScene *canvas)
     QPointF center = canvas->sceneRect().center();
     qDebug() << "Tree::test center" << center;
 
-    test_tree->draw(canvas, center, 40);
+    test_tree->draw(canvas, center, 60);
 }

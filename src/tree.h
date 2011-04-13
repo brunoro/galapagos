@@ -7,11 +7,14 @@
 #include <cmath>
 
 #include <QDebug>
+#include <QGraphicsLineItem>
 #include <QList>
 #include <QPointF>
 #include <QString>
 #include <QStringList>
 #include <QVector>
+
+const float pi = 3.14159265;
 
 class Tree
 {

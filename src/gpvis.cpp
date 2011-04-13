@@ -29,9 +29,8 @@ GPVis::GPVis(QWidget *parent)
     center(this, WIDTH, HEIGHT);
 
     scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGTH, this);
-    preview = new QGraphicsView(this);
-    preview->setScene(scene);
-    
+    preview = new QGraphicsView(scene);
+
     fileField = new QLineEdit(this);
     fileSelect = new QPushButton("Select file", this);
     fileOpen = new QPushButton("Read file", this);
