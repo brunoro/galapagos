@@ -11,6 +11,102 @@ void Node::addSon(Node *son)
     sons.append(son);
 }
 
+/* draw all sons from a node */
+int Node::recursiveDraw(QGraphicsScene *canvas,
+                        QPointF origin, QPointF coord,
+                        int step, int level,
+                        float areaAngle, float refAngle)
+{
+    /* draw node */
+    draw(canvas, coord);
+    qDebug() << "Tree::recursiveDraw" << coord << " " <<  areaAngle << " " <<  refAngle;
+
+    int maxLevel = 0,
+        sonLevel;
+
+    float hstep = areaAngle / sons.length();
+    float sonAngle = refAngle - areaAngle/2 + hstep/2;
+    for(int i = 0; i < sons.length(); i++)
+    {
+        /* get son position */
+        QPointF sonCoord(origin.x() + level * step * cosf(sonAngle),
+                         origin.y() + level * step * sinf(sonAngle));
+        /* draw son */
+        sonLevel = sons[i]->recursiveDraw(canvas, origin, sonCoord, 
+                                          step, level + 1, hstep, sonAngle);
+        sonAngle += hstep;
+        
+        /* connect son */
+        Edge *edge = new Edge(this, sons[i]);
+        edges.append(edge);
+        edge->draw(canvas);
+
+        /* get max depth */
+        if(sonLevel > maxLevel)
+            maxLevel = sonLevel;
+    }
+    return maxLevel + 1;
+}
+
+/* TODO: do it */
+/* TODO: make it for n trees */
+int Node::recursiveDraw(QGraphicsScene *canvas, QList<Node*> nodes,
+                        QPointF origin, QPointF coord,
+                        int step, int level,
+                        float areaAngle, float refAngle)
+{
+    int maxLevel = 0,
+        sonLevel;
+    
+    /* TODO: join sons and make equals and differents to call recursion */
+    /* equal node, draw common */
+    if((*nodes[0]) == (*nodes[1]))
+    {
+        qDebug() << "Node::recursiveDrawMany equal" << nodes[0]->getInfo() << nodes[1]->getInfo();
+        for(int i = 0; i < nodes.length(); i++)
+        {
+            nodes[i]->draw(canvas, coord);
+
+            float hstep = areaAngle / sons.length();
+            float sonAngle = refAngle - areaAngle/2 + hstep/2;
+            for(int i = 0; i < nodes[i]->getSons().length(); i++)
+            {
+                /* get son position */
+                QPointF sonCoord(origin.x() + level * step * cosf(sonAngle),
+                                 origin.y() + level * step * sinf(sonAngle));
+                /* draw sons */
+                sonLevel = sons[i]->recursiveDrawMany(canvas, origin, sonCoord, 
+                                                      step, level + 1, hstep, sonAngle);
+                sonAngle += hstep;
+                
+                /* connect sons
+                Edge *edge = new Edge(this, sons[i]);
+                edges.append(edge);
+                edge->draw(canvas); */
+        
+                /* get max depth */
+                if(sonLevel > maxLevel)
+                    maxLevel = sonLevel;
+            }
+        }
+        return maxLevel + 1;
+
+    }
+    /* different nodes, draw independent subtrees */
+    else
+    {
+        qDebug() << "Tree::drawMany different" << nodes[0]->getInfo() << nodes[1]->getInfo();
+        float angleStep = areaAngle / nodes.length();
+        for(int i = 0; i < nodes.length(); i++)
+        {
+            depths[0] = nodes[0]->recursiveDraw(canvas, 
+                                                coord, coord, 
+                                                step, turnDepth, 
+                                                areaAngle, refAngle);
+        }
+    }
+}
+
 /* TODO: add brushes and pens */
 void Node::draw(QGraphicsScene *canvas, QPointF coord)
 {
@@ -83,3 +179,4 @@ QPointF Node::getCoord()
     QRectF box = ((QGraphicsEllipseItem*)bound)->rect();
     return bound->pos() + QPointF(box.width()/2, box.height()/2);
 }
+

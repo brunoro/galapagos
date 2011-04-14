@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <QLineF>
 
+class Node;
 class Edge
 {
     public:
