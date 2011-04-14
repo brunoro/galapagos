@@ -50,7 +50,7 @@ float run() /* Interpreter */
       den = run();
       return( fabs( den ) <= 0.001f ? num : num / den );
     default:
-      return(x[primitive]);
+      return(x[(int)primitive]);
     }
 }
 
@@ -173,7 +173,7 @@ void stats( float *fitness, char **pop, int gen )
          gen, -favgpop,  -fitness[best],nodes_evaluated,avg_len);
   print_indiv( pop[best] );
     
-  fprintf(runlog, "\tbest: %d\n", best, -fitness[best]);
+  fprintf(runlog, "\tbest: %d\n", best);
 }
 
 int tournament( float *fitness, int tsize, char type )
