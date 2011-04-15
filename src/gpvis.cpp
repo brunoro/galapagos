@@ -30,6 +30,7 @@ GPVis::GPVis(QWidget *parent)
 
     scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGTH, this);
     preview = new QGraphicsView(scene);
+    preview->setRenderHint(QPainter::Antialiasing);
 
     fileField = new QLineEdit(this);
     fileSelect = new QPushButton("Select file", this);
