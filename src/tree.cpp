@@ -125,9 +125,9 @@ void Tree::test(QGraphicsScene *canvas)
     QPointF center = canvas->sceneRect().center();
     qDebug() << "Tree::test center" << center;
 
-    //test_tree->draw(canvas, center, 60);
-    QList<Tree*> trees;
-    trees.append(test_tree1);
-    trees.append(test_tree2);
-    Tree::drawMany(canvas, trees, center, 60);
+    test_tree1->draw(canvas, center, 60);
+    //QList<Tree*> trees;
+    //trees.append(test_tree1);
+    //trees.append(test_tree2);
+    //Tree::drawMany(canvas, trees, center, 60);
 }
