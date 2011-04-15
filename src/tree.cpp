@@ -19,6 +19,9 @@ void Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, i
         nodes.append(tree->getRoot());
     }
 
+    /* make new tree */
+    Tree *merged;
+    int depth = Node::recursiveDrawMany(canvas, nodes, coord, coord, step, 1, pi, pi/2);
 }
 
 /* calls recursiveDraw */
