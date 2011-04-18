@@ -12,12 +12,13 @@
 #include <QGraphicsItemGroup>
 #include <QGraphicsScene>
 #include <QGraphicsSimpleTextItem>
+#include <QHash>
 #include <QList>
 #include <QObject>
 #include <QPointF>
 #include <QString>
 
-enum NodeType {OP, TERM, VAR};
+enum NodeType {OP, TERM, VAR, ROOT};
 class Edge;
 class Node
 {
@@ -26,7 +27,9 @@ class Node
         Node(NodeType type, QString info);
 
         void addSon(Node *son);
+        void addEdge(Node *son, QColor color);
         void draw(QGraphicsScene *canvas, QPointF coord);
+        void updateEdges(QGraphicsScene *canvas);
         int recursiveDraw(QGraphicsScene *canvas,
                           QPointF origin, QPointF coord,
                           int step, int level,
@@ -34,14 +37,16 @@ class Node
 
         void update(QPointF coord);
 
-        static int recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes, 
-                                     QPointF origin, QPointF coord,
-                                     int step, int level,
-                                     float areaAngle, float refAngle);
+        static QList<Node*> recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
+                                              QPointF origin, QPointF coord,
+                                              int step, int level,
+                                              float areaAngle, float refAngle, QHash<int, QColor> colors);
         QList<Node*> getSons();
         NodeType getType();
         QString getInfo();
         QPointF getCoord();
+        int getTreeId();
+        void setTreeId(int id);
         
         inline bool operator==(const Node &other) const
         {
@@ -49,6 +54,7 @@ class Node
         }
 
     private:
+        int tree_id;
         NodeType type;
         QString info;
         QList<Node*> sons;

@@ -3,6 +3,7 @@
 
 #include "def.h"
 #include "node.h"
+#include "style.h"
 
 #include <QDebug>
 #include <QGraphicsLineItem>
@@ -19,11 +20,13 @@ class Tree
 {
     public:
         Tree(QString line, int tree_id, float tree_fitness);
+        Tree(int tree_id, float tree_fitness);
 
         void draw(QGraphicsScene *canvas, QPointF coord, int step);
 
         void addParent(Tree *parent);
         void addOffspring(Tree *offspring);
+        void setRoot(Node *node);
 
         int getId();
         float getFitness();
@@ -32,8 +35,8 @@ class Tree
         QList<Tree*> getParents();
         QList<Tree*> getOffspring();
 
-        static void drawMany(QGraphicsScene *canvas, QList<Tree*> trees, 
-                             QPointF coord, int step);
+        static Tree* drawMany(QGraphicsScene *canvas, QList<Tree*> trees,
+                              QPointF coord, int step);
         static void test(QGraphicsScene *canvas);
 
     private:
@@ -44,7 +47,7 @@ class Tree
         QList<Tree*> parents;
         QList<Tree*> offspring;
         
-        Node *parseTree(QStringList nodes, int pos);
+        Node *parseTree(QStringList nodes, int pos, int id);
 };
 
 #endif

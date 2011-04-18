@@ -34,6 +34,7 @@ class GPVis : public QWidget
         void addTree(Tree *tree);
         void test();
 
+        static QHash<int, QColor> getColorPalette(QList<int> ids);
 
     private:
         QList<Tree*> trees;

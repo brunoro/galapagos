@@ -19,7 +19,7 @@ class Edge
 
     private:
         QColor color;
-        QGraphicsLineItem *line;
+        QGraphicsLineItem line;
         Node *dest, *dir;
 };
 
