@@ -184,5 +184,5 @@ void Tree::test(QGraphicsScene *canvas)
     QList<Tree*> trees;
     trees.append(test_tree1);
     trees.append(test_tree2);
-    Tree *merged = Tree::drawMany(canvas, trees, center, 40);
+    Tree *merged = Tree::drawMany(canvas, trees, center, 60);
 }

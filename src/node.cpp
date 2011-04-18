@@ -117,7 +117,6 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
     }
     merged = merged_new;
 
-    qDebug() << merged;
     float hstep = areaAngle / merged.length();
     float sonAngle = refAngle - areaAngle/2 + hstep/2;
     for(int i = 0; i < merged.length(); i++)
