@@ -46,6 +46,8 @@ class Node
         QString getInfo();
         QPointF getCoord();
         int getTreeId();
+
+        void setCoord(QPointF node_coord);
         void setTreeId(int id);
         
         inline bool operator==(const Node &other) const

@@ -37,6 +37,7 @@ class Tree
 
         static Tree* drawMany(QGraphicsScene *canvas, QList<Tree*> trees,
                               QPointF coord, int step);
+        static void drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step);
         static void test(QGraphicsScene *canvas);
 
     private:

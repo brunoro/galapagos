@@ -19,27 +19,48 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     /* start from trees root */
     QList<Node*> nodes;
     QList<int> ids;
+    bool needRoot = false;
     foreach(Tree *tree, trees)
     {
         nodes.append(tree->getRoot());
         ids.append(tree->getId());
+        foreach(Node *node, nodes)
+        {
+            if(!((*tree->getRoot()) == (*node)))
+                needRoot = true;
+        }
     }
 
     /* set colors */
     QHash<int, QColor> colors(Style::getColorPalette(ids));
 
-    /* draw common root */
-    Node *root = new Node(ROOT, " ");
-    root->draw(canvas, coord);
-
     /* make new tree */
     Tree *merged = new Tree(-1, -1); // TODO: change this
-    merged->setRoot(root);
 
-    QList<Node*> sons = Node::recursiveDrawMany(canvas, nodes, coord, coord, step, 2, 2 * pi, pi/2, colors);
+    /* draw common root if needed */
+    int startLevel;
+    if(needRoot)
+    {
+        Node *root = new Node(ROOT, "root");
+        root->draw(canvas, coord);
+        merged->setRoot(root);
+        startLevel = 1;
+    }
+    else
+        startLevel = 0;
+
+    QList<Node*> sons = Node::recursiveDrawMany(canvas, nodes, coord, coord, step, startLevel, 2 * pi, pi/2, colors);
+
+    if(!needRoot)
+        merged->setRoot(sons[0]);
     foreach(Node *son, sons)
+    {
         merged->getRoot()->addSon(son);
+        merged->getRoot()->addEdge(son, colors[son->getTreeId()]);
+    }
+    merged->getRoot()->updateEdges(canvas);
 
+    Tree::drawRings(canvas, coord, 10, step); // TODO: get depth from merged tree
     return merged;
 }
 
@@ -50,7 +71,12 @@ void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
     int depth = root->recursiveDraw(canvas, coord, coord, step, 1, 2 * pi, pi/2);
     qDebug() << "Tree::draw depth" << depth;
 
-    /* draw rings */
+    Tree::drawRings(canvas, coord, depth, step);
+
+}
+
+void Tree::drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step)
+{
     for(int i = 0; i < depth; i++)
     {
         int radius = i*step;
@@ -58,7 +84,7 @@ void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
                                                                  coord.y() - radius,
                                                                  radius * 2,
                                                                  radius * 2);
-        ellipse->setPen(QPen(Qt::gray));
+        ellipse->setPen(QPen(Qt::gray)); // TODO: change this
         ellipse->setZValue(0);
         canvas->addItem(ellipse);
     }

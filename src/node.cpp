@@ -4,6 +4,14 @@ Node::Node(NodeType nodetype, QString nodeinfo)
 {
     type = nodetype;
     info = nodeinfo;
+
+    bound = new QGraphicsEllipseItem();
+    text = new QGraphicsSimpleTextItem(info);
+
+    ((QGraphicsEllipseItem*)bound)->setBrush(Qt::white); // TODO: change this
+
+    bound->setPos(0, 0);
+    text->setPos(0, 0);
 }
 
 void Node::addSon(Node *son)
@@ -56,16 +64,20 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                                      float areaAngle, float refAngle, QHash<int, QColor> colors)
 {
     QList<Node*> merged(nodes);
+    QVector<bool> toRemove(merged.length());
     /* iterates on nodes search for duplicates */
     for(int i = 0; i < nodes.length(); i++)
     {
+        toRemove[i] = false;
         for(int j = i + 1; j < nodes.length(); j++)
         {
             if(nodes[i]->getTreeId() != nodes[j]->getTreeId())
             {
+                qDebug() << "Node::recursiveDrawMany not same treeId " << nodes[i]->getTreeId() << nodes[j]->getTreeId();
                 /* if it is duplicate, merge */
-                if(nodes[i] == nodes[j])
+                if((*(nodes[i])) == (*(nodes[j])))
                 {
+                    qDebug() << "Node::recursiveDrawMany nodes are equal " << nodes[i]->getInfo() << nodes[j]->getInfo();
                     merged[j] = new Node(nodes[i]->getType(), nodes[i]->getInfo());
                     foreach(Node *son, nodes[i]->getSons())
                     {
@@ -78,22 +90,34 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                         merged[j]->addEdge(son, colors[nodes[j]->getTreeId()]);
                     }
                     /* mark as merged */
-                    merged[i] = NULL;
+                    toRemove[i] = true;
                 }
-            }
 
+                /* if not, leaves it */
+                else
+                {
+                    foreach(Node *son, nodes[i]->getSons())
+                    {
+                        merged[i] = new Node(nodes[i]->getType(), nodes[i]->getInfo());
+                        merged[i]->addSon(son);
+                        merged[i]->addEdge(son, colors[nodes[i]->getTreeId()]);
+                    }
+                }
+
+            }
         }
     }
+
     /* remove doubles */
+    QList<Node*> merged_new;
     for(int i = 0; i < merged.length(); i++)
     {
-        if(merged[i] == NULL)
-        {
-            merged.removeAt(i);
-            i = 0;
-        }
+        if(!toRemove[i])
+            merged_new.append(merged[i]);
     }
+    merged = merged_new;
 
+    qDebug() << merged;
     float hstep = areaAngle / merged.length();
     float sonAngle = refAngle - areaAngle/2 + hstep/2;
     for(int i = 0; i < merged.length(); i++)
@@ -127,16 +151,9 @@ void Node::updateEdges(QGraphicsScene *canvas)
 /* TODO: add brushes and pens */
 void Node::draw(QGraphicsScene *canvas, QPointF coord)
 {
-    /* draw bound */
-    bound = new QGraphicsEllipseItem();
-    ((QGraphicsEllipseItem*)bound)->setBrush(Qt::white); // TODO: change this
-
-    /* draw text */
-    text = new QGraphicsSimpleTextItem(info);
-
     /* get bounding box from text */
     QRectF bbox = text->boundingRect();
-    
+
     /* borders TODO: config */
     int bx = 10,
         by = 10;
@@ -206,6 +223,12 @@ QPointF Node::getCoord()
 int Node::getTreeId()
 {
     return tree_id;
+}
+
+void Node::setCoord(QPointF node_coord)
+{
+     QRectF box = ((QGraphicsEllipseItem*)bound)->rect();
+     bound->setPos(node_coord + QPointF(box.width()/2, box.height()/2));
 }
 
 void Node::setTreeId(int id)
