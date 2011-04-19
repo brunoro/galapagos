@@ -131,25 +131,10 @@ void GPVis::openFileDialog()
                                                     tr("All files (*.*)")));
 }
 
-QHash<int, QColor> GPVis::getColorPalette(QList<int> ids)
-{
-    QHash<int, QColor> palette;
-    int h = 190,
-        s = 190,
-        v = 0;
-    float ratio = 255/ids.length();
-    for(int i = 0; i < ids.length(); i++)
-    {
-        QColor color;
-        v += ratio;
-        palette[i] = color.fromHsv(h, s, v);
-    }
-    return palette;
-}
-
 void GPVis::test()
 {
-    fileField->setText("tinygp/test/problem.log");
+    //fileField->setText("tinygp/test/problem.log");
+    fileField->setText("../../../tinygp/test/problem.log");
     QTest::mouseClick(fileOpen, Qt::LeftButton);
 
     Tree::test(scene);
