@@ -162,7 +162,7 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
 
     bbox.setSize(bbox.size() + QSizeF(bx, by));
     ((QGraphicsEllipseItem*)bound)->setRect(bbox);
-    
+
     /* adjust position to center in terms of bounding box and border */
     bound->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));
     bound->setZValue(1);
