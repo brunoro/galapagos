@@ -20,4 +20,5 @@ void Edge::draw(QGraphicsScene *canvas)
 void Edge::update()
 {
     line->setLine(QLineF(dest->getCoord(), dir->getCoord()));
+    qDebug() << "Edge::update" << QLineF(dest->getCoord(), dir->getCoord());
 }

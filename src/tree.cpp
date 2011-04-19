@@ -173,7 +173,7 @@ QList<Tree*> Tree::getOffspring()
 void Tree::test(QGraphicsScene *canvas)
 {
     QString line1 = QString("-  x^2  /  -  x^0  *  x^0  x^1  /  x^2  x^2");
-    QString line2 = QString("-  x^2  /  -  x^0  +  x^0  x^1  /  x^2  x^2");
+    QString line2 = QString("-  x^0  /  -  x^0  +  x^0  x^1  /  x^2  x^2");
     Tree *test_tree1 = new Tree(line1, -1, float(0.22222));
     Tree *test_tree2 = new Tree(line2, -2, float(0.22222));
 

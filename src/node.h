@@ -47,6 +47,7 @@ class Node
         QPointF getCoord();
         int getTreeId();
 
+        void setSons(QList<Node*> node_sons);
         void setCoord(QPointF node_coord);
         void setTreeId(int id);
         
@@ -61,6 +62,7 @@ class Node
         QString info;
         QList<Node*> sons;
         QList<Edge*> edges;
+        QPointF pos;
         QGraphicsItem *text;
         QGraphicsItem *bound;
         QGraphicsItemGroup *nodeView;

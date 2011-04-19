@@ -82,12 +82,12 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                     foreach(Node *son, nodes[i]->getSons())
                     {
                         merged[j]->addSon(son);
-                        merged[j]->addEdge(son, colors[nodes[i]->getTreeId()]);
+                        merged[j]->setTreeId(nodes[i]->getTreeId());
                     }
                     foreach(Node *son, nodes[j]->getSons())
                     {
                         merged[j]->addSon(son);
-                        merged[j]->addEdge(son, colors[nodes[j]->getTreeId()]);
+                        merged[j]->setTreeId(nodes[j]->getTreeId());
                     }
                     /* mark as merged */
                     toRemove[i] = true;
@@ -100,7 +100,6 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                     {
                         merged[i] = new Node(nodes[i]->getType(), nodes[i]->getInfo());
                         merged[i]->addSon(son);
-                        merged[i]->addEdge(son, colors[nodes[i]->getTreeId()]);
                     }
                 }
 
@@ -126,11 +125,13 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                          origin.y() + level * step * sinf(sonAngle));
         /* draw node and call recursion */
         merged[i]->draw(canvas, sonCoord);
-        Node::recursiveDrawMany(canvas, merged[i]->getSons(), origin, sonCoord,
-                                step, level + 1, hstep, sonAngle, colors);
+        merged[i]->setSons(Node::recursiveDrawMany(canvas, merged[i]->getSons(), origin, sonCoord,
+                           step, level + 1, hstep, sonAngle, colors));
         sonAngle += hstep;
 
         /* update edges */
+        foreach(Node *son, merged[i]->getSons())
+            merged[i]->addEdge(son, colors[son->getTreeId()]);
         merged[i]->updateEdges(canvas);
 
     }
@@ -142,7 +143,6 @@ void Node::updateEdges(QGraphicsScene *canvas)
 {
     foreach(Edge *edge, edges)
     {
-        edge->update();
         edge->draw(canvas);
     }
 }
@@ -169,6 +169,7 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
     text->setZValue(2);
     canvas->addItem(text);
 
+    pos = coord;
     qDebug() << "Node::draw" << coord << " " << bbox << info;
     
     return;
@@ -189,6 +190,7 @@ void Node::update(QPointF coord)
     /* adjust position to center in terms of bounding box and border */
     bound->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));
     text->setPos(coord - QPointF((bbox.width() - bx)/2, (bbox.height() - by)/2));
+    pos = coord;
 }
 
 void Node::addEdge(Node *son, QColor color)
@@ -203,6 +205,11 @@ QList<Node*> Node::getSons()
     return sons;
 }
 
+void Node::setSons(QList<Node*> node_sons)
+{
+    sons = node_sons;
+}
+
 NodeType Node::getType()
 {
     return type;
@@ -215,8 +222,7 @@ QString Node::getInfo()
 
 QPointF Node::getCoord()
 {
-    QRectF box = ((QGraphicsEllipseItem*)bound)->rect();
-    return bound->pos() + QPointF(box.width()/2, box.height()/2);
+    return pos;
 }
 
 int Node::getTreeId()
@@ -226,8 +232,7 @@ int Node::getTreeId()
 
 void Node::setCoord(QPointF node_coord)
 {
-     QRectF box = ((QGraphicsEllipseItem*)bound)->rect();
-     bound->setPos(node_coord + QPointF(box.width()/2, box.height()/2));
+    pos = node_coord;
 }
 
 void Node::setTreeId(int id)
