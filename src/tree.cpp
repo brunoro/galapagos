@@ -56,7 +56,8 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     foreach(Node *son, sons)
     {
         merged->getRoot()->addSon(son);
-        merged->getRoot()->addEdge(son, colors[son->getTreeId()]);
+        merged->getRoot()->addEdge(son, colors.value(son->getTreeId()));
+        qDebug() << "Color" << colors.value(son->getTreeId());
     }
     merged->getRoot()->updateEdges(canvas);
 
@@ -172,10 +173,10 @@ QList<Tree*> Tree::getOffspring()
 
 void Tree::test(QGraphicsScene *canvas)
 {
-    QString line1 = QString("-  x^2  /  -  x^0  *  x^0  x^1  /  x^2  x^2");
+    QString line1 = QString("-  x^0  /  -  x^0  *  x^0  x^1  /  x^2  x^2");
     QString line2 = QString("-  x^0  /  -  x^0  +  x^0  x^1  /  x^2  x^2");
-    Tree *test_tree1 = new Tree(line1, -1, float(0.22222));
-    Tree *test_tree2 = new Tree(line2, -2, float(0.22222));
+    Tree *test_tree1 = new Tree(line1, 10, float(0.22222));
+    Tree *test_tree2 = new Tree(line2, 20, float(0.22222));
 
     QPointF center = canvas->sceneRect().center();
     qDebug() << "Tree::test center" << center;

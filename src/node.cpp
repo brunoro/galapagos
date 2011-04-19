@@ -79,15 +79,14 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                 {
                     qDebug() << "Node::recursiveDrawMany nodes are equal " << nodes[i]->getInfo() << nodes[j]->getInfo();
                     merged[j] = new Node(nodes[i]->getType(), nodes[i]->getInfo());
+                    merged[j]->setTreeId(nodes[i]->getTreeId());
                     foreach(Node *son, nodes[i]->getSons())
                     {
                         merged[j]->addSon(son);
-                        merged[j]->setTreeId(nodes[i]->getTreeId());
                     }
                     foreach(Node *son, nodes[j]->getSons())
                     {
                         merged[j]->addSon(son);
-                        merged[j]->setTreeId(nodes[j]->getTreeId());
                     }
                     /* mark as merged */
                     toRemove[i] = true;
@@ -100,6 +99,7 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                     {
                         merged[i] = new Node(nodes[i]->getType(), nodes[i]->getInfo());
                         merged[i]->addSon(son);
+                        merged[i]->setTreeId(nodes[i]->getTreeId());
                     }
                 }
 
@@ -131,7 +131,10 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
 
         /* update edges */
         foreach(Node *son, merged[i]->getSons())
-            merged[i]->addEdge(son, colors[son->getTreeId()]);
+        {
+            merged[i]->addEdge(son, colors.value(son->getTreeId()));
+            qDebug() << "Color" << colors.value(son->getTreeId());
+        }
         merged[i]->updateEdges(canvas);
 
     }
