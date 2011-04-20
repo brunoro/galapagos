@@ -77,16 +77,14 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                 qDebug() << "Node::recursiveDrawMany nodes are equal " << nodes[i]->getInfo() << nodes[j]->getInfo();
                 Node *old_j = nodes[j];
                 nodes[j] = new Node(old_j->getType(), old_j->getInfo());
+
+                nodes[j]->addTreeId(nodes[i]->getTreeId());
+                nodes[j]->addTreeId(old_j->getTreeId());
                 foreach(Node *son, nodes[i]->getSons())
-                {
-                    nodes[j]->addTreeId(nodes[i]->getTreeId());
                     nodes[j]->addSon(son);
-                }
                 foreach(Node *son, old_j->getSons())
-                {
-                    nodes[j]->addTreeId(old_j->getTreeId());
                     nodes[j]->addSon(son);
-                }
+
                 /* mark as merged */
                 toRemove[i] = true;
             }

@@ -12,7 +12,7 @@ Edge::Edge(Node *from, Node *to, QColor edge_color)
 void Edge::draw(QGraphicsScene *canvas)
 {
     update();
-    line->setPen(QPen(color));
+    line->setPen(QPen(QBrush(color), 2)); // TODO: change this
     line->setZValue(0);
     canvas->addItem(line);
 }

@@ -2,6 +2,7 @@
 #define STYLE_H
 
 #include <QColor>
+#include <QDebug>
 #include <QHash>
 #include <QList>
 
