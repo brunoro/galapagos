@@ -16,6 +16,7 @@
 #include <QList>
 #include <QObject>
 #include <QPointF>
+#include <QSet>
 #include <QString>
 
 enum NodeType {OP, TERM, VAR, ROOT};
@@ -45,19 +46,20 @@ class Node
         NodeType getType();
         QString getInfo();
         QPointF getCoord();
-        int getTreeId();
+        QSet<int> getTreeId();
 
         void setSons(QList<Node*> node_sons);
         void setCoord(QPointF node_coord);
-        void setTreeId(int id);
-        
+        void setTreeId(QSet<int> id);
+        void addTreeId(QSet<int> ids);
+
         inline bool operator==(const Node &other) const
         {
             return (other.type == type) && (other.info == info);
         }
 
     private:
-        int tree_id;
+        QSet<int> tree_id;
         NodeType type;
         QString info;
         QList<Node*> sons;

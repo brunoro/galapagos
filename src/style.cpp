@@ -9,7 +9,7 @@ QHash<int, QColor> Style::getColorPalette(QList<int> ids)
     QHash<int, QColor> palette;
     int   v = 190,
           s = 190,
-          h = 0;
+          h = 1;
     float ratio = 360/ids.length();
     for(int i = 0; i < ids.length(); i++)
     {

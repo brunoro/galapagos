@@ -56,8 +56,11 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     foreach(Node *son, sons)
     {
         merged->getRoot()->addSon(son);
-        merged->getRoot()->addEdge(son, colors.value(son->getTreeId()));
-        qDebug() << "Color" << colors.value(son->getTreeId());
+        foreach(int id, son->getTreeId())
+        {
+            merged->getRoot()->addEdge(son, colors.value(id));
+            qDebug() << "Tree::drawMany " << colors.value(id) << id;
+        }
     }
     merged->getRoot()->updateEdges(canvas);
 
@@ -128,8 +131,11 @@ Node *Tree::parseTree(QStringList nodes, int pos, int id)
         qDebug() << "Tree::parseTree invalid node" << nodes[pos];
         exit(1);
     }
-    
-    turn->setTreeId(id);
+
+    QSet<int> tree_id;
+    tree_id.insert(id);
+    turn->setTreeId(tree_id);
+
     index.append(turn);
     
     return turn;

@@ -10,6 +10,7 @@
 #include <QList>
 #include <QPen>
 #include <QPointF>
+#include <QSet>
 #include <QString>
 #include <QStringList>
 #include <QVector>

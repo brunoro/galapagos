@@ -63,58 +63,43 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                                      int step, int level,
                                      float areaAngle, float refAngle, QHash<int, QColor> colors)
 {
-    QList<Node*> merged(nodes);
-    QVector<bool> toRemove(merged.length());
+    QVector<bool> toRemove(nodes.length());
     /* iterates on nodes search for duplicates */
     for(int i = 0; i < nodes.length(); i++)
     {
         toRemove[i] = false;
         for(int j = i + 1; j < nodes.length(); j++)
         {
-            if(nodes[i]->getTreeId() != nodes[j]->getTreeId())
+            QSet<int> intersection = nodes[i]->getTreeId() & nodes[j]->getTreeId();
+            /* if it is duplicate, merge */
+            if( (*(nodes[i]) == *(nodes[j])) && intersection.isEmpty())
             {
-                qDebug() << "Node::recursiveDrawMany not same treeId " << nodes[i]->getTreeId() << nodes[j]->getTreeId();
-                /* if it is duplicate, merge */
-                if((*(nodes[i])) == (*(nodes[j])))
+                qDebug() << "Node::recursiveDrawMany nodes are equal " << nodes[i]->getInfo() << nodes[j]->getInfo();
+                Node *old_j = nodes[j];
+                nodes[j] = new Node(old_j->getType(), old_j->getInfo());
+                foreach(Node *son, nodes[i]->getSons())
                 {
-                    qDebug() << "Node::recursiveDrawMany nodes are equal " << nodes[i]->getInfo() << nodes[j]->getInfo();
-                    merged[j] = new Node(nodes[i]->getType(), nodes[i]->getInfo());
-                    merged[j]->setTreeId(nodes[i]->getTreeId());
-                    foreach(Node *son, nodes[i]->getSons())
-                    {
-                        merged[j]->addSon(son);
-                    }
-                    foreach(Node *son, nodes[j]->getSons())
-                    {
-                        merged[j]->addSon(son);
-                    }
-                    /* mark as merged */
-                    toRemove[i] = true;
+                    nodes[j]->addTreeId(nodes[i]->getTreeId());
+                    nodes[j]->addSon(son);
                 }
-
-                /* if not, leaves it */
-                else
+                foreach(Node *son, old_j->getSons())
                 {
-                    foreach(Node *son, nodes[i]->getSons())
-                    {
-                        merged[i] = new Node(nodes[i]->getType(), nodes[i]->getInfo());
-                        merged[i]->addSon(son);
-                        merged[i]->setTreeId(nodes[i]->getTreeId());
-                    }
+                    nodes[j]->addTreeId(old_j->getTreeId());
+                    nodes[j]->addSon(son);
                 }
-
+                /* mark as merged */
+                toRemove[i] = true;
             }
         }
     }
 
     /* remove doubles */
-    QList<Node*> merged_new;
-    for(int i = 0; i < merged.length(); i++)
+    QList<Node*> merged;
+    for(int i = 0; i < nodes.length(); i++)
     {
         if(!toRemove[i])
-            merged_new.append(merged[i]);
+            merged.append(nodes[i]);
     }
-    merged = merged_new;
 
     float hstep = areaAngle / merged.length();
     float sonAngle = refAngle - areaAngle/2 + hstep/2;
@@ -132,8 +117,8 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
         /* update edges */
         foreach(Node *son, merged[i]->getSons())
         {
-            merged[i]->addEdge(son, colors.value(son->getTreeId()));
-            qDebug() << "Color" << colors.value(son->getTreeId());
+            foreach(int id, son->getTreeId())
+                merged[i]->addEdge(son, colors.value(id));
         }
         merged[i]->updateEdges(canvas);
 
@@ -228,7 +213,7 @@ QPointF Node::getCoord()
     return pos;
 }
 
-int Node::getTreeId()
+QSet<int> Node::getTreeId()
 {
     return tree_id;
 }
@@ -238,7 +223,12 @@ void Node::setCoord(QPointF node_coord)
     pos = node_coord;
 }
 
-void Node::setTreeId(int id)
+void Node::addTreeId(QSet<int> ids)
 {
-    tree_id = id;
+    tree_id += ids;
+}
+
+void Node::setTreeId(QSet<int> ids)
+{
+    tree_id = ids;
 }
