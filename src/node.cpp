@@ -127,9 +127,17 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
 
 void Node::updateEdges(QGraphicsScene *canvas)
 {
-    foreach(Edge *edge, edges)
+    // TODO: get offset based on edges from same nodes
+    if(edges.length() == 0)
+        return;
+
+    // TODO: use distance from style
+    int edgeDistance = 5;
+    float offset = - edges.length() * edgeDistance / 2;
+    for(int i = 0; i < edges.length(); i++)
     {
-        edge->draw(canvas);
+        offset += edgeDistance;
+        edges[i]->drawOffset(canvas, offset);
     }
 }
 
