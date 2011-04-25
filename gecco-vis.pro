@@ -16,11 +16,17 @@ HEADERS += src/def.h \
     src/gpvis.h \
     src/node.h \
     src/tree.h \
-    src/style.h
+    src/style.h \
+    src/generation.h \
+    src/mutation.h \
+    src/crossover.h
 SOURCES += src/def.cpp \
     src/edge.cpp \
     src/gpvis.cpp \
     src/main.cpp \
     src/node.cpp \
     src/tree.cpp \
-    src/style.cpp
+    src/style.cpp \
+    src/generation.cpp \
+    src/mutation.cpp \
+    src/crossover.cpp
