@@ -128,16 +128,19 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
 void Node::updateEdges(QGraphicsScene *canvas)
 {
     // TODO: get offset based on edges from same nodes
-    if(edges.length() == 0)
-        return;
-
-    // TODO: use distance from style
-    int edgeDistance = 5;
-    float offset = - edges.length() * edgeDistance / 2;
-    for(int i = 0; i < edges.length(); i++)
+    foreach(QList<Edge*> sonEdges, edges)
     {
-        offset += edgeDistance;
-        edges[i]->drawOffset(canvas, offset);
+      if(sonEdges.length() == 0)
+            continue;
+
+        // TODO: use distance from style
+        int edgeDistance = 5;
+        float offset = - sonEdges.length() * edgeDistance / 2;
+        for(int i = 0; i < sonEdges.length(); i++)
+        {
+            offset += edgeDistance;
+            sonEdges[i]->drawOffset(canvas, offset);
+        }
     }
 }
 
@@ -191,7 +194,7 @@ void Node::addEdge(Node *son, QColor color)
 {
     /* connect son */
     Edge *edge = new Edge(this, son, color);
-    edges.append(edge);
+    edges[*son].append(edge);
 }
 
 QList<Node*> Node::getSons()

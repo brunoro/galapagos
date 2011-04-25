@@ -14,6 +14,7 @@
 #include <QGraphicsSimpleTextItem>
 #include <QHash>
 #include <QList>
+#include <QMap>
 #include <QObject>
 #include <QPointF>
 #include <QSet>
@@ -58,12 +59,29 @@ class Node
             return (other.type == type) && (other.info == info);
         }
 
+        inline bool operator<(const Node &other) const
+        {
+            if (other.type == type)
+            {
+                if (other.info == info)
+                {
+                    if (other.pos.x() == pos.x())
+                        return other.pos.y() < pos.y();
+                    else
+                        return other.pos.x() < pos.x();
+                }
+                else
+                    return other.info < info;
+            }
+            return other.type < type;
+        }
+
     private:
         QSet<int> tree_id;
         NodeType type;
         QString info;
         QList<Node*> sons;
-        QList<Edge*> edges;
+        QMap< Node, QList<Edge*> > edges;
         QPointF pos;
         QGraphicsItem *text;
         QGraphicsItem *bound;
