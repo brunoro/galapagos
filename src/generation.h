@@ -12,7 +12,13 @@ class Generation
 {
 
     public:
-        Generation();
+        Generation(int popSize);
+
+        void addIndividual(Tree *individual);
+        void addMutation(Tree *parent, Tree *offspring);
+        void addCrossover(Tree *parent1, Tree *parent2, Tree *offspring);
+
+        Tree* getIndividual(int id);
 
     private:
         int num;
