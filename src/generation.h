@@ -15,6 +15,7 @@ class Generation
         Generation();
 
     private:
+        int num;
         QList<Tree*> population;
         QSet<Mutation> mutations;
         QSet<Crossover> crossovers;
