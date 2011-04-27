@@ -32,8 +32,8 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         }
     }
 
-    /* set colors */
-    QHash<int, QColor> colors(Style::getColorPalette(ids));
+    /* set styles */
+    QHash<int, Qt::PenStyle> styles(Style::getPenStylePalette(ids));
 
     /* make new tree */
     Tree *merged = new Tree(-1, -1); // TODO: change this
@@ -50,7 +50,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     else
         startLevel = 0;
 
-    QList<Node*> sons = Node::recursiveDrawMany(canvas, nodes, coord, coord, step, startLevel, 2 * pi, pi/2, colors);
+    QList<Node*> sons = Node::recursiveDrawMany(canvas, nodes, coord, coord, step, startLevel, 2 * pi, pi/2, styles);
 
     if(!needRoot)
         merged->setRoot(sons[0]);
@@ -59,8 +59,8 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         merged->getRoot()->addSon(son);
         foreach(int id, son->getTreeId())
         {
-            merged->getRoot()->addEdge(son, colors.value(id));
-            qDebug() << "Tree::drawMany " << colors.value(id) << id;
+            merged->getRoot()->addEdge(son, styles.value(id));
+            qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
     }
     merged->getRoot()->updateEdges(canvas);

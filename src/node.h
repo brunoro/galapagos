@@ -29,7 +29,7 @@ class Node
         Node(NodeType type, QString info);
 
         void addSon(Node *son);
-        void addEdge(Node *son, QColor color);
+        void addEdge(Node *son, QColor color, Qt::PenStyle style=Qt::SolidLine);
         void draw(QGraphicsScene *canvas, QPointF coord);
         void updateEdges(QGraphicsScene *canvas);
         int recursiveDraw(QGraphicsScene *canvas,
@@ -42,7 +42,7 @@ class Node
         static QList<Node*> recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                                               QPointF origin, QPointF coord,
                                               int step, int level,
-                                              float areaAngle, float refAngle, QHash<int, QColor> colors);
+                                              float areaAngle, float refAngle, QHash<int, Qt::PenStyle> colors);
         QList<Node*> getSons();
         NodeType getType();
         QString getInfo();

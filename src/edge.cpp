@@ -1,8 +1,9 @@
 #include "edge.h"
 
-Edge::Edge(Node *from, Node *to, QColor edge_color)
+Edge::Edge(Node *from, Node *to, QColor edge_color, Qt::PenStyle edge_style)
 {
     color = edge_color;
+    style = edge_style;
     dest = from;
     dir = to;
     line = new QGraphicsLineItem();
@@ -12,7 +13,7 @@ Edge::Edge(Node *from, Node *to, QColor edge_color)
 void Edge::draw(QGraphicsScene *canvas)
 {
     update();
-    line->setPen(QPen(QBrush(color), 2)); // TODO: change this
+    line->setPen(QPen(QBrush(color), Style::edgeWeight, style));
     line->setZValue(0);
     canvas->addItem(line);
 }
@@ -27,7 +28,7 @@ void Edge::drawOffset(QGraphicsScene *canvas, float offset)
     translated.translate(offset * cosf(angleRad), offset * sinf(angleRad));
     line->setLine(translated);
 
-    line->setPen(QPen(QBrush(color), 2)); // TODO: change this
+    line->setPen(QPen(QBrush(color), Style::edgeWeight, style));
     line->setZValue(0);
     canvas->addItem(line);
 }

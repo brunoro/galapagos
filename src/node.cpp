@@ -45,8 +45,7 @@ int Node::recursiveDraw(QGraphicsScene *canvas,
         sonAngle += hstep;
         
         /* connect son */
-        QColor edgecolor(0,0,255);
-        addEdge(sons[i], edgecolor);
+        addEdge(sons[i], Style::edgeColor);
 
         /* get max depth */
         if(sonLevel > maxLevel)
@@ -61,7 +60,7 @@ int Node::recursiveDraw(QGraphicsScene *canvas,
 QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                                      QPointF origin, QPointF coord,
                                      int step, int level,
-                                     float areaAngle, float refAngle, QHash<int, QColor> colors)
+                                     float areaAngle, float refAngle, QHash<int, Qt::PenStyle> styles)
 {
     QVector<bool> toRemove(nodes.length());
     /* iterates on nodes search for duplicates */
@@ -109,14 +108,14 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
         /* draw node and call recursion */
         merged[i]->draw(canvas, sonCoord);
         merged[i]->setSons(Node::recursiveDrawMany(canvas, merged[i]->getSons(), origin, sonCoord,
-                           step, level + 1, hstep, sonAngle, colors));
+                           step, level + 1, hstep, sonAngle, styles));
         sonAngle += hstep;
 
         /* update edges */
         foreach(Node *son, merged[i]->getSons())
         {
             foreach(int id, son->getTreeId())
-                merged[i]->addEdge(son, colors.value(id));
+                merged[i]->addEdge(son, Style::edgeColor, styles.value(id));
         }
         merged[i]->updateEdges(canvas);
 
@@ -144,15 +143,18 @@ void Node::updateEdges(QGraphicsScene *canvas)
     }
 }
 
-/* TODO: add brushes and pens */
 void Node::draw(QGraphicsScene *canvas, QPointF coord)
 {
+    /* set colors */
+    ((QGraphicsEllipseItem*)bound)->setBrush(QBrush(QColor(Style::nodeBrushColor[type])));
+    ((QGraphicsEllipseItem*)bound)->setPen(QPen(QColor(Style::nodePenColor)));
+    ((QGraphicsSimpleTextItem*)text)->setBrush(QBrush(QColor(Style::nodeTextColor)));
+
+    /* set position */
     QRectF bbox = text->boundingRect();
     QSizeF size = Style::nodeSize;
 
-    /* centering */
     ((QGraphicsEllipseItem*)bound)->setRect(QRectF(bbox.topLeft(), size));
-
     bound->setPos(coord - QPointF(size.width()/2, size.height()/2));
     bound->setZValue(1);
     canvas->addItem(bound);
@@ -179,10 +181,10 @@ void Node::update(QPointF coord)
     pos = coord;
 }
 
-void Node::addEdge(Node *son, QColor color)
+void Node::addEdge(Node *son, QColor color, Qt::PenStyle style)
 {
     /* connect son */
-    Edge *edge = new Edge(this, son, color);
+    Edge *edge = new Edge(this, son, color, style);
     edges[*son].append(edge);
 }
 
