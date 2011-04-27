@@ -37,8 +37,10 @@ class GPVis : public QWidget
         void test();
 
     private:
-        QVector<Generation> *generations;
+        /* data */
+        QList<Generation*> generations;
 
+        /* ui */
         QGridLayout *grid;
 
         QPushButton *fileOpen,
@@ -50,8 +52,11 @@ class GPVis : public QWidget
         QGraphicsView *preview;
         QGraphicsScene *scene;
         
+        /* file reading */
         QFile *fileFile;
         QTextStream fileStream;
+
+        void readGeneration();
         
     private slots:
         void openFileDialog();

@@ -12,11 +12,11 @@ class Generation
 {
 
     public:
-        Generation(int popSize);
+        Generation();
 
         void addIndividual(Tree *individual);
-        void addMutation(Tree *parent, Tree *offspring);
-        void addCrossover(Tree *parent1, Tree *parent2, Tree *offspring);
+        void addMutation(Mutation mutation);
+        void addCrossover(Crossover crossover);
 
         Tree* getIndividual(int id);
 

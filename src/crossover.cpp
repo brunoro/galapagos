@@ -1,10 +1,10 @@
 #include "crossover.h"
 
-Crossover::Crossover(Tree *tree_parent1, Tree *tree_parent2, Tree *tree_offspring)
+Crossover::Crossover(Tree *tree_parent1, Tree *tree_parent2, int tree_offspring)
 {
     parent1 = tree_parent1;
     parent2 = tree_parent2;
-    offspring = tree_offspring;
+    offspring_id = tree_offspring;
 
     float maxFit = parent1->getFitness() > parent2->getFitness() ?
                    parent1->getFitness() : parent2->getFitness();
@@ -18,4 +18,14 @@ void Crossover::draw(QGraphicsScene *canvas, QPointF origin, int step)
     trees.append(parent2);
     trees.append(offspring);
     Tree::drawMany(canvas, trees, origin, step);
+}
+
+void Crossover::setOffspring(Tree *offspring_tree)
+{
+    offspring = offspring_tree;
+}
+
+int Crossover::getOffspringId()
+{
+    return offspring_id;
 }

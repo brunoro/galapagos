@@ -47,16 +47,6 @@ GPVis::GPVis(QWidget *parent)
     connect(fileOpen, SIGNAL(clicked()), this, SLOT(readLogFile()));
 }
 
-int GPVis::newTreeId()
-{
-    return trees.count();
-}
-
-void GPVis::addTree(Tree *tree)
-{
-    trees.append(tree);
-}
-
 void GPVis::readLogFile()
 {
     fileFile = new QFile(fileField->text());
@@ -121,6 +111,53 @@ void GPVis::readLogFile()
 
     extern Def *definition;
     definition = new Def(ops, vars, terms);
+}
+
+void GPVis::readGeneration()
+{
+    Generation *gen = new Generation();
+    QString fileBuffer = fileStream.readLine(),
+            individual,
+            crossover,
+            mutation;
+    QStringList tokens;
+
+    while(!(fileBuffer.contains(QRegExp("generation:*."))) ||
+          !(fileStream.atEnd()))
+    {
+        /* individuals */
+        if(fileBuffer.contains(QRegExp("ind:*.")))
+        {
+            individual = fileBuffer.remove(QRegExp("\tind:\\s*"));
+            qDebug() << "GPVis::readLogFile found individual" << individual;
+            tokens = individual.split("\t", QString::SkipEmptyParts);
+            gen->addIndividual(new Tree(tokens[2], tokens[0].toInt(), tokens[1].toFloat()));
+            continue;
+        }
+        /* crossover */
+        if(fileBuffer.contains(QRegExp("crossover:*.")))
+        {
+            crossover = fileBuffer.remove(QRegExp("\tcrossover:\\s*"));
+            qDebug() << "GPVis::readLogFile found crossover" << crossover;
+            tokens = crossover.split(" ");
+            gen->addCrossover(Crossover(gen->getIndividual(tokens[0].toInt()),
+                                        gen->getIndividual(tokens[1].toInt()),
+                                        tokens[3].toInt()));
+            continue;
+        }
+        /* mutation */
+        if(fileBuffer.contains(QRegExp("mutation:*.")))
+        {
+            mutation = fileBuffer.remove(QRegExp("\tmutation:\\s*"));
+            qDebug() << "GPVis::readLogFile found mutation" << mutation;
+            tokens = mutation.split(" ");
+            gen->addMutation(Mutation(gen->getIndividual(tokens[0].toInt()),
+                                      tokens[2].toInt()));
+            continue;
+        }
+    }
+
+    generations.append(gen);
 }
 
 void GPVis::openFileDialog()
