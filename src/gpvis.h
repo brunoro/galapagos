@@ -54,7 +54,7 @@ class GPVis : public QWidget
         
         /* file reading */
         QFile *fileFile;
-        QTextStream fileStream;
+        QTextStream *fileStream;
 
         void readGeneration();
         

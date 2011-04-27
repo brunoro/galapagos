@@ -60,17 +60,17 @@ void GPVis::readLogFile()
         return;
     }
 
-    QTextStream fileStream(fileFile);
+    fileStream = new QTextStream(fileFile);
     QString ops, vars, terms;
     
-    QString fileBuffer = fileStream.readLine();
+    QString fileBuffer = fileStream->readLine();
 
     if(fileBuffer.contains(QRegExp("definition:*.")))
     {
         qDebug() << "GPVis::readLogFile found definition"; 
-        while(!fileStream.atEnd())
+        while(!fileStream->atEnd())
         {
-            fileBuffer = fileStream.readLine();
+            fileBuffer = fileStream->readLine();
 
             /* ops */
             if(fileBuffer.contains(QRegExp("\tops:*.")))
@@ -99,7 +99,7 @@ void GPVis::readLogFile()
             /* end of definition */
             if(fileBuffer.contains(QRegExp("generation*.")))
             {
-                break;
+                readGeneration();
             }
         }
     }
@@ -116,14 +116,14 @@ void GPVis::readLogFile()
 void GPVis::readGeneration()
 {
     Generation *gen = new Generation();
-    QString fileBuffer = fileStream.readLine(),
+    QString fileBuffer = fileStream->readLine(),
             individual,
             crossover,
             mutation;
     QStringList tokens;
 
     while(!(fileBuffer.contains(QRegExp("generation:*."))) ||
-          !(fileStream.atEnd()))
+          !(fileStream->atEnd()))
     {
         /* individuals */
         if(fileBuffer.contains(QRegExp("ind:*.")))
@@ -155,8 +155,9 @@ void GPVis::readGeneration()
                                       tokens[2].toInt()));
             continue;
         }
-    }
 
+        fileBuffer = fileStream->readLine();
+    }
     generations.append(gen);
 }
 
