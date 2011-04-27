@@ -258,7 +258,7 @@ int main(int argc, char **argv)
 
     for ( indivs = 0; indivs < POPSIZE; indivs ++ )
     {
-        fprintf(runlog, "\tind: %d\t%f\t", indivs, -fitness[indivs]);
+        fprintf(runlog, "\tind: %d\t%f\t", indivs, fitness[indivs]);
         logprint_indiv(pop[indivs]);
         fprintf(runlog, "\n");
     }
@@ -277,7 +277,7 @@ int main(int argc, char **argv)
 
         for ( indivs = 0; indivs < POPSIZE; indivs ++ )
         {
-            fprintf(runlog, "\tind: %d\t%f\t", indivs, -fitness[indivs]);
+            fprintf(runlog, "\tind: %d\t%f\t", indivs, fitness[indivs]);
             logprint_indiv(pop[indivs]);
             fprintf(runlog, "\n");
         }
@@ -300,10 +300,6 @@ int main(int argc, char **argv)
                 pop[offspring] = mutation( pop[parent1], PMUT_PER_NODE );
             }
             fitness[offspring] = fitness_function( pop[offspring] );
-
-            fprintf(runlog, "\t\t%d\t%f\t", offspring, -fitness[offspring]);
-            logprint_indiv(pop[offspring]);
-            fprintf(runlog, "\n");
         }
         stats( fitness, pop, gen );
     }

@@ -2,6 +2,7 @@
 #define GPVIS_H
 
 #include "tree.h"
+#include "generation.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -21,6 +22,7 @@
 #include <QStringList>
 #include <QTest>
 #include <QTextStream>
+#include <QVector>
 #include <QWidget>
 
 class GPVis : public QWidget
@@ -34,10 +36,8 @@ class GPVis : public QWidget
         void addTree(Tree *tree);
         void test();
 
-        static QHash<int, QColor> getColorPalette(QList<int> ids);
-
     private:
-        QList<Tree*> trees;
+        QVector<Generation> *generations;
 
         QGridLayout *grid;
 
