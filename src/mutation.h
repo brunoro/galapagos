@@ -10,7 +10,7 @@ class Mutation
 {
     public:
         Mutation(Tree *parent, Tree *offspring);
-        draw(QGraphicsScene *canvas, QPointF origin, int step);
+        void draw(QGraphicsScene *canvas, QPointF origin, int step);
 
     private:
         Tree *parent,

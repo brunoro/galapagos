@@ -11,7 +11,7 @@ Crossover::Crossover(Tree *tree_parent1, Tree *tree_parent2, Tree *tree_offsprin
     gain = offspring->getFitness() - maxFit;
 }
 
-Crossover::draw(QGraphicsScene *canvas, QPointF origin, int step)
+void Crossover::draw(QGraphicsScene *canvas, QPointF origin, int step)
 {
     QList<Tree*> trees;
     trees.append(parent1);

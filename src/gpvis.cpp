@@ -133,8 +133,8 @@ void GPVis::openFileDialog()
 
 void GPVis::test()
 {
-    //fileField->setText("tinygp/test/problem.log");
-    fileField->setText("../../../tinygp/test/problem.log");
+    fileField->setText("tinygp/test/problem.log");
+    //fileField->setText("../../../tinygp/test/problem.log");
     QTest::mouseClick(fileOpen, Qt::LeftButton);
 
     Tree::test(scene);

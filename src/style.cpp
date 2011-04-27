@@ -1,9 +1,5 @@
 #include "style.h"
 
-Style::Style()
-{
-}
-
 QHash<int, QColor> Style::getColorPalette(QList<int> ids)
 {
     QHash<int, QColor> palette;

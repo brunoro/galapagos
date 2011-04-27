@@ -2,6 +2,7 @@
 #define EDGE_H
 
 #include "node.h"
+#include "style.h"
 
 #include <QColor>
 #include <QGraphicsLineItem>

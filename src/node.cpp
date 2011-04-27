@@ -134,7 +134,7 @@ void Node::updateEdges(QGraphicsScene *canvas)
             continue;
 
         // TODO: use distance from style
-        int edgeDistance = 5;
+        int edgeDistance = Style::edgeDistance;
         float offset = - sonEdges.length() * edgeDistance / 2;
         for(int i = 0; i < sonEdges.length(); i++)
         {
@@ -151,10 +151,9 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
     QRectF bbox = text->boundingRect();
 
     /* borders TODO: config */
-    int bx = 10,
-        by = 10;
+    QSizeF borders = Style::nodeBorder;
 
-    bbox.setSize(bbox.size() + QSizeF(bx, by));
+    bbox.setSize(bbox.size() + borders);
     ((QGraphicsEllipseItem*)bound)->setRect(bbox);
 
     /* adjust position to center in terms of bounding box and border */
@@ -162,7 +161,7 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
     bound->setZValue(1);
     canvas->addItem(bound);
 
-    text->setPos(coord - QPointF((bbox.width() - bx)/2, (bbox.height() - by)/2));
+    text->setPos(coord - QPointF((bbox.width() - borders.width())/2, (bbox.height() - borders.height())/2));
     text->setZValue(2);
     canvas->addItem(text);
 

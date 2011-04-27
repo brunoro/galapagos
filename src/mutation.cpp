@@ -7,7 +7,7 @@ Mutation::Mutation(Tree *tree_parent, Tree *tree_offspring)
     gain = offspring->getFitness() - parent->getFitness();
 }
 
-Mutation::draw(QGraphicsScene *canvas, QPointF origin, int step)
+void Mutation::draw(QGraphicsScene *canvas, QPointF origin, int step)
 {
     QList<Tree*> trees;
     trees.append(parent);

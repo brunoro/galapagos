@@ -16,6 +16,7 @@ Tree::Tree(int tree_id, float tree_fitness)
 /* draw multiple trees */
 Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, int step)
 {
+    float pi = Style::pi;
     /* start from trees root */
     QList<Node*> nodes;
     QList<int> ids;
@@ -72,6 +73,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
 /* TODO: add pens, brushes and constants */
 void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
 {
+    float pi = Style::pi;
     int depth = root->recursiveDraw(canvas, coord, coord, step, 1, 2 * pi, pi/2);
     qDebug() << "Tree::draw depth" << depth;
 

@@ -10,7 +10,7 @@ class Crossover
 {
     public:
         Crossover(Tree *parent1, Tree *parent2, Tree *offspring);
-        draw(QGraphicsScene *canvas, QPointF origin, int step);
+        void draw(QGraphicsScene *canvas, QPointF origin, int step);
 
     private:
         Tree *parent1,

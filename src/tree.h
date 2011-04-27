@@ -3,7 +3,6 @@
 
 #include "def.h"
 #include "node.h"
-#include "style.h"
 
 #include <QDebug>
 #include <QGraphicsLineItem>
@@ -14,8 +13,6 @@
 #include <QString>
 #include <QStringList>
 #include <QVector>
-
-const float pi = 3.14159265;
 
 class Tree
 {

@@ -23,8 +23,8 @@ class Generation
     private:
         int num;
         QList<Tree*> population;
-        QSet<Mutation> mutations;
-        QSet<Crossover> crossovers;
+        QList<Mutation> mutations;
+        QList<Crossover> crossovers;
 };
 
 #endif // GENERATION_H

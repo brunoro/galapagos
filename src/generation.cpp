@@ -1,7 +1,8 @@
 #include "generation.h"
 
-Generation::Generation()
+Generation::Generation(int popSize)
 {
+    num = popSize;
 }
 
 void Generation::addIndividual(Tree *individual)
@@ -11,12 +12,12 @@ void Generation::addIndividual(Tree *individual)
 
 void Generation::addMutation(Tree *parent, Tree *offspring)
 {
-    mutations.insert(Mutation(parent, offspring));
+    mutations.append(Mutation(parent, offspring));
 }
 
 void Generation::addCrossover(Tree *parent1, Tree *parent2, Tree *offspring)
 {
-    crossovers.insert(Crossover(parent1, parent2, offspring));
+    crossovers.append(Crossover(parent1, parent2, offspring));
 }
 
 Tree* Generation::getIndividual(int id)
