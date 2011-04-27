@@ -13,8 +13,7 @@ namespace Style
     const float pi = 3.14159265;
 
     /* sizes and distances */
-    const QSizeF nodeBorder = QSizeF(10, 10);
-    const float nodeStepRatio = 0.5;
+    const QSizeF nodeSize = QSizeF(35, 35);
     const int edgeDistance = 5;
 
     /* colors */

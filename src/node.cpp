@@ -147,45 +147,35 @@ void Node::updateEdges(QGraphicsScene *canvas)
 /* TODO: add brushes and pens */
 void Node::draw(QGraphicsScene *canvas, QPointF coord)
 {
-    /* get bounding box from text */
     QRectF bbox = text->boundingRect();
+    QSizeF size = Style::nodeSize;
 
-    /* borders TODO: config */
-    QSizeF borders = Style::nodeBorder;
+    /* centering */
+    ((QGraphicsEllipseItem*)bound)->setRect(QRectF(bbox.topLeft(), size));
 
-    bbox.setSize(bbox.size() + borders);
-    ((QGraphicsEllipseItem*)bound)->setRect(bbox);
-
-    /* adjust position to center in terms of bounding box and border */
-    bound->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));
+    bound->setPos(coord - QPointF(size.width()/2, size.height()/2));
     bound->setZValue(1);
     canvas->addItem(bound);
 
-    text->setPos(coord - QPointF((bbox.width() - borders.width())/2, (bbox.height() - borders.height())/2));
+    text->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));
     text->setZValue(2);
     canvas->addItem(text);
 
     pos = coord;
     qDebug() << "Node::draw" << coord << " " << bbox << info;
-    
-    return;
 }
 
 void Node::update(QPointF coord)
 {   
-    /* get bounding box from text */
     QRectF bbox = text->boundingRect();
-    
-    /* borders TODO: config */
-    int bx = 10,
-        by = 10;
+    QSizeF size = Style::nodeSize;
 
-    bbox.setSize(bbox.size() + QSizeF(bx, by));
-    ((QGraphicsEllipseItem*)bound)->setRect(bbox);
- 
-    /* adjust position to center in terms of bounding box and border */
-    bound->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));
-    text->setPos(coord - QPointF((bbox.width() - bx)/2, (bbox.height() - by)/2));
+    /* centering */
+    ((QGraphicsEllipseItem*)bound)->setRect(QRectF(bbox.topLeft(), size));
+
+    bound->setPos(coord - QPointF(size.width()/2, size.height()/2));
+    text->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));
+
     pos = coord;
 }
 
