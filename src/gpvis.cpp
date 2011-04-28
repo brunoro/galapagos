@@ -65,6 +65,7 @@ void GPVis::readLogFile()
     
     QString fileBuffer = fileStream->readLine();
 
+    extern Def *definition;
     if(fileBuffer.contains(QRegExp("definition:*.")))
     {
         qDebug() << "GPVis::readLogFile found definition"; 
@@ -93,6 +94,9 @@ void GPVis::readLogFile()
             {
                 terms = fileBuffer.remove(QRegExp("\tterms:\\s*"));
                 qDebug() << "GPVis::readLogFile found terms" << terms;
+
+                definition = new Def(ops, vars, terms); // TODO: change this
+
                 continue;
             }
 
@@ -108,9 +112,6 @@ void GPVis::readLogFile()
         // TODO: definition reading exception
         return;
     }
-
-    extern Def *definition;
-    definition = new Def(ops, vars, terms);
 }
 
 void GPVis::readGeneration()
@@ -129,8 +130,8 @@ void GPVis::readGeneration()
         if(fileBuffer.contains(QRegExp("ind:*.")))
         {
             individual = fileBuffer.remove(QRegExp("\tind:\\s*"));
-            qDebug() << "GPVis::readLogFile found individual" << individual;
             tokens = individual.split("\t", QString::SkipEmptyParts);
+            qDebug() << "GPVis::readLogFile found individual" << tokens;
             gen->addIndividual(new Tree(tokens[2], tokens[0].toInt(), tokens[1].toFloat()));
             continue;
         }
