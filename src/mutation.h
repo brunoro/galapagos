@@ -9,17 +9,10 @@
 class Mutation
 {
     public:
-        Mutation(Tree *parent, int offspring_id);
+        Mutation(int mut_parent, int mut_offspring);
         void draw(QGraphicsScene *canvas, QPointF origin, int step);
-
-        void setOffspring(Tree *offspring);
-        int getOffspringId();
-
-    private:
-        Tree *parent,
-             *offspring;
-        float gain;
-        int offspring_id;
+        int parent,
+            offspring;
 };
 
 #endif // MUTATION_H

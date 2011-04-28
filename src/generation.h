@@ -14,15 +14,15 @@ class Generation
     public:
         Generation();
 
-        void addIndividual(Tree *individual);
+        void addIndividual(QString individual, float fitness);
         void addMutation(Mutation mutation);
         void addCrossover(Crossover crossover);
 
         Tree* getIndividual(int id);
 
     private:
-        int num;
-        QList<Tree*> population;
+        QList<QString> population_tree;
+        QList<float> population_fit;
         QList<Mutation> mutations;
         QList<Crossover> crossovers;
 };

@@ -132,7 +132,7 @@ void GPVis::readGeneration()
             individual = fileBuffer.remove(QRegExp("\tind:\\s*"));
             tokens = individual.split("\t", QString::SkipEmptyParts);
             //qDebug() << "GPVis::readLogFile found individual" << tokens;
-            gen->addIndividual(new Tree(tokens[2], tokens[0].toInt(), tokens[1].toFloat()));
+            gen->addIndividual(tokens[2], tokens[1].toFloat());
             continue;
         }
         /* crossover */
@@ -141,8 +141,8 @@ void GPVis::readGeneration()
             crossover = fileBuffer.remove(QRegExp("\tcrossover:\\s*"));
             //qDebug() << "GPVis::readLogFile found crossover" << crossover;
             tokens = crossover.split(" ");
-            gen->addCrossover(Crossover(gen->getIndividual(tokens[0].toInt()),
-                                        gen->getIndividual(tokens[1].toInt()),
+            gen->addCrossover(Crossover(tokens[0].toInt(),
+                                        tokens[1].toInt(),
                                         tokens[3].toInt()));
             continue;
         }
@@ -152,7 +152,7 @@ void GPVis::readGeneration()
             mutation = fileBuffer.remove(QRegExp("\tmutation:\\s*"));
             //qDebug() << "GPVis::readLogFile found mutation" << mutation;
             tokens = mutation.split(" ");
-            gen->addMutation(Mutation(gen->getIndividual(tokens[0].toInt()),
+            gen->addMutation(Mutation(tokens[0].toInt(),
                                       tokens[2].toInt()));
             continue;
         }
