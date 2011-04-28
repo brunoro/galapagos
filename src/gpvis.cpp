@@ -50,8 +50,8 @@ GPVis::GPVis(QWidget *parent)
 void GPVis::readLogFile()
 {
     fileFile = new QFile(fileField->text());
-    qDebug() << "GPVis::readLogFile using file" << fileField->text();
-    //qDebug() << fileField->text();
+    //qDebug() << "GPVis::readLogFile using file" << fileField->text();
+    ////qDebug() << fileField->text();
     
     /* check if file and can be read */
     if(!fileFile->open(QIODevice::ReadOnly | QIODevice::Text))
@@ -68,7 +68,7 @@ void GPVis::readLogFile()
     extern Def *definition;
     if(fileBuffer.contains(QRegExp("definition:*.")))
     {
-        qDebug() << "GPVis::readLogFile found definition"; 
+        //qDebug() << "GPVis::readLogFile found definition"; 
         while(!fileStream->atEnd())
         {
             fileBuffer = fileStream->readLine();
@@ -77,7 +77,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\tops:*.")))
             {
                 ops = fileBuffer.remove(QRegExp("\tops:\\s*"));
-                qDebug() << "GPVis::readLogFile found ops " << ops;
+                //qDebug() << "GPVis::readLogFile found ops " << ops;
                 continue;
             }
 
@@ -85,7 +85,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\tvars:*.")))
             {
                 vars = fileBuffer.remove(QRegExp("\tvars:\\s*"));
-                qDebug() << "GPVis::readLogFile found vars" << vars;
+                //qDebug() << "GPVis::readLogFile found vars" << vars;
                 continue;
             }
             
@@ -93,7 +93,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\tterms:*.")))
             {
                 terms = fileBuffer.remove(QRegExp("\tterms:\\s*"));
-                qDebug() << "GPVis::readLogFile found terms" << terms;
+                //qDebug() << "GPVis::readLogFile found terms" << terms;
 
                 definition = new Def(ops, vars, terms); // TODO: change this
 
@@ -131,7 +131,7 @@ void GPVis::readGeneration()
         {
             individual = fileBuffer.remove(QRegExp("\tind:\\s*"));
             tokens = individual.split("\t", QString::SkipEmptyParts);
-            qDebug() << "GPVis::readLogFile found individual" << tokens;
+            //qDebug() << "GPVis::readLogFile found individual" << tokens;
             gen->addIndividual(new Tree(tokens[2], tokens[0].toInt(), tokens[1].toFloat()));
             continue;
         }
@@ -139,7 +139,7 @@ void GPVis::readGeneration()
         if(fileBuffer.contains(QRegExp("crossover:*.")))
         {
             crossover = fileBuffer.remove(QRegExp("\tcrossover:\\s*"));
-            qDebug() << "GPVis::readLogFile found crossover" << crossover;
+            //qDebug() << "GPVis::readLogFile found crossover" << crossover;
             tokens = crossover.split(" ");
             gen->addCrossover(Crossover(gen->getIndividual(tokens[0].toInt()),
                                         gen->getIndividual(tokens[1].toInt()),
@@ -150,7 +150,7 @@ void GPVis::readGeneration()
         if(fileBuffer.contains(QRegExp("mutation:*.")))
         {
             mutation = fileBuffer.remove(QRegExp("\tmutation:\\s*"));
-            qDebug() << "GPVis::readLogFile found mutation" << mutation;
+            //qDebug() << "GPVis::readLogFile found mutation" << mutation;
             tokens = mutation.split(" ");
             gen->addMutation(Mutation(gen->getIndividual(tokens[0].toInt()),
                                       tokens[2].toInt()));
@@ -180,6 +180,6 @@ void GPVis::test()
     /*
     QString line = QString("-  x^2  /  -  x^0  *  x^0  x^1  /  x^2  x^2");
     Tree *test_tree = new Tree(line, -1, float(0.22222));
-    qDebug() << "Tree::test : " << test_tree->index;
+    //qDebug() << "Tree::test : " << test_tree->index;
     */
 }

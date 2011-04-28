@@ -5,7 +5,7 @@ Tree::Tree(QString line, int tree_id, float tree_fitness)
     id = tree_id;
     fitness = tree_fitness;
     QStringList str_list = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
-    qDebug() << "Tree::Tree" << str_list;
+    //qDebug() << "Tree::Tree" << str_list;
     root = parseTree(str_list.replaceInStrings(QRegExp("\\s+"), " "), 0, id);
 }
 
@@ -38,7 +38,7 @@ Node *Tree::parseTree(QStringList nodes, int pos, int id)
     /* TODO: raise exception */
     else
     {
-        qDebug() << "Tree::parseTree invalid node" << nodes[pos];
+        //qDebug() << "Tree::parseTree invalid node" << nodes[pos];
         exit(1);
     }
 
@@ -98,7 +98,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         foreach(int id, son->getTreeId())
         {
             merged->getRoot()->addEdge(son, styles.value(id));
-            qDebug() << "Tree::drawMany " << styles.value(id) << id;
+            //qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
     }
     merged->getRoot()->updateEdges(canvas);
@@ -113,7 +113,7 @@ void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
 {
     float pi = Style::pi;
     int depth = root->recursiveDraw(canvas, coord, coord, step, 1, 2 * pi, pi/2);
-    qDebug() << "Tree::draw depth" << depth;
+    //qDebug() << "Tree::draw depth" << depth;
 
     Tree::drawRings(canvas, coord, depth, step);
 
@@ -189,7 +189,7 @@ void Tree::test(QGraphicsScene *canvas)
     Tree *test_tree2 = new Tree(line2, 20, float(0.22222));
 
     QPointF center = canvas->sceneRect().center();
-    qDebug() << "Tree::test center" << center;
+    //qDebug() << "Tree::test center" << center;
 
     //test_tree1->draw(canvas, center, 60);
     QList<Tree*> trees;

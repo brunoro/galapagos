@@ -27,7 +27,7 @@ int Node::recursiveDraw(QGraphicsScene *canvas,
 {
     /* draw node */
     draw(canvas, coord);
-    qDebug() << "Tree::recursiveDraw" << coord << " " <<  areaAngle << " " <<  refAngle;
+    //qDebug() << "Tree::recursiveDraw" << coord << " " <<  areaAngle << " " <<  refAngle;
 
     int maxLevel = 0,
         sonLevel;
@@ -73,7 +73,7 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
             /* if it is duplicate, merge */
             if( (*(nodes[i]) == *(nodes[j])) && intersection.isEmpty())
             {
-                qDebug() << "Node::recursiveDrawMany nodes are equal " << nodes[i]->getInfo() << nodes[j]->getInfo();
+                //qDebug() << "Node::recursiveDrawMany nodes are equal " << nodes[i]->getInfo() << nodes[j]->getInfo();
                 Node *old_j = nodes[j];
                 nodes[j] = new Node(old_j->getType(), old_j->getInfo());
 
@@ -164,7 +164,7 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
     canvas->addItem(text);
 
     pos = coord;
-    qDebug() << "Node::draw" << coord << " " << bbox << info;
+    //qDebug() << "Node::draw" << coord << " " << bbox << info;
 }
 
 void Node::update(QPointF coord)

@@ -36,5 +36,5 @@ void Edge::drawOffset(QGraphicsScene *canvas, float offset)
 void Edge::update()
 {
     line->setLine(QLineF(dest->getCoord(), dir->getCoord()));
-    qDebug() << "Edge::update" << QLineF(dest->getCoord(), dir->getCoord());
+    //qDebug() << "Edge::update" << QLineF(dest->getCoord(), dir->getCoord());
 }
