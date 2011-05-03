@@ -41,6 +41,7 @@ GPVis::GPVis(QWidget *parent)
     genSlider->setTickPosition(QSlider::TicksBelow);
 
     tableView = new QTableView();
+    tableView->horizontalHeader()->setStretchLastSection(true);
 
     fileField = new QLineEdit(this);
     fileSelect = new QPushButton("Select file", this);
@@ -148,7 +149,7 @@ void GPVis::readLogFile()
 /* builds model from a generation */
 void GPVis::renderGeneration(int gen)
 {
-    qDebug() << "GPVis::renderGeneration " << gen;
+    //qDebug() << "GPVis::renderGeneration " << gen;
     QStandardItemModel *ind, *cross, *mut;
 
     Generation *actual = generations[gen];
@@ -181,6 +182,7 @@ void GPVis::renderGeneration(int gen)
         }
     }
 
+    // TODO: make this work
     /* cleanup last viewed
     if(individuals != NULL)
         delete individuals;
@@ -195,6 +197,9 @@ void GPVis::renderGeneration(int gen)
     individuals = ind;
     crossovers = cross;
     mutations = mut;
+
+    //TODO: change this after putting radio buttons
+    tableView->setModel(ind);
 }
 
 void GPVis::readGeneration()

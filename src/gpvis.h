@@ -12,6 +12,7 @@
 #include <QGraphicsView>
 #include <QGridLayout>
 #include <QHash>
+#include <QHeaderView>
 #include <QLabel>
 #include <QLineEdit>
 #include <QList>
