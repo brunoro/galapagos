@@ -25,7 +25,7 @@ void Edge::drawOffset(QGraphicsScene *canvas, float offset)
     /* translates edge based on its normal vector */
     QLineF translated = line->line();
     double angleRad = (translated.normalVector().angle() * Style::pi) / 180;
-    translated.translate(offset * cosf(angleRad), offset * sinf(angleRad));
+    translated.translate(offset * cos(angleRad), offset * sin(angleRad));
     line->setLine(translated);
 
     line->setPen(QPen(QBrush(color), Style::edgeWeight, style));

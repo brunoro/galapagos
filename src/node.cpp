@@ -133,12 +133,12 @@ void Node::updateEdges(QGraphicsScene *canvas)
             continue;
 
         // TODO: use distance from style
-        int edgeDistance = Style::edgeDistance;
+        float edgeDistance = Style::edgeDistance;
         float offset = - sonEdges.length() * edgeDistance / 2;
         for(int i = 0; i < sonEdges.length(); i++)
         {
-            offset += edgeDistance;
             sonEdges[i]->drawOffset(canvas, offset);
+            offset += edgeDistance;
         }
     }
 }

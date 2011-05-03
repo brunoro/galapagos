@@ -123,7 +123,7 @@ void GPVis::readGeneration()
             mutation;
     QStringList tokens;
 
-    while(!(fileBuffer.contains(QRegExp("generation:*."))) ||
+    while(!(fileBuffer.contains(QRegExp("generation:*."))) &&
           !(fileStream->atEnd()))
     {
         /* individuals */
