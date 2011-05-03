@@ -4,6 +4,7 @@
 #include "tree.h"
 #include "generation.h"
 
+#include <QAbstractItemModel>
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
@@ -20,6 +21,7 @@
 #include <QSlider>
 #include <QSpinBox>
 #include <QStringList>
+#include <QTableView>
 #include <QTest>
 #include <QTextStream>
 #include <QVector>
@@ -39,6 +41,9 @@ class GPVis : public QWidget
     private:
         /* data */
         QList<Generation*> generations;
+        QAbstractItemModel *individuals,
+                           *crossovers,
+                           *mutations;
 
         /* ui */
         QGridLayout *grid;
@@ -47,8 +52,9 @@ class GPVis : public QWidget
                     *fileSelect;
         QLineEdit *fileField;
 
-        QSlider *genslider;
-        QSpinBox *genspin;
+        QSlider *genSlider;
+        QSpinBox *genSpin;
+        QTableView *tableView;
         QGraphicsView *preview;
         QGraphicsScene *scene;
         
@@ -59,6 +65,7 @@ class GPVis : public QWidget
         void readGeneration();
         
     private slots:
+        void renderGeneration(int gen);
         void openFileDialog();
         void readLogFile();
 };

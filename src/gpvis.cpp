@@ -20,10 +20,10 @@ void center(QWidget *widget, int w, int h)
 GPVis::GPVis(QWidget *parent)
     : QWidget(parent)
 {
-    int WIDTH = 805;
-    int HEIGHT = 605;
-    int SCENE_WIDTH = 400;
-    int SCENE_HEIGTH = 300;
+    int WIDTH = 1024;
+    int HEIGHT = 768;
+    int SCENE_WIDTH = 550;
+    int SCENE_HEIGTH = 550;
 
     resize(WIDTH, HEIGHT);
     center(this, WIDTH, HEIGHT);
@@ -32,16 +32,36 @@ GPVis::GPVis(QWidget *parent)
     preview = new QGraphicsView(scene);
     preview->setRenderHint(QPainter::Antialiasing);
 
+    genSpin = new QSpinBox();
+    genSpin->setEnabled(false);
+
+    genSlider = new QSlider();
+    genSlider->setEnabled(false);
+    genSlider->setOrientation(Qt::Horizontal);
+    genSlider->setTickPosition(QSlider::TicksBelow);
+
+    tableView = new QTableView();
+
     fileField = new QLineEdit(this);
     fileSelect = new QPushButton("Select file", this);
     fileOpen = new QPushButton("Read file", this);
 
     grid = new QGridLayout(this);
     grid->addWidget(preview, 0, 0, -1, 1);
-    grid->addWidget(fileField, 0, 1, 0, 2);
-    grid->addWidget(fileSelect, 1, 1);
-    grid->addWidget(fileOpen, 1, 2);
+    grid->addWidget(fileField, 1, 1, 3, 1);
+    grid->addWidget(fileSelect, 2, 1);
+    grid->addWidget(fileOpen, 2, 2);
+    grid->addWidget(genSlider, 3, 1);
+    grid->addWidget(genSpin, 3, 2);
+    grid->addWidget(tableView, 4, 1, 4, 2);
     setLayout(grid);
+
+    
+    connect(genSlider, SIGNAL(valueChanged(int)), genSpin, SLOT(setValue(int)));
+    connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
+
+    connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(renderGeneration(int)));
+    connect(genSpin, SIGNAL(valueChanged(int)), this, SLOT(renderGeneration(int)));
 
     connect(fileSelect, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(fileOpen, SIGNAL(clicked()), this, SLOT(readLogFile()));
@@ -112,6 +132,19 @@ void GPVis::readLogFile()
         // TODO: definition reading exception
         return;
     }
+    /* set up the generation chooses */
+    genSpin->setRange(0, generations.length() - 1);
+    genSpin->setEnabled(true);
+    
+    genSlider->setRange(0, generations.length() - 1);
+    genSlider->setEnabled(true);
+
+    
+}
+
+void GPVis::renderGeneration(int gen)
+{
+    return;
 }
 
 void GPVis::readGeneration()
