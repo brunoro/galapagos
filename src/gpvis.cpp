@@ -48,12 +48,12 @@ GPVis::GPVis(QWidget *parent)
 
     grid = new QGridLayout(this);
     grid->addWidget(preview, 0, 0, -1, 1);
-    grid->addWidget(fileField, 1, 1, 3, 1);
-    grid->addWidget(fileSelect, 2, 1);
-    grid->addWidget(fileOpen, 2, 2);
-    grid->addWidget(genSlider, 3, 1);
-    grid->addWidget(genSpin, 3, 2);
-    grid->addWidget(tableView, 4, 1, 4, 2);
+    grid->addWidget(fileField, 0, 1, 3, 1);
+    grid->addWidget(fileSelect, 1, 1);
+    grid->addWidget(fileOpen, 1, 2);
+    grid->addWidget(genSlider, 2, 1);
+    grid->addWidget(genSpin, 2, 2);
+    grid->addWidget(tableView, 3, 1, 3, 2);
     setLayout(grid);
 
     
@@ -61,7 +61,6 @@ GPVis::GPVis(QWidget *parent)
     connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
 
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(renderGeneration(int)));
-    connect(genSpin, SIGNAL(valueChanged(int)), this, SLOT(renderGeneration(int)));
 
     connect(fileSelect, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(fileOpen, SIGNAL(clicked()), this, SLOT(readLogFile()));
@@ -132,6 +131,7 @@ void GPVis::readLogFile()
         // TODO: definition reading exception
         return;
     }
+
     /* set up the generation chooses */
     genSpin->setRange(0, generations.length() - 1);
     genSpin->setEnabled(true);
@@ -139,12 +139,62 @@ void GPVis::readLogFile()
     genSlider->setRange(0, generations.length() - 1);
     genSlider->setEnabled(true);
 
+    /* define first generation read */
+    renderGeneration(0);
+
     
 }
 
+/* builds model from a generation */
 void GPVis::renderGeneration(int gen)
 {
-    return;
+    qDebug() << "GPVis::renderGeneration " << gen;
+    QStandardItemModel *ind, *cross, *mut;
+
+    Generation *actual = generations[gen];
+    /* population */
+    ind = new QStandardItemModel(actual->population_tree.length(), 2);
+    for(int i = 0; i < actual->population_tree.length(); i++)
+    {
+        ind->setItem(i, 0, new QStandardItem(actual->population_fit[i]));
+        ind->setItem(i, 1, new QStandardItem(actual->population_tree[i]));
+    }
+
+    /* crossovers and mutations */
+    cross = new QStandardItemModel(actual->crossovers.length(), 3);
+    mut = new QStandardItemModel(actual->mutations.length(), 2);
+
+    /* if it is not last generation, get next */
+    if(gen < generations.length() - 1)
+    {
+        Generation *next = generations[gen + 1];
+        for(int i = 0; i < actual->crossovers.length(); i++)
+        {
+            cross->setItem(i, 0, new QStandardItem(QString::number(actual->crossovers[i].parent1)));
+            cross->setItem(i, 1, new QStandardItem(QString::number(actual->crossovers[i].parent2)));
+            cross->setItem(i, 2, new QStandardItem(QString::number(actual->crossovers[i].offspring)));
+        }
+        for(int i = 0; i < actual->mutations.length(); i++)
+        {
+            cross->setItem(i, 0, new QStandardItem(QString::number(actual->mutations[i].parent)));
+            cross->setItem(i, 1, new QStandardItem(QString::number(actual->mutations[i].offspring)));
+        }
+    }
+
+    /* cleanup last viewed
+    if(individuals != NULL)
+        delete individuals;
+
+    if(crossovers != NULL)
+        delete crossovers;
+
+    if(mutations != NULL)
+        delete mutations; */
+
+    /* replace */
+    individuals = ind;
+    crossovers = cross;
+    mutations = mut;
 }
 
 void GPVis::readGeneration()

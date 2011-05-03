@@ -20,7 +20,6 @@ class Generation
 
         Tree* getIndividual(int id);
 
-    private:
         QList<QString> population_tree;
         QList<float> population_fit;
         QList<Mutation> mutations;

@@ -4,7 +4,6 @@
 #include "tree.h"
 #include "generation.h"
 
-#include <QAbstractItemModel>
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
@@ -20,6 +19,7 @@
 #include <QRegExp>
 #include <QSlider>
 #include <QSpinBox>
+#include <QStandardItemModel>
 #include <QStringList>
 #include <QTableView>
 #include <QTest>
@@ -41,7 +41,7 @@ class GPVis : public QWidget
     private:
         /* data */
         QList<Generation*> generations;
-        QAbstractItemModel *individuals,
+        QStandardItemModel *individuals,
                            *crossovers,
                            *mutations;
 
