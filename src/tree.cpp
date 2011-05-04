@@ -99,7 +99,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         merged->getRoot()->addSon(son);
         foreach(int id, son->getTreeId())
         {
-            merged->getRoot()->addEdge(son, styles.value(id));
+            merged->getRoot()->addEdge(son, Style::edgeColor, styles.value(id));
             //qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
     }

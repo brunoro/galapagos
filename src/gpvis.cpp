@@ -53,7 +53,6 @@ GPVis::GPVis(QWidget *parent)
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
     tableView->verticalHeader()->hide();
-    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tableView->setEnabled(false);
 
     fileField = new QLineEdit(this);
@@ -324,6 +323,7 @@ void GPVis::individualFromTable()
     int row = tableView->selectionModel()->currentIndex().row(),
         ind = tableView->model()->index(row, 0).data().toInt();
     selectedRow = row;
+    scene->clear();
     renderIndividual(genSpin->value(), ind);
 }
 
@@ -341,15 +341,16 @@ void GPVis::crossoverFromTable()
         par2_num = tableView->model()->index(row, 1).data().toInt(),
         off_num = tableView->model()->index(row, 2).data().toInt();
     selectedRow = row;
+    scene->clear();
     renderCrossover(genSpin->value(), par1_num, par2_num, off_num);
 }
 
 void GPVis::renderCrossover(int gen, int parent1, int parent2, int offspring)
 {
     QList<Tree*> trees;
+    trees.append(generations[gen + 1]->getIndividual(offspring));
     trees.append(generations[gen]->getIndividual(parent1));
     trees.append(generations[gen]->getIndividual(parent2));
-    trees.append(generations[gen + 1]->getIndividual(offspring));
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
 }
 
@@ -359,14 +360,15 @@ void GPVis::mutationFromTable()
         par_num = tableView->model()->index(row, 0).data().toInt(),
         off_num = tableView->model()->index(row, 1).data().toInt();
     selectedRow = row;
+    scene->clear();
     renderMutation(genSpin->value(), par_num, off_num);
 }
 
 void GPVis::renderMutation(int gen, int parent, int offspring)
 {
     QList<Tree*> trees;
-    trees.append(generations[gen]->getIndividual(parent));
     trees.append(generations[gen + 1]->getIndividual(offspring));
+    trees.append(generations[gen]->getIndividual(parent));
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
 }
 
@@ -382,6 +384,8 @@ void GPVis::showIndTable()
     tableView->selectionModel()->disconnect();
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(individualFromTable()));
+    
+    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 void GPVis::showCrossTable()
@@ -396,6 +400,8 @@ void GPVis::showCrossTable()
     tableView->selectionModel()->disconnect();
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(crossoverFromTable()));
+    
+    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 void GPVis::showMutTable()
@@ -409,6 +415,8 @@ void GPVis::showMutTable()
     tableView->selectionModel()->disconnect();
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(mutationFromTable()));
+    
+    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 void GPVis::openFileDialog()
