@@ -179,6 +179,10 @@ void GPVis::readLogFile()
     /* set individuals as default view */
     viewInd->setChecked(true);
     showIndTable();
+    
+    /* individual 0 is the first one shown */
+    selectedRow = 0;
+    tableView->selectRow(selectedRow);
 }
 
 /* builds model from a generation */
@@ -256,6 +260,7 @@ void GPVis::showGeneration(int gen)
     crossovers = cross;
     mutations = mut;
 
+    /* select right view */
     switch(selectedView)
     {
         case INDIVIDUALS:
@@ -268,6 +273,9 @@ void GPVis::showGeneration(int gen)
             showCrossTable();
             break;
     }
+    
+    /* keep same row selected */
+    tableView->selectRow(selectedRow);
 }
 
 void GPVis::readGeneration()
@@ -390,6 +398,7 @@ void GPVis::showIndTable()
 
 void GPVis::showCrossTable()
 {
+    // TODO: limit slider if generation is the last one
     selectedView = CROSSOVERS;
     tableView->setModel(crossovers);
 
@@ -433,7 +442,7 @@ void GPVis::test()
     //fileField->setText("../../../tinygp/test/problem.log");
     QTest::mouseClick(fileOpen, Qt::LeftButton);
 
-    Tree::test(scene);
+    //Tree::test(scene);
     /*
     QString line = QString("-  x^2  /  -  x^0  *  x^0  x^1  /  x^2  x^2");
     Tree *test_tree = new Tree(line, -1, float(0.22222));
