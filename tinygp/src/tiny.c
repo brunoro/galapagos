@@ -254,19 +254,9 @@ int main(int argc, char **argv)
     seed, MAX_LEN, POPSIZE, DEPTH, CROSSOVER_PROB, PMUT_PER_NODE, GENERATIONS, TSIZE );
     
     logprint_definition();
-    fprintf(runlog, "generation 0:\n");
 
-    for ( indivs = 0; indivs < POPSIZE; indivs ++ )
+    for ( gen = 0; gen < GENERATIONS; gen ++ )
     {
-        fprintf(runlog, "\tind: %d\t%f\t", indivs, fitness[indivs]);
-        logprint_indiv(pop[indivs]);
-        fprintf(runlog, "\n");
-    }
-    stats( fitness, pop, 0 );
-
-    for ( gen = 1; gen < GENERATIONS; gen ++ )
-    {
-        fprintf(runlog, "generation %d:\n", gen);
         /*
         if (  fitness[best] > -1e-5f )
         {
@@ -275,12 +265,18 @@ int main(int argc, char **argv)
         }
         */
 
+        fprintf(runlog, "generation %d:\n", gen);
+
         for ( indivs = 0; indivs < POPSIZE; indivs ++ )
         {
             fprintf(runlog, "\tind: %d\t%f\t", indivs, fitness[indivs]);
             logprint_indiv(pop[indivs]);
             fprintf(runlog, "\n");
         }
+
+        /* limit */
+        if(gen == GENERATIONS - 1)
+            continue;
 
         for ( indivs = 0; indivs < POPSIZE; indivs ++ )
         {
