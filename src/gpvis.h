@@ -17,6 +17,7 @@
 #include <QLineEdit>
 #include <QList>
 #include <QPushButton>
+#include <QRadioButton>
 #include <QRegExp>
 #include <QSlider>
 #include <QSpinBox>
@@ -53,12 +54,18 @@ class GPVis : public QWidget
                     *fileSelect;
         QLineEdit *fileField;
 
+        QLabel *genLabel;
         QSlider *genSlider;
         QSpinBox *genSpin;
+        QRadioButton *viewInd,
+                     *viewCross,
+                     *viewMut;
         QTableView *tableView;
         QGraphicsView *preview;
         QGraphicsScene *scene;
         
+        int selected;
+
         /* file reading */
         QFile *fileFile;
         QTextStream *fileStream;
@@ -67,8 +74,14 @@ class GPVis : public QWidget
         
     private slots:
         void renderGeneration(int gen);
+        /* change tableView */
+        void showIndTable();
+        void showCrossTable();
+        void showMutTable();
+        /* file reading */
         void openFileDialog();
         void readLogFile();
+
 };
 
 #endif

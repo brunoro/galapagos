@@ -32,16 +32,26 @@ GPVis::GPVis(QWidget *parent)
     preview = new QGraphicsView(scene);
     preview->setRenderHint(QPainter::Antialiasing);
 
-    genSpin = new QSpinBox();
+    genLabel = new QLabel("Generation");
+
+    genSpin = new QSpinBox(this);
     genSpin->setEnabled(false);
 
-    genSlider = new QSlider();
+    genSlider = new QSlider(this);
     genSlider->setEnabled(false);
     genSlider->setOrientation(Qt::Horizontal);
     genSlider->setTickPosition(QSlider::TicksBelow);
 
-    tableView = new QTableView();
+    viewInd = new QRadioButton("Individuals", this);
+    viewInd->setEnabled(false);
+    viewCross = new QRadioButton("Crossovers", this);
+    viewCross->setEnabled(false);
+    viewMut = new QRadioButton("Mutations", this);
+    viewMut->setEnabled(false);
+
+    tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
+    tableView->setEnabled(false);
 
     fileField = new QLineEdit(this);
     fileSelect = new QPushButton("Select file", this);
@@ -49,22 +59,29 @@ GPVis::GPVis(QWidget *parent)
 
     grid = new QGridLayout(this);
     grid->addWidget(preview, 0, 0, -1, 1);
-    grid->addWidget(fileField, 0, 1, 3, 1);
-    grid->addWidget(fileSelect, 1, 1);
-    grid->addWidget(fileOpen, 1, 2);
-    grid->addWidget(genSlider, 2, 1);
-    grid->addWidget(genSpin, 2, 2);
-    grid->addWidget(tableView, 3, 1, 3, 2);
+    grid->addWidget(fileField, 0, 1);
+    grid->addWidget(fileSelect, 0, 2);
+    grid->addWidget(fileOpen, 0, 3);
+    grid->addWidget(genLabel, 1, 1);
+    grid->addWidget(genSlider, 1, 2);
+    grid->addWidget(genSpin, 1, 3);
+    grid->addWidget(viewInd, 2, 1);
+    grid->addWidget(viewCross, 2, 2);
+    grid->addWidget(viewMut, 2, 3);
+    grid->addWidget(tableView, 3, 1, 3, 3);
     setLayout(grid);
 
     
-    connect(genSlider, SIGNAL(valueChanged(int)), genSpin, SLOT(setValue(int)));
-    connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
-
-    connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(renderGeneration(int)));
-
     connect(fileSelect, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(fileOpen, SIGNAL(clicked()), this, SLOT(readLogFile()));
+
+    connect(genSlider, SIGNAL(valueChanged(int)), genSpin, SLOT(setValue(int)));
+    connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
+    connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(renderGeneration(int)));
+
+    connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
+    connect(viewCross, SIGNAL(toggled(bool)), this, SLOT(showCrossTable()));
+    connect(viewMut, SIGNAL(toggled(bool)), this, SLOT(showMutTable()));
 }
 
 void GPVis::readLogFile()
@@ -133,12 +150,21 @@ void GPVis::readLogFile()
         return;
     }
 
-    /* set up the generation chooses */
+    /* set up the generation stuff */
     genSpin->setRange(0, generations.length() - 1);
     genSpin->setEnabled(true);
     
     genSlider->setRange(0, generations.length() - 1);
     genSlider->setEnabled(true);
+
+    /* enable viewer */
+    tableView->setEnabled(true);
+    viewInd->setEnabled(true);
+    viewCross->setEnabled(true);
+    viewMut->setEnabled(true);
+    
+    /* set individuals as default view */
+    viewInd->setDown(true);
 
     /* define first generation read */
     renderGeneration(0);
@@ -248,6 +274,21 @@ void GPVis::readGeneration()
         fileBuffer = fileStream->readLine();
     }
     generations.append(gen);
+}
+
+void GPVis::showIndTable()
+{
+    tableView->setModel(individuals);
+}
+
+void GPVis::showCrossTable()
+{
+    tableView->setModel(crossovers);
+}
+
+void GPVis::showMutTable()
+{
+    tableView->setModel(mutations);
 }
 
 void GPVis::openFileDialog()
