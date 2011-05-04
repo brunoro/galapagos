@@ -10,7 +10,6 @@ class Mutation
 {
     public:
         Mutation(int mut_parent, int mut_offspring);
-        void draw(QGraphicsScene *canvas, QPointF origin, int step);
         int parent,
             offspring;
 };

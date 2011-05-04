@@ -16,6 +16,7 @@ namespace Style
     const QSizeF nodeSize = QSizeF(35, 35);
     const int edgeDistance = 5;
     const int edgeWeight = 2;
+    const int defaultStep = 50;
 
     /* colors */
     const QColor nodeBrushColor[4] = { QColor("dodgerblue"),

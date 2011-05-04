@@ -29,6 +29,7 @@ GPVis::GPVis(QWidget *parent)
     center(this, WIDTH, HEIGHT);
 
     scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGTH, this);
+    sceneCenter = new QPointF(SCENE_WIDTH/2, SCENE_HEIGTH/2);
     preview = new QGraphicsView(scene);
     preview->setRenderHint(QPainter::Antialiasing);
 
@@ -52,6 +53,7 @@ GPVis::GPVis(QWidget *parent)
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
     tableView->setEnabled(false);
+    tableView->verticalHeader()->hide();
 
     fileField = new QLineEdit(this);
     fileSelect = new QPushButton("Select file", this);
@@ -77,7 +79,7 @@ GPVis::GPVis(QWidget *parent)
 
     connect(genSlider, SIGNAL(valueChanged(int)), genSpin, SLOT(setValue(int)));
     connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
-    connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(renderGeneration(int)));
+    connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGenration(int)));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewCross, SIGNAL(toggled(bool)), this, SLOT(showCrossTable()));
@@ -103,6 +105,14 @@ void GPVis::readLogFile()
     QString fileBuffer = fileStream->readLine();
 
     extern Def *definition;
+
+    /* delete everything from generations */
+    generations.clear();
+
+    /* if other definition was there */
+    if(definition != NULL) delete definition;
+
+    /* search definition in file */
     if(fileBuffer.contains(QRegExp("definition:*.")))
     {
         //qDebug() << "GPVis::readLogFile found definition"; 
@@ -163,38 +173,48 @@ void GPVis::readLogFile()
     viewCross->setEnabled(true);
     viewMut->setEnabled(true);
     
-    /* set individuals as default view */
-    viewInd->setDown(true);
-
     /* define first generation read */
-    renderGeneration(0);
-
+    showGenration(0);
     
+    /* set individuals as default view */
+    viewInd->setChecked(true);
+    showIndTable();
 }
 
 /* builds model from a generation */
-void GPVis::renderGeneration(int gen)
+void GPVis::showGenration(int gen)
 {
-    //qDebug() << "GPVis::renderGeneration " << gen;
+    //qDebug() << "GPVis::showGenration " << gen;
     QStandardItemModel *ind, *cross, *mut;
 
     Generation *actual = generations[gen];
+
     /* population */
-    ind = new QStandardItemModel(actual->population_tree.length(), 2);
+    ind = new QStandardItemModel(actual->population_tree.length(), 3);
+    ind->setHeaderData(0, Qt::Horizontal, "id");
+    ind->setHeaderData(1, Qt::Horizontal, "fitness");
+    ind->setHeaderData(2, Qt::Horizontal, "tree");
     for(int i = 0; i < actual->population_tree.length(); i++)
     {
-        ind->setItem(i, 0, new QStandardItem(actual->population_fit[i]));
-        ind->setItem(i, 1, new QStandardItem(actual->population_tree[i]));
+        ind->setItem(i, 0, new QStandardItem(QString::number(i)));
+        ind->setItem(i, 1, new QStandardItem(QString::number(actual->population_fit[i])));
+        ind->setItem(i, 2, new QStandardItem(actual->population_tree[i]));
     }
 
     /* crossovers and mutations */
     cross = new QStandardItemModel(actual->crossovers.length(), 3);
+    cross->setHeaderData(1, Qt::Horizontal, "parent 1");
+    cross->setHeaderData(2, Qt::Horizontal, "parent 2");
+    cross->setHeaderData(0, Qt::Horizontal, "offspring");
+    
     mut = new QStandardItemModel(actual->mutations.length(), 2);
+    mut->setHeaderData(0, Qt::Horizontal, "parent");
+    mut->setHeaderData(1, Qt::Horizontal, "offspring");
 
     /* if it is not last generation, get next */
     if(gen < generations.length() - 1)
     {
-        Generation *next = generations[gen + 1];
+        //Generation *next = generations[gen + 1];
         for(int i = 0; i < actual->crossovers.length(); i++)
         {
             cross->setItem(i, 0, new QStandardItem(QString::number(actual->crossovers[i].parent1)));
@@ -203,11 +223,19 @@ void GPVis::renderGeneration(int gen)
         }
         for(int i = 0; i < actual->mutations.length(); i++)
         {
-            cross->setItem(i, 0, new QStandardItem(QString::number(actual->mutations[i].parent)));
-            cross->setItem(i, 1, new QStandardItem(QString::number(actual->mutations[i].offspring)));
+            mut->setItem(i, 0, new QStandardItem(QString::number(actual->mutations[i].parent)));
+            mut->setItem(i, 1, new QStandardItem(QString::number(actual->mutations[i].offspring)));
         }
+        /* set radios */
+        viewCross->setEnabled(true);
+        viewMut->setEnabled(true);
     }
-
+    else
+    {
+        /* unset radios */
+        viewCross->setEnabled(false);
+        viewMut->setEnabled(false);
+    }
     // TODO: make this work
     /* cleanup last viewed
     if(individuals != NULL)
@@ -224,8 +252,18 @@ void GPVis::renderGeneration(int gen)
     crossovers = cross;
     mutations = mut;
 
-    //TODO: change this after putting radio buttons
-    tableView->setModel(ind);
+    switch(selectedView)
+    {
+        case INDIVIDUALS:
+            showIndTable();
+            break;
+        case CROSSOVERS:
+            showMutTable();
+            break;
+        case MUTATIONS:
+            showCrossTable();
+            break;
+    }
 }
 
 void GPVis::readGeneration()
@@ -276,19 +314,53 @@ void GPVis::readGeneration()
     generations.append(gen);
 }
 
+void GPVis::renderIndividual(int gen, int ind)
+{
+    Tree *tree;
+    tree = generations[gen]->getIndividual(ind);
+}
+
+void GPVis::renderCrossover(int gen, int parent1, int parent2, int offspring)
+{
+    QList<Tree*> trees;
+    trees.append(generations[gen]->getIndividual(parent1));
+    trees.append(generations[gen]->getIndividual(parent2));
+    trees.append(generations[gen + 1]->getIndividual(offspring));
+    Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
+}
+
+void GPVis::renderMutation(int gen, int parent, int offspring)
+{
+    QList<Tree*> trees;
+    trees.append(generations[gen]->getIndividual(parent));
+    trees.append(generations[gen + 1]->getIndividual(offspring));
+    Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
+}
+
 void GPVis::showIndTable()
 {
+    selectedView = INDIVIDUALS;
     tableView->setModel(individuals);
+    tableView->resizeColumnToContents(0);
+    tableView->resizeColumnToContents(1);
+    tableView->resizeColumnToContents(2);
 }
 
 void GPVis::showCrossTable()
 {
+    selectedView = CROSSOVERS;
     tableView->setModel(crossovers);
+    tableView->resizeColumnToContents(0);
+    tableView->resizeColumnToContents(1);
+    tableView->resizeColumnToContents(2);
 }
 
 void GPVis::showMutTable()
 {
+    selectedView = MUTATIONS;
     tableView->setModel(mutations);
+    tableView->resizeColumnToContents(0);
+    tableView->resizeColumnToContents(1);
 }
 
 void GPVis::openFileDialog()

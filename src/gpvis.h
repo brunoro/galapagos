@@ -29,6 +29,8 @@
 #include <QVector>
 #include <QWidget>
 
+enum Views{INDIVIDUALS, CROSSOVERS, MUTATIONS};
+
 class GPVis : public QWidget
 {
     Q_OBJECT
@@ -63,8 +65,10 @@ class GPVis : public QWidget
         QTableView *tableView;
         QGraphicsView *preview;
         QGraphicsScene *scene;
+        QPointF *sceneCenter;
         
-        int selected;
+        Views selectedView;
+        int selectedInd;
 
         /* file reading */
         QFile *fileFile;
@@ -73,11 +77,17 @@ class GPVis : public QWidget
         void readGeneration();
         
     private slots:
-        void renderGeneration(int gen);
+        /* show data */
+        void showGenration(int gen);
+        void renderIndividual(int gen, int individual);
+        void renderCrossover(int gen, int parent1, int parent2, int offspring);
+        void renderMutation(int gen, int parent, int offspring);
+
         /* change tableView */
         void showIndTable();
         void showCrossTable();
         void showMutTable();
+
         /* file reading */
         void openFileDialog();
         void readLogFile();
