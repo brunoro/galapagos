@@ -76,12 +76,15 @@ class GPVis : public QWidget
 
         void readGeneration();
         
-    private slots:
-        /* show data */
-        void showGenration(int gen);
+        /* render stuff on canvas */
         void renderIndividual(int gen, int individual);
         void renderCrossover(int gen, int parent1, int parent2, int offspring);
         void renderMutation(int gen, int parent, int offspring);
+
+    private slots:
+        /* show data */
+        void showGeneration(int gen);
+        void individualFromTable(QModelIndex ind);
 
         /* change tableView */
         void showIndTable();

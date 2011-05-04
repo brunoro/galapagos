@@ -52,8 +52,9 @@ GPVis::GPVis(QWidget *parent)
 
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
-    tableView->setEnabled(false);
     tableView->verticalHeader()->hide();
+    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tableView->setEnabled(false);
 
     fileField = new QLineEdit(this);
     fileSelect = new QPushButton("Select file", this);
@@ -79,7 +80,7 @@ GPVis::GPVis(QWidget *parent)
 
     connect(genSlider, SIGNAL(valueChanged(int)), genSpin, SLOT(setValue(int)));
     connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
-    connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGenration(int)));
+    connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewCross, SIGNAL(toggled(bool)), this, SLOT(showCrossTable()));
@@ -174,7 +175,7 @@ void GPVis::readLogFile()
     viewMut->setEnabled(true);
     
     /* define first generation read */
-    showGenration(0);
+    showGeneration(0);
     
     /* set individuals as default view */
     viewInd->setChecked(true);
@@ -182,9 +183,9 @@ void GPVis::readLogFile()
 }
 
 /* builds model from a generation */
-void GPVis::showGenration(int gen)
+void GPVis::showGeneration(int gen)
 {
-    //qDebug() << "GPVis::showGenration " << gen;
+    //qDebug() << "GPVis::showGeneration " << gen;
     QStandardItemModel *ind, *cross, *mut;
 
     Generation *actual = generations[gen];
@@ -194,12 +195,16 @@ void GPVis::showGenration(int gen)
     ind->setHeaderData(0, Qt::Horizontal, "id");
     ind->setHeaderData(1, Qt::Horizontal, "fitness");
     ind->setHeaderData(2, Qt::Horizontal, "tree");
+
     for(int i = 0; i < actual->population_tree.length(); i++)
     {
         ind->setItem(i, 0, new QStandardItem(QString::number(i)));
         ind->setItem(i, 1, new QStandardItem(QString::number(actual->population_fit[i])));
         ind->setItem(i, 2, new QStandardItem(actual->population_tree[i]));
     }
+
+    connect(viewMut, SIGNAL(toggled(bool)), this, SLOT(showMutTable()));
+    connect(viewMut, SIGNAL(toggled(bool)), this, SLOT(showMutTable()));
 
     /* crossovers and mutations */
     cross = new QStandardItemModel(actual->crossovers.length(), 3);
@@ -314,10 +319,17 @@ void GPVis::readGeneration()
     generations.append(gen);
 }
 
+void GPVis::individualFromTable(QModelIndex ind)
+{
+    renderIndividual(genSpin->value(),
+                     tableView->model()->data(ind, 0).toInt());
+}
+
 void GPVis::renderIndividual(int gen, int ind)
 {
     Tree *tree;
     tree = generations[gen]->getIndividual(ind);
+    tree->draw(scene, *sceneCenter, Style::defaultStep);
 }
 
 void GPVis::renderCrossover(int gen, int parent1, int parent2, int offspring)
@@ -344,6 +356,7 @@ void GPVis::showIndTable()
     tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
     tableView->resizeColumnToContents(2);
+    connect(tableView, SIGNAL(clicked(QModelIndex)), this, SLOT(individualFromTable(QModelIndex)));
 }
 
 void GPVis::showCrossTable()
