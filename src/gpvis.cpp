@@ -319,10 +319,11 @@ void GPVis::readGeneration()
     generations.append(gen);
 }
 
-void GPVis::individualFromTable(QModelIndex field)
+void GPVis::individualFromTable()
 {
     //TODO: change this to take first from row
-    int ind_num = tableView->model()->index(field.row(), 0).data().toInt();
+    int ind_row = tableView->selectionModel()->currentIndex().row(),
+        ind_num = tableView->model()->index(ind_row, 0).data().toInt();
     selectedInd = ind_num;
     renderIndividual(genSpin->value(),
                      ind_num);
@@ -359,9 +360,9 @@ void GPVis::showIndTable()
     tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
     tableView->resizeColumnToContents(2);
-    //TODO: remove these connections
-    connect(tableView, SIGNAL(clicked(QModelIndex)), this, SLOT(individualFromTable(QModelIndex)));
-    connect(tableView, SIGNAL(activated(QModelIndex)), this, SLOT(individualFromTable(QModelIndex)));
+    //TODO: remove all other connections
+    connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            this, SLOT(individualFromTable()));
 }
 
 void GPVis::showCrossTable()

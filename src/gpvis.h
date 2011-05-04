@@ -84,7 +84,7 @@ class GPVis : public QWidget
     private slots:
         /* show data */
         void showGeneration(int gen);
-        void individualFromTable(QModelIndex field);
+        void individualFromTable();
 
         /* change tableView */
         void showIndTable();
