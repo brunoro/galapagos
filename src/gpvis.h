@@ -68,7 +68,7 @@ class GPVis : public QWidget
         QPointF *sceneCenter;
         
         Views selectedView;
-        int selectedInd;
+        int selectedRow;
 
         /* file reading */
         QFile *fileFile;
@@ -85,6 +85,8 @@ class GPVis : public QWidget
         /* show data */
         void showGeneration(int gen);
         void individualFromTable();
+        void crossoverFromTable();
+        void mutationFromTable();
 
         /* change tableView */
         void showIndTable();

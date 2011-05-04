@@ -321,12 +321,10 @@ void GPVis::readGeneration()
 
 void GPVis::individualFromTable()
 {
-    //TODO: change this to take first from row
-    int ind_row = tableView->selectionModel()->currentIndex().row(),
-        ind_num = tableView->model()->index(ind_row, 0).data().toInt();
-    selectedInd = ind_num;
-    renderIndividual(genSpin->value(),
-                     ind_num);
+    int row = tableView->selectionModel()->currentIndex().row(),
+        ind = tableView->model()->index(row, 0).data().toInt();
+    selectedRow = row;
+    renderIndividual(genSpin->value(), ind);
 }
 
 void GPVis::renderIndividual(int gen, int ind)
@@ -336,6 +334,16 @@ void GPVis::renderIndividual(int gen, int ind)
     tree->draw(scene, *sceneCenter, Style::defaultStep);
 }
 
+void GPVis::crossoverFromTable()
+{
+    int row = tableView->selectionModel()->currentIndex().row(),
+        par1_num = tableView->model()->index(row, 0).data().toInt(),
+        par2_num = tableView->model()->index(row, 1).data().toInt(),
+        off_num = tableView->model()->index(row, 2).data().toInt();
+    selectedRow = row;
+    renderCrossover(genSpin->value(), par1_num, par2_num, off_num);
+}
+
 void GPVis::renderCrossover(int gen, int parent1, int parent2, int offspring)
 {
     QList<Tree*> trees;
@@ -343,6 +351,15 @@ void GPVis::renderCrossover(int gen, int parent1, int parent2, int offspring)
     trees.append(generations[gen]->getIndividual(parent2));
     trees.append(generations[gen + 1]->getIndividual(offspring));
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
+}
+
+void GPVis::mutationFromTable()
+{
+    int row = tableView->selectionModel()->currentIndex().row(),
+        par_num = tableView->model()->index(row, 0).data().toInt(),
+        off_num = tableView->model()->index(row, 1).data().toInt();
+    selectedRow = row;
+    renderMutation(genSpin->value(), par_num, off_num);
 }
 
 void GPVis::renderMutation(int gen, int parent, int offspring)
@@ -357,10 +374,12 @@ void GPVis::showIndTable()
 {
     selectedView = INDIVIDUALS;
     tableView->setModel(individuals);
+
     tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
     tableView->resizeColumnToContents(2);
-    //TODO: remove all other connections
+
+    tableView->selectionModel()->disconnect();
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(individualFromTable()));
 }
@@ -369,17 +388,27 @@ void GPVis::showCrossTable()
 {
     selectedView = CROSSOVERS;
     tableView->setModel(crossovers);
+
     tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
     tableView->resizeColumnToContents(2);
+
+    tableView->selectionModel()->disconnect();
+    connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            this, SLOT(crossoverFromTable()));
 }
 
 void GPVis::showMutTable()
 {
     selectedView = MUTATIONS;
     tableView->setModel(mutations);
+
     tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
+
+    tableView->selectionModel()->disconnect();
+    connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            this, SLOT(mutationFromTable()));
 }
 
 void GPVis::openFileDialog()
