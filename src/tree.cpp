@@ -82,7 +82,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     int startLevel;
     if(needRoot)
     {
-        Node *root = new Node(ROOT, "root");
+        Node *root = new Node(ROOT, "");
         root->draw(canvas, coord);
         merged->setRoot(root);
         startLevel = 1;

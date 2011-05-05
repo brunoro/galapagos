@@ -84,6 +84,11 @@ GPVis::GPVis(QWidget *parent)
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewCross, SIGNAL(toggled(bool)), this, SLOT(showCrossTable()));
     connect(viewMut, SIGNAL(toggled(bool)), this, SLOT(showMutTable()));
+
+    individuals = new QStandardItemModel(this);
+    crossovers = new QStandardItemModel(this);
+    mutations = new QStandardItemModel(this);
+
 }
 
 void GPVis::readLogFile()
@@ -188,36 +193,36 @@ void GPVis::readLogFile()
 /* builds model from a generation */
 void GPVis::showGeneration(int gen)
 {
-    //qDebug() << "GPVis::showGeneration " << gen;
-    QStandardItemModel *ind, *cross, *mut;
+    /* cleanup last viewed */
+    individuals->clear();
+    crossovers->clear();
+    mutations->clear();
 
+    //qDebug() << "GPVis::showGeneration " << gen;
     Generation *actual = generations[gen];
 
     /* population */
-    ind = new QStandardItemModel(actual->population_tree.length(), 3);
-    ind->setHeaderData(0, Qt::Horizontal, "id");
-    ind->setHeaderData(1, Qt::Horizontal, "fitness");
-    ind->setHeaderData(2, Qt::Horizontal, "tree");
+    individuals->setHeaderData(0, Qt::Horizontal, "id");
+    individuals->setHeaderData(1, Qt::Horizontal, "fitness");
+    individuals->setHeaderData(2, Qt::Horizontal, "tree");
 
     for(int i = 0; i < actual->population_tree.length(); i++)
     {
-        ind->setItem(i, 0, new QStandardItem(QString::number(i)));
-        ind->setItem(i, 1, new QStandardItem(QString::number(actual->population_fit[i])));
-        ind->setItem(i, 2, new QStandardItem(actual->population_tree[i]));
+        individuals->setItem(i, 0, new QStandardItem(QString::number(i)));
+        individuals->setItem(i, 1, new QStandardItem(QString::number(actual->population_fit[i])));
+        individuals->setItem(i, 2, new QStandardItem(actual->population_tree[i]));
     }
 
     connect(viewMut, SIGNAL(toggled(bool)), this, SLOT(showMutTable()));
     connect(viewMut, SIGNAL(toggled(bool)), this, SLOT(showMutTable()));
 
     /* crossovers and mutations */
-    cross = new QStandardItemModel(actual->crossovers.length(), 3);
-    cross->setHeaderData(1, Qt::Horizontal, "parent 1");
-    cross->setHeaderData(2, Qt::Horizontal, "parent 2");
-    cross->setHeaderData(0, Qt::Horizontal, "offspring");
+    crossovers->setHeaderData(1, Qt::Horizontal, "parent 1");
+    crossovers->setHeaderData(2, Qt::Horizontal, "parent 2");
+    crossovers->setHeaderData(0, Qt::Horizontal, "offspring");
     
-    mut = new QStandardItemModel(actual->mutations.length(), 2);
-    mut->setHeaderData(0, Qt::Horizontal, "parent");
-    mut->setHeaderData(1, Qt::Horizontal, "offspring");
+    mutations->setHeaderData(0, Qt::Horizontal, "parent");
+    mutations->setHeaderData(1, Qt::Horizontal, "offspring");
 
     /* if it is not last generation, get next */
     if(gen < generations.length() - 1)
@@ -225,14 +230,14 @@ void GPVis::showGeneration(int gen)
         //Generation *next = generations[gen + 1];
         for(int i = 0; i < actual->crossovers.length(); i++)
         {
-            cross->setItem(i, 0, new QStandardItem(QString::number(actual->crossovers[i].parent1)));
-            cross->setItem(i, 1, new QStandardItem(QString::number(actual->crossovers[i].parent2)));
-            cross->setItem(i, 2, new QStandardItem(QString::number(actual->crossovers[i].offspring)));
+            crossovers->setItem(i, 0, new QStandardItem(QString::number(actual->crossovers[i].parent1)));
+            crossovers->setItem(i, 1, new QStandardItem(QString::number(actual->crossovers[i].parent2)));
+            crossovers->setItem(i, 2, new QStandardItem(QString::number(actual->crossovers[i].offspring)));
         }
         for(int i = 0; i < actual->mutations.length(); i++)
         {
-            mut->setItem(i, 0, new QStandardItem(QString::number(actual->mutations[i].parent)));
-            mut->setItem(i, 1, new QStandardItem(QString::number(actual->mutations[i].offspring)));
+            mutations->setItem(i, 0, new QStandardItem(QString::number(actual->mutations[i].parent)));
+            mutations->setItem(i, 1, new QStandardItem(QString::number(actual->mutations[i].offspring)));
         }
         /* set radios */
         viewCross->setEnabled(true);
@@ -244,21 +249,6 @@ void GPVis::showGeneration(int gen)
         viewCross->setEnabled(false);
         viewMut->setEnabled(false);
     }
-    // TODO: make this work
-    /* cleanup last viewed
-    if(individuals != NULL)
-        delete individuals;
-
-    if(crossovers != NULL)
-        delete crossovers;
-
-    if(mutations != NULL)
-        delete mutations; */
-
-    /* replace */
-    individuals = ind;
-    crossovers = cross;
-    mutations = mut;
 
     /* select right view */
     switch(selectedView)
@@ -394,11 +384,13 @@ void GPVis::showIndTable()
             this, SLOT(individualFromTable()));
     
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    
+    genSlider->setMaximum(generations.length() - 1);
+    genSpin->setMaximum(generations.length() - 1);
 }
 
 void GPVis::showCrossTable()
 {
-    // TODO: limit slider if generation is the last one
     selectedView = CROSSOVERS;
     tableView->setModel(crossovers);
 
@@ -411,6 +403,9 @@ void GPVis::showCrossTable()
             this, SLOT(crossoverFromTable()));
     
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    
+    genSlider->setMaximum(generations.length() - 2);
+    genSpin->setMaximum(generations.length() - 2);
 }
 
 void GPVis::showMutTable()
@@ -426,6 +421,9 @@ void GPVis::showMutTable()
             this, SLOT(mutationFromTable()));
     
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    genSlider->setMaximum(generations.length() - 2);
+    genSpin->setMaximum(generations.length() - 2);
 }
 
 void GPVis::openFileDialog()
