@@ -19,6 +19,7 @@ class Tree
     public:
         Tree(QString line, int tree_id, float tree_fitness);
         Tree(int tree_id, float tree_fitness);
+        ~Tree();
 
         void draw(QGraphicsScene *canvas, QPointF coord, int step);
 

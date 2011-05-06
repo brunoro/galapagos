@@ -15,6 +15,12 @@ Tree::Tree(int tree_id, float tree_fitness)
     fitness = tree_fitness;
 }
 
+Tree::~Tree()
+{
+    for(int i = 0; i < index.length(); i++)
+        delete index[i];
+}
+
 Node *Tree::parseTree(QStringList nodes, int pos, int id)
 {
     extern Def *definition;

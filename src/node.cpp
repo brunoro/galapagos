@@ -14,6 +14,13 @@ Node::Node(NodeType nodetype, QString nodeinfo)
     text->setPos(0, 0);
 }
 
+Node::~Node()
+{
+    delete text;
+    delete bound;
+    delete nodeView;
+}
+
 void Node::addSon(Node *son)
 {
     sons.append(son);

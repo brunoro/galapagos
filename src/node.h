@@ -27,6 +27,7 @@ class Node
 
     public:
         Node(NodeType type, QString info);
+        ~Node();
 
         void addSon(Node *son);
         void addEdge(Node *son, QColor color, Qt::PenStyle style=Qt::SolidLine);
