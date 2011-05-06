@@ -88,6 +88,13 @@ GPVis::GPVis(QWidget *parent)
     individuals = new QStandardItemModel(this);
     crossovers = new QStandardItemModel(this);
     mutations = new QStandardItemModel(this);
+    
+    individualsHeader = QStringList();
+    individualsHeader << "id" << "fitness" << "tree";
+    crossoversHeader = QStringList();
+    crossoversHeader << "parent 1" << "parent 2" << "offspring";
+    mutationsHeader = QStringList();
+    mutationsHeader << "parent" << "offspring";
 
 }
 
@@ -202,10 +209,8 @@ void GPVis::showGeneration(int gen)
     Generation *actual = generations[gen];
 
     /* population */
-    individuals->setHeaderData(0, Qt::Horizontal, "id");
-    individuals->setHeaderData(1, Qt::Horizontal, "fitness");
-    individuals->setHeaderData(2, Qt::Horizontal, "tree");
 
+    individuals->setHorizontalHeaderLabels(individualsHeader);
     for(int i = 0; i < actual->population_tree.length(); i++)
     {
         individuals->setItem(i, 0, new QStandardItem(QString::number(i)));
@@ -217,12 +222,8 @@ void GPVis::showGeneration(int gen)
     connect(viewMut, SIGNAL(toggled(bool)), this, SLOT(showMutTable()));
 
     /* crossovers and mutations */
-    crossovers->setHeaderData(1, Qt::Horizontal, "parent 1");
-    crossovers->setHeaderData(2, Qt::Horizontal, "parent 2");
-    crossovers->setHeaderData(0, Qt::Horizontal, "offspring");
-    
-    mutations->setHeaderData(0, Qt::Horizontal, "parent");
-    mutations->setHeaderData(1, Qt::Horizontal, "offspring");
+    crossovers->setHorizontalHeaderLabels(crossoversHeader);
+    mutations->setHorizontalHeaderLabels(mutationsHeader);
 
     /* if it is not last generation, get next */
     if(gen < generations.length() - 1)

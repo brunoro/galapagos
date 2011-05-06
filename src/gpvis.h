@@ -48,7 +48,9 @@ class GPVis : public QWidget
         QStandardItemModel *individuals,
                            *crossovers,
                            *mutations;
-        int actualGeneration;
+        QStringList individualsHeader,
+                    crossoversHeader,
+                    mutationsHeader;
 
         /* ui */
         QGridLayout *grid;
