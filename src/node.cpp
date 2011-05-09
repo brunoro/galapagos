@@ -93,6 +93,7 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
 
                 /* mark as merged */
                 toRemove[i] = true;
+                break;
             }
         }
     }
