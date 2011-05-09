@@ -13,6 +13,7 @@
 #define DEPTH   4
 #define PMUT_PER_NODE    0.02f
 #define CROSSOVER_PROB   0.9f
+#define ELITISM 50
 #define GENERATIONS 50
 #define TSIZE 2
 
@@ -33,6 +34,8 @@ long seed;
 float avg_len;
 unsigned long nodes_evaluated = 0;
 float targets[MAX_EXAMPLES][MAX_INPUTS+2];
+float *auxfit;
+
 
 FILE *runlog;
 
@@ -63,8 +66,6 @@ int length( char *buffer )
 {
   return ( traverse(buffer) - buffer);
 }
-
-
 
 float fitness_function( char *Prog )
 {
@@ -141,6 +142,33 @@ char *logprint_indiv( char *buffer )
   return( buffer );
 }
 
+char **copy_pop(char **pop, int n)
+{
+    char **newpop = (char**) malloc(n * sizeof(char*));
+    int i;
+    for(i = 0; i < n; i++)
+        newpop[i] = pop[i];
+    return newpop;
+}
+
+static int cmpbyfit(const void *a, const void *b)
+{
+    int *aa = (int*)a;
+    int *bb = (int*)b;
+    return auxfit[*aa] < auxfit[*bb] ? 1 : 0;
+}
+
+int *get_sorted(char **pop, float *fitness, int n)
+{
+    int *indexes = malloc(sizeof(int) * n);
+    int i;
+    for(i = 0; i < n; i++)
+        indexes[i] = i;
+    auxfit = fitness;
+    qsort(indexes, n, sizeof(int), cmpbyfit);
+    return indexes;
+}
+
 char **create_random_pop(int n, int depth, float *fitness )
 {
   char **pop = (char **) malloc( n * sizeof(char *));
@@ -178,7 +206,7 @@ void stats( float *fitness, char **pop, int gen )
 
 int tournament( float *fitness, int tsize, char type )
 {
-  int bestworst,  competitor;
+  int bestworst, competitor;
   char i;
   float  fbestworst = type ? -1e30f : 1e30f;
   for ( i = 0; i < tsize; i ++ )
@@ -234,6 +262,8 @@ int main(int argc, char **argv)
     int gen, indivs, offspring, parent1, parent2, i, j;
     float *fitness = (float *) calloc( POPSIZE, sizeof(float));
     char **pop;
+    char **nupop;
+    int *sorted_by_fit;
 
     scanf( "%hd %hd", &varnumber, &fitnesscases);
     seed = 0;
@@ -250,6 +280,8 @@ int main(int argc, char **argv)
     }
 
     pop = create_random_pop(POPSIZE, DEPTH, fitness );
+    nupop = copy_pop(pop, POPSIZE);
+    sorted_by_fit = get_sorted(pop, fitness, POPSIZE);
     printf("SEED=%ld\nMAXLEN=%d\nPSIZE=%d\nDEPTH=%d\nXOPROB=%g\nPMUT=%g\nGENS=%d\nTSIZE=%d",
     seed, MAX_LEN, POPSIZE, DEPTH, CROSSOVER_PROB, PMUT_PER_NODE, GENERATIONS, TSIZE );
     
@@ -278,26 +310,36 @@ int main(int argc, char **argv)
         if(gen == GENERATIONS - 1)
             continue;
 
-        for ( indivs = 0; indivs < POPSIZE; indivs ++ )
+        /* elitism */
+        for ( indivs = 0; indivs < ELITISM; indivs++)
+        {
+            //free( nupop[indivs] );
+            nupop[indivs] = pop[sorted_by_fit[indivs]];
+            fitness[indivs] = fitness_function( nupop[indivs] );
+        }
+
+        /* reproduction */
+        for ( ; indivs < POPSIZE; indivs ++ )
         {
             parent1 = tournament( fitness, TSIZE,1 );
             parent2 = tournament( fitness, TSIZE,1 );
-            offspring = tournament( fitness, TSIZE,0 );
-            free( pop[offspring] );
+            free( nupop[indivs] );
             
             if(drand48() > CROSSOVER_PROB)
             {
-                fprintf(runlog, "\tcrossover: %d %d -> %d\n", parent1, parent2, offspring );
-                pop[offspring] =  crossover( pop[parent1], pop[parent2] );
+                fprintf(runlog, "\tcrossover: %d %d -> %d\n", parent1, parent2, indivs );
+                nupop[indivs] =  crossover( pop[parent1], pop[parent2] );
             }
             else
             {
-                fprintf(runlog, "\tmutation: %d -> %d\n", parent1, offspring );
-                pop[offspring] = mutation( pop[parent1], PMUT_PER_NODE );
+                fprintf(runlog, "\tmutation: %d -> %d\n", parent1, indivs);
+                nupop[indivs] = mutation( pop[parent1], PMUT_PER_NODE );
             }
-            fitness[offspring] = fitness_function( pop[offspring] );
+            fitness[indivs] = fitness_function( nupop[indivs] );
         }
-        stats( fitness, pop, gen );
+        stats( fitness, nupop, gen );
+        sorted_by_fit = get_sorted(nupop, fitness, POPSIZE);
+        pop = copy_pop(nupop, POPSIZE);
     }
     printf("\n");
     fclose(runlog);
