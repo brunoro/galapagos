@@ -86,7 +86,6 @@ class Node
         QPointF pos;
         QGraphicsItem *text;
         QGraphicsItem *bound;
-        QGraphicsItemGroup *nodeView;
 };
 
 #endif

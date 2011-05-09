@@ -16,9 +16,9 @@ Node::Node(NodeType nodetype, QString nodeinfo)
 
 Node::~Node()
 {
-    delete text;
-    delete bound;
-    delete nodeView;
+    /* TODO: make this work */
+    //delete text;
+    //delete bound;
 }
 
 void Node::addSon(Node *son)
@@ -141,7 +141,7 @@ void Node::updateEdges(QGraphicsScene *canvas)
 
         // TODO: use distance from style
         float edgeDistance = Style::edgeDistance;
-        float offset = - sonEdges.length() * edgeDistance / 2;
+        float offset = - (sonEdges.length() - 1) * edgeDistance / 2;
         for(int i = 0; i < sonEdges.length(); i++)
         {
             sonEdges[i]->drawOffset(canvas, offset);

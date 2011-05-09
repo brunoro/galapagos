@@ -331,6 +331,7 @@ void GPVis::renderIndividual(int gen, int ind)
     Tree *tree;
     tree = generations[gen]->getIndividual(ind);
     tree->draw(scene, *sceneCenter, Style::defaultStep);
+    delete tree;
 }
 
 void GPVis::crossoverFromTable()
@@ -351,6 +352,8 @@ void GPVis::renderCrossover(int gen, int parent1, int parent2, int offspring)
     trees.append(generations[gen]->getIndividual(parent1));
     trees.append(generations[gen]->getIndividual(parent2));
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
+    for(int i=0; i < trees.length(); i++)
+        delete trees[i];
 }
 
 void GPVis::mutationFromTable()
@@ -369,6 +372,8 @@ void GPVis::renderMutation(int gen, int parent, int offspring)
     trees.append(generations[gen + 1]->getIndividual(offspring));
     trees.append(generations[gen]->getIndividual(parent));
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
+    for(int i=0; i < trees.length(); i++)
+        delete trees[i];
 }
 
 void GPVis::showIndTable()
