@@ -91,8 +91,8 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                 foreach(Node *son, old_j->getSons())
                     nodes[j]->addSon(son);
 
-                /* mark as merged */
-                toRemove[i] = true;
+                /* mark as merged and do not merge this node again */
+                toRemove[i] = true; 
                 break;
             }
         }
@@ -168,7 +168,7 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
     canvas->addItem(bound);
 
     text->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));
-    text->setZValue(2);
+    text->setZValue(1);
     canvas->addItem(text);
 
     pos = coord;
