@@ -33,6 +33,10 @@ GPVis::GPVis(QWidget *parent)
     preview = new QGraphicsView(scene);
     preview->setRenderHint(QPainter::Antialiasing);
 
+    fileField = new QLineEdit(this);
+    fileSelect = new QPushButton("Select file", this);
+    fileOpen = new QPushButton("Read file", this);
+
     genLabel = new QLabel("Generation");
 
     genSpin = new QSpinBox(this);
@@ -55,24 +59,29 @@ GPVis::GPVis(QWidget *parent)
     tableView->verticalHeader()->hide();
     tableView->setEnabled(false);
 
-    fileField = new QLineEdit(this);
-    fileSelect = new QPushButton("Select file", this);
-    fileOpen = new QPushButton("Read file", this);
+    fileLine = new QBoxLayout(QBoxLayout::LeftToRight);
+    fileLine->addWidget(fileField);
+    fileLine->addWidget(fileSelect);
+    fileLine->addWidget(fileOpen);
+
+    genLine = new QBoxLayout(QBoxLayout::LeftToRight);
+    genLine->addWidget(genSlider);
+    genLine->addWidget(genSpin);
+
+    viewLine = new QBoxLayout(QBoxLayout::LeftToRight);
+    viewLine->addWidget(viewInd);
+    viewLine->addWidget(viewCross);
+    viewLine->addWidget(viewMut);   
 
     grid = new QGridLayout(this);
     grid->addWidget(preview, 0, 0, -1, 1);
-    grid->addWidget(fileField, 0, 1);
-    grid->addWidget(fileSelect, 0, 2);
-    grid->addWidget(fileOpen, 0, 3);
+    grid->addLayout(fileLine, 0, 1);
     grid->addWidget(genLabel, 1, 1);
-    grid->addWidget(genSlider, 1, 2);
-    grid->addWidget(genSpin, 1, 3);
-    grid->addWidget(viewInd, 2, 1);
-    grid->addWidget(viewCross, 2, 2);
-    grid->addWidget(viewMut, 2, 3);
-    grid->addWidget(tableView, 3, 1, 3, 3);
+    grid->addLayout(genLine, 2, 1);
+    grid->addLayout(viewLine, 3, 1);
+    grid->addWidget(tableView, 4, 1);
+ 
     setLayout(grid);
-
     
     connect(fileSelect, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(fileOpen, SIGNAL(clicked()), this, SLOT(readLogFile()));

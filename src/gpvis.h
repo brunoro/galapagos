@@ -5,6 +5,7 @@
 #include "generation.h"
 
 #include <QApplication>
+#include <QBoxLayout>
 #include <QClipboard>
 #include <QDesktopWidget>
 #include <QFileDialog>
@@ -55,17 +56,22 @@ class GPVis : public QWidget
         /* ui */
         QGridLayout *grid;
 
+        QBoxLayout *fileLine;
         QPushButton *fileOpen,
                     *fileSelect;
         QLineEdit *fileField;
 
+        QBoxLayout *genLine;
         QLabel *genLabel;
         QSlider *genSlider;
         QSpinBox *genSpin;
+        
+        QBoxLayout *viewLine;
         QRadioButton *viewInd,
                      *viewCross,
                      *viewMut;
         QTableView *tableView;
+
         QGraphicsView *preview;
         QGraphicsScene *scene;
         QPointF *sceneCenter;
