@@ -397,7 +397,8 @@ void GPVis::showIndTable()
     tableView->selectionModel()->disconnect();
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(individualFromTable()));
-    
+
+    tableView->setSortingEnabled(true);
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     
     genSlider->setMaximum(generations.length() - 1);
@@ -416,7 +417,8 @@ void GPVis::showCrossTable()
     tableView->selectionModel()->disconnect();
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(crossoverFromTable()));
-    
+
+    tableView->setSortingEnabled(true);
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     
     genSlider->setMaximum(generations.length() - 2);
@@ -434,7 +436,8 @@ void GPVis::showMutTable()
     tableView->selectionModel()->disconnect();
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(mutationFromTable()));
-    
+
+    tableView->setSortingEnabled(true);
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     genSlider->setMaximum(generations.length() - 2);
