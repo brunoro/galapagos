@@ -272,10 +272,10 @@ void GPVis::showGeneration(int gen)
             showIndTable();
             break;
         case CROSSOVERS:
-            showMutTable();
+            showCrossTable();
             break;
         case MUTATIONS:
-            showCrossTable();
+            showMutTable();
             break;
     }
     
