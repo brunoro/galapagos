@@ -26,14 +26,14 @@ namespace Style
                                        QColor("orange"),
                                        QColor("darkgrey") };*/
 
-    const QColor defaultNodeColor = QColor("dimgrey");
+    const QColor defaultNodeColor = QColor("gainsboro");
     const QColor nodeBrushColor[4] = { QColor(defaultNodeColor),
                                        QColor(defaultNodeColor),
                                        QColor(defaultNodeColor),
                                        QColor(defaultNodeColor) };
     const QColor nodePenColor(0, 0, 0, 0);
-    const QColor nodeTextColor("white");
-    const QColor edgeColor("orange");
+    const QColor nodeTextColor("grey");
+    const QColor edgeColor("royalblue");
 
     QList<QColor> getColorPalette(int len);
     QList<Qt::PenStyle> getPenStylePalette(int len);
