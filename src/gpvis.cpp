@@ -57,7 +57,12 @@ GPVis::GPVis(QWidget *parent)
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
     tableView->verticalHeader()->hide();
+    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+    tableView->setAlternatingRowColors(true);
     tableView->setEnabled(false);
+    
 
     fileLine = new QBoxLayout(QBoxLayout::LeftToRight);
     fileLine->addWidget(fileField);
@@ -394,13 +399,10 @@ void GPVis::showIndTable()
     tableView->resizeColumnToContents(1);
     tableView->resizeColumnToContents(2);
 
-    tableView->selectionModel()->disconnect();
+    tableView->selectionModel()->disconnect(this);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(individualFromTable()));
 
-    tableView->setSortingEnabled(true);
-    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    
     genSlider->setMaximum(generations.length() - 1);
     genSpin->setMaximum(generations.length() - 1);
 }
@@ -414,13 +416,10 @@ void GPVis::showCrossTable()
     tableView->resizeColumnToContents(1);
     tableView->resizeColumnToContents(2);
 
-    tableView->selectionModel()->disconnect();
+    tableView->selectionModel()->disconnect(this);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(crossoverFromTable()));
 
-    tableView->setSortingEnabled(true);
-    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    
     genSlider->setMaximum(generations.length() - 2);
     genSpin->setMaximum(generations.length() - 2);
 }
@@ -433,12 +432,9 @@ void GPVis::showMutTable()
     tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
 
-    tableView->selectionModel()->disconnect();
+    tableView->selectionModel()->disconnect(this);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(mutationFromTable()));
-
-    tableView->setSortingEnabled(true);
-    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     genSlider->setMaximum(generations.length() - 2);
     genSpin->setMaximum(generations.length() - 2);
