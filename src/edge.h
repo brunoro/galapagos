@@ -14,14 +14,13 @@ class Node;
 class Edge
 {
     public:
-        Edge(Node *from, Node *to, QColor edge_color, Qt::PenStyle edge_style=Qt::SolidLine);
+        Edge(Node *from, Node *to, QPen style);
         void draw(QGraphicsScene *canvas);
         void drawOffset(QGraphicsScene *canvas, float offset);
         void update();
 
     private:
-        QColor color;
-        Qt::PenStyle style;
+        QPen style;
         QGraphicsLineItem *line;
         Node *dest, *dir;
 };

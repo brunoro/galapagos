@@ -6,6 +6,7 @@
 
 #include <QDebug>
 #include <QGraphicsLineItem>
+#include <QHash>
 #include <QList>
 #include <QPen>
 #include <QPointF>

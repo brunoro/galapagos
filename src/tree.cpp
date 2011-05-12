@@ -79,7 +79,10 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     }
 
     /* set styles */
-    QHash<int, Qt::PenStyle> styles(Style::getPenStylePalette(ids));
+    QHash<int, QPen> styles;
+    QList<QColor> colors = Style::getColorPalette(ids.length());
+    for(int i = 0; i < ids.length(); i++)
+        styles[ids[i]] = QPen(QBrush(colors[i]), Style::edgeWeight);
 
     /* make new tree */
     Tree *merged = new Tree(-1, -1); // TODO: change this
@@ -105,7 +108,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         merged->getRoot()->addSon(son);
         foreach(int id, son->getTreeId())
         {
-            merged->getRoot()->addEdge(son, Style::edgeColor, styles.value(id));
+            merged->getRoot()->addEdge(son, styles.value(id));
             //qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
     }

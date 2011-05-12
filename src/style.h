@@ -17,18 +17,26 @@ namespace Style
     const int edgeDistance = 5;
     const int edgeWeight = 2;
     const int defaultStep = 50;
+    const int paletteS = 200,
+              paletteV = 200;
 
     /* colors */
-    const QColor nodeBrushColor[4] = { QColor("dodgerblue"),
+    /*const QColor nodeBrushColor[4] = { QColor("dodgerblue"),
                                        QColor("lightseagreen"),
                                        QColor("orange"),
-                                       QColor("darkgrey") };
+                                       QColor("darkgrey") };*/
+
+    const QColor defaultNodeColor = QColor("dimgrey");
+    const QColor nodeBrushColor[4] = { QColor(defaultNodeColor),
+                                       QColor(defaultNodeColor),
+                                       QColor(defaultNodeColor),
+                                       QColor(defaultNodeColor) };
     const QColor nodePenColor(0, 0, 0, 0);
     const QColor nodeTextColor("white");
-    const QColor edgeColor("darkgrey");
+    const QColor edgeColor("orange");
 
-    QHash<int, QColor> getColorPalette(QList<int> ids);
-    QHash<int, Qt::PenStyle> getPenStylePalette(QList<int> ids);
+    QList<QColor> getColorPalette(int len);
+    QList<Qt::PenStyle> getPenStylePalette(int len);
 }
 
 #endif // STYLE_H

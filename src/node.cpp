@@ -52,7 +52,7 @@ int Node::recursiveDraw(QGraphicsScene *canvas,
         sonAngle += hstep;
         
         /* connect son */
-        addEdge(sons[i], Style::edgeColor);
+        addEdge(sons[i], QPen(Style::edgeColor, Style::edgeWeight));
 
         /* get max depth */
         if(sonLevel > maxLevel)
@@ -67,7 +67,7 @@ int Node::recursiveDraw(QGraphicsScene *canvas,
 QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                                      QPointF origin, QPointF coord,
                                      int step, int level,
-                                     float areaAngle, float refAngle, QHash<int, Qt::PenStyle> styles)
+                                     float areaAngle, float refAngle, QHash<int, QPen> styles)
 {
     QVector<bool> toRemove(nodes.length());
     /* iterates on nodes search for duplicates */
@@ -123,7 +123,7 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
         foreach(Node *son, merged[i]->getSons())
         {
             foreach(int id, son->getTreeId())
-                merged[i]->addEdge(son, Style::edgeColor, styles.value(id));
+                merged[i]->addEdge(son, styles.value(id));
         }
         merged[i]->updateEdges(canvas);
 
@@ -189,10 +189,10 @@ void Node::update(QPointF coord)
     pos = coord;
 }
 
-void Node::addEdge(Node *son, QColor color, Qt::PenStyle style)
+void Node::addEdge(Node *son, QPen style)
 {
     /* connect son */
-    Edge *edge = new Edge(this, son, color, style);
+    Edge *edge = new Edge(this, son, style);
     edges[*son].append(edge);
 }
 
