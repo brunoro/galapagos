@@ -7,6 +7,12 @@
 #include <QList>
 #include <QSet>
 
+struct ind
+{
+    QString str;
+    float fit;
+};
+
 class Generation
 {
 
@@ -18,8 +24,7 @@ class Generation
 
         Tree* getIndividual(int id);
 
-        QList<QString> population_tree;
-        QList<float> population_fit;
+        QList<struct ind> population;
         QList<Reproduction> reproductions;
 };
 

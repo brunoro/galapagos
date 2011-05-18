@@ -101,7 +101,7 @@ GPVis::GPVis(QWidget *parent)
     individualsHeader = QStringList();
     individualsHeader << "id" << "fitness" << "tree";
     reproductionsHeader = QStringList();
-    reproductionsHeader << "parents" << "offspring";
+    reproductionsHeader << "fitness gain" << "offspring" << "parent" ;
 
 }
 
@@ -216,11 +216,11 @@ void GPVis::showGeneration(int gen)
     /* population */
 
     individuals->setHorizontalHeaderLabels(individualsHeader);
-    for(int i = 0; i < actual->population_tree.length(); i++)
+    for(int i = 0; i < actual->population.length(); i++)
     {
         individuals->setItem(i, 0, new QStandardItem(QString::number(i)));
-        individuals->setItem(i, 1, new QStandardItem(QString::number(actual->population_fit[i])));
-        individuals->setItem(i, 2, new QStandardItem(actual->population_tree[i]));
+        individuals->setItem(i, 1, new QStandardItem(QString::number(actual->population[i].fit)));
+        individuals->setItem(i, 2, new QStandardItem(actual->population[i].str));
     }
 
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
@@ -231,14 +231,23 @@ void GPVis::showGeneration(int gen)
     /* if it is not last generation, get next */
     if(gen < generations.length() - 1)
     {
+        Generation *next = generations[++gen];
         // TODO: divide by columns
         for(int i = 0; i < actual->reproductions.length(); i++)
         {
             QString parents;
+            float par_fit,
+                  max_fit = FLT_MIN;
             for(int j = 0; j < actual->reproductions[i].parents.length(); j++)
+            {
                 parents += QString::number(actual->reproductions[i].parents[j]) + " ";
-            reproductions->setItem(i, 0, new QStandardItem(parents));
+                par_fit = actual->population[actual->reproductions[i].parents[j]].fit;
+                if(par_fit > max_fit)
+                    max_fit = par_fit;
+            }
+            reproductions->setItem(i, 0, new QStandardItem(QString::number(max_fit - next->population[actual->reproductions[i].offspring].fit)));
             reproductions->setItem(i, 1, new QStandardItem(QString::number(actual->reproductions[i].offspring)));
+            reproductions->setItem(i, 2, new QStandardItem(parents));
         }
         /* set radios */
         viewRep->setEnabled(true);
@@ -329,7 +338,7 @@ void GPVis::reproductionFromTable()
 {
     int row = tableView->selectionModel()->currentIndex().row(),
         off_num = tableView->model()->index(row, 1).data().toInt();
-    QStringList str_par_num = tableView->model()->index(row, 0).data().toString().split(QRegExp("\\s+"));
+    QStringList str_par_num = tableView->model()->index(row, 2).data().toString().split(QRegExp("\\s+"));
     QList<int> par_num;
     // TODO: fix last element of str_par_num getting 0
     for(int i = 0; i < str_par_num.length() - 1; i++)
@@ -358,7 +367,6 @@ void GPVis::showIndTable()
 
     tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
-    tableView->resizeColumnToContents(2);
 
     tableView->selectionModel()->disconnect(this);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
@@ -373,8 +381,9 @@ void GPVis::showRepTable()
     selectedView = REPRODUCTIONS;
     tableView->setModel(reproductions);
 
-    tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
+    tableView->resizeColumnToContents(2);
+    tableView->resizeColumnToContents(0);
 
     tableView->selectionModel()->disconnect(this);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),

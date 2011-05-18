@@ -4,6 +4,8 @@
 #include "tree.h"
 #include "generation.h"
 
+#include <cfloat>
+
 #include <QApplication>
 #include <QBoxLayout>
 #include <QClipboard>
