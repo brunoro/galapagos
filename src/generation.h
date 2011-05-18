@@ -2,8 +2,7 @@
 #define GENERATION_H
 
 #include "tree.h"
-#include "mutation.h"
-#include "crossover.h"
+#include "reproduction.h"
 
 #include <QList>
 #include <QSet>
@@ -15,15 +14,13 @@ class Generation
         Generation();
 
         void addIndividual(QString individual, float fitness);
-        void addMutation(Mutation mutation);
-        void addCrossover(Crossover crossover);
+        void addReproduction(Reproduction rep);
 
         Tree* getIndividual(int id);
 
         QList<QString> population_tree;
         QList<float> population_fit;
-        QList<Mutation> mutations;
-        QList<Crossover> crossovers;
+        QList<Reproduction> reproductions;
 };
 
 #endif // GENERATION_H

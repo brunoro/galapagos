@@ -10,14 +10,9 @@ void Generation::addIndividual(QString individual, float fitness)
     population_fit.append(fitness);
 }
 
-void Generation::addMutation(Mutation mutation)
+void Generation::addReproduction(Reproduction rep)
 {
-    mutations.append(mutation);
-}
-
-void Generation::addCrossover(Crossover crossover)
-{
-    crossovers.append(crossover);
+    reproductions.append(rep);
 }
 
 Tree* Generation::getIndividual(int id)

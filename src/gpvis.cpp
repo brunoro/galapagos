@@ -48,11 +48,9 @@ GPVis::GPVis(QWidget *parent)
     genSlider->setTickPosition(QSlider::TicksBelow);
 
     viewInd = new QRadioButton("Individuals", this);
-    viewInd->setEnabled(false);
-    viewCross = new QRadioButton("Crossovers", this);
-    viewCross->setEnabled(false);
-    viewMut = new QRadioButton("Mutations", this);
-    viewMut->setEnabled(false);
+    viewInd ->setEnabled(false);
+    viewRep = new QRadioButton("Reproductions", this);
+    viewRep->setEnabled(false);
 
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
@@ -75,8 +73,7 @@ GPVis::GPVis(QWidget *parent)
 
     viewLine = new QBoxLayout(QBoxLayout::LeftToRight);
     viewLine->addWidget(viewInd);
-    viewLine->addWidget(viewCross);
-    viewLine->addWidget(viewMut);   
+    viewLine->addWidget(viewRep);   
 
     grid = new QGridLayout(this);
     grid->addWidget(preview, 0, 0, -1, 1);
@@ -96,19 +93,15 @@ GPVis::GPVis(QWidget *parent)
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
-    connect(viewCross, SIGNAL(toggled(bool)), this, SLOT(showCrossTable()));
-    connect(viewMut, SIGNAL(toggled(bool)), this, SLOT(showMutTable()));
+    connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
 
     individuals = new QStandardItemModel(this);
-    crossovers = new QStandardItemModel(this);
-    mutations = new QStandardItemModel(this);
+    reproductions = new QStandardItemModel(this);
     
     individualsHeader = QStringList();
     individualsHeader << "id" << "fitness" << "tree";
-    crossoversHeader = QStringList();
-    crossoversHeader << "parent 1" << "parent 2" << "offspring";
-    mutationsHeader = QStringList();
-    mutationsHeader << "parent" << "offspring";
+    reproductionsHeader = QStringList();
+    reproductionsHeader << "parents" << "offspring";
 
 }
 
@@ -196,8 +189,7 @@ void GPVis::readLogFile()
     /* enable viewer */
     tableView->setEnabled(true);
     viewInd->setEnabled(true);
-    viewCross->setEnabled(true);
-    viewMut->setEnabled(true);
+    viewRep->setEnabled(true);
     
     /* define first generation read */
     showGeneration(0);
@@ -216,8 +208,7 @@ void GPVis::showGeneration(int gen)
 {
     /* cleanup last viewed */
     individuals->clear();
-    crossovers->clear();
-    mutations->clear();
+    reproductions->clear();
 
     //qDebug() << "GPVis::showGeneration " << gen;
     Generation *actual = generations[gen];
@@ -232,37 +223,30 @@ void GPVis::showGeneration(int gen)
         individuals->setItem(i, 2, new QStandardItem(actual->population_tree[i]));
     }
 
-    connect(viewMut, SIGNAL(toggled(bool)), this, SLOT(showMutTable()));
-    connect(viewMut, SIGNAL(toggled(bool)), this, SLOT(showMutTable()));
+    connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
 
-    /* crossovers and mutations */
-    crossovers->setHorizontalHeaderLabels(crossoversHeader);
-    mutations->setHorizontalHeaderLabels(mutationsHeader);
+    /* reproductions */
+    reproductions->setHorizontalHeaderLabels(reproductionsHeader);
 
     /* if it is not last generation, get next */
     if(gen < generations.length() - 1)
     {
-        //Generation *next = generations[gen + 1];
-        for(int i = 0; i < actual->crossovers.length(); i++)
+        // TODO: divide by columns
+        for(int i = 0; i < actual->reproductions.length(); i++)
         {
-            crossovers->setItem(i, 0, new QStandardItem(QString::number(actual->crossovers[i].parent1)));
-            crossovers->setItem(i, 1, new QStandardItem(QString::number(actual->crossovers[i].parent2)));
-            crossovers->setItem(i, 2, new QStandardItem(QString::number(actual->crossovers[i].offspring)));
-        }
-        for(int i = 0; i < actual->mutations.length(); i++)
-        {
-            mutations->setItem(i, 0, new QStandardItem(QString::number(actual->mutations[i].parent)));
-            mutations->setItem(i, 1, new QStandardItem(QString::number(actual->mutations[i].offspring)));
+            QString parents;
+            for(int j = 0; j < actual->reproductions[i].parents.length(); j++)
+                parents += QString::number(actual->reproductions[i].parents[j]) + " ";
+            reproductions->setItem(i, 0, new QStandardItem(parents));
+            reproductions->setItem(i, 1, new QStandardItem(QString::number(actual->reproductions[i].offspring)));
         }
         /* set radios */
-        viewCross->setEnabled(true);
-        viewMut->setEnabled(true);
+        viewRep->setEnabled(true);
     }
     else
     {
         /* unset radios */
-        viewCross->setEnabled(false);
-        viewMut->setEnabled(false);
+        viewRep->setEnabled(false);
     }
 
     /* select right view */
@@ -271,11 +255,8 @@ void GPVis::showGeneration(int gen)
         case INDIVIDUALS:
             showIndTable();
             break;
-        case CROSSOVERS:
-            showCrossTable();
-            break;
-        case MUTATIONS:
-            showMutTable();
+        case REPRODUCTIONS:
+            showRepTable();
             break;
     }
     
@@ -288,8 +269,7 @@ void GPVis::readGeneration()
     Generation *gen = new Generation();
     QString fileBuffer = fileStream->readLine(),
             individual,
-            crossover,
-            mutation;
+            reproduction;
     QStringList tokens;
 
     while(!(fileBuffer.contains(QRegExp("generation:*."))) &&
@@ -304,28 +284,25 @@ void GPVis::readGeneration()
             gen->addIndividual(tokens[2], tokens[1].toFloat());
             continue;
         }
-        /* crossover */
-        if(fileBuffer.contains(QRegExp("crossover:*.")))
+        /* reproduction */
+        if(fileBuffer.contains(QRegExp("reproduction:*.")))
         {
-            crossover = fileBuffer.remove(QRegExp("\tcrossover:\\s*"));
-            //qDebug() << "GPVis::readLogFile found crossover" << crossover;
-            tokens = crossover.split(" ");
-            gen->addCrossover(Crossover(tokens[0].toInt(),
-                                        tokens[1].toInt(),
-                                        tokens[3].toInt()));
-            continue;
-        }
-        /* mutation */
-        if(fileBuffer.contains(QRegExp("mutation:*.")))
-        {
-            mutation = fileBuffer.remove(QRegExp("\tmutation:\\s*"));
-            //qDebug() << "GPVis::readLogFile found mutation" << mutation;
-            tokens = mutation.split(" ");
-            gen->addMutation(Mutation(tokens[0].toInt(),
-                                      tokens[2].toInt()));
-            continue;
-        }
+            reproduction = fileBuffer.remove(QRegExp("\treproduction:\\s*"));
+            //qDebug() << "GPVis::readLogFile found reproduction" << reproduction;
+            tokens = reproduction.split(" ");
 
+            QList<int> parents;
+            int i = 0;
+            for(; i < tokens.length(); i++)
+            {
+                if(tokens[i] == "->")
+                    break;
+                parents.append(tokens[i].toInt());
+            }
+            gen->addReproduction(Reproduction(parents,
+                                              tokens[++i].toInt()));
+            continue;
+        }
         fileBuffer = fileStream->readLine();
     }
     generations.append(gen);
@@ -348,43 +325,27 @@ void GPVis::renderIndividual(int gen, int ind)
     delete tree;
 }
 
-void GPVis::crossoverFromTable()
+void GPVis::reproductionFromTable()
 {
     int row = tableView->selectionModel()->currentIndex().row(),
-        par1_num = tableView->model()->index(row, 0).data().toInt(),
-        par2_num = tableView->model()->index(row, 1).data().toInt(),
-        off_num = tableView->model()->index(row, 2).data().toInt();
-    selectedRow = row;
-    scene->clear();
-    renderCrossover(genSpin->value(), par1_num, par2_num, off_num);
-}
-
-void GPVis::renderCrossover(int gen, int parent1, int parent2, int offspring)
-{
-    QList<Tree*> trees;
-    trees.append(generations[gen + 1]->getIndividual(offspring));
-    trees.append(generations[gen]->getIndividual(parent1));
-    trees.append(generations[gen]->getIndividual(parent2));
-    Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
-    for(int i=0; i < trees.length(); i++)
-        delete trees[i];
-}
-
-void GPVis::mutationFromTable()
-{
-    int row = tableView->selectionModel()->currentIndex().row(),
-        par_num = tableView->model()->index(row, 0).data().toInt(),
         off_num = tableView->model()->index(row, 1).data().toInt();
+    QStringList str_par_num = tableView->model()->index(row, 0).data().toString().split(QRegExp("\\s+"));
+    QList<int> par_num;
+    // TODO: fix last element of str_par_num getting 0
+    for(int i = 0; i < str_par_num.length() - 1; i++)
+        par_num << str_par_num[i].toInt();
     selectedRow = row;
     scene->clear();
-    renderMutation(genSpin->value(), par_num, off_num);
+    renderReproduction(genSpin->value(), par_num, off_num);
 }
 
-void GPVis::renderMutation(int gen, int parent, int offspring)
+void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
 {
+    //TODO: render tooltip
     QList<Tree*> trees;
     trees.append(generations[gen + 1]->getIndividual(offspring));
-    trees.append(generations[gen]->getIndividual(parent));
+    for(int i = 0; i < parents.length(); i++)
+        trees.append(generations[gen]->getIndividual(parents[i]));
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
     for(int i=0; i < trees.length(); i++)
         delete trees[i];
@@ -407,34 +368,17 @@ void GPVis::showIndTable()
     genSpin->setMaximum(generations.length() - 1);
 }
 
-void GPVis::showCrossTable()
+void GPVis::showRepTable()
 {
-    selectedView = CROSSOVERS;
-    tableView->setModel(crossovers);
-
-    tableView->resizeColumnToContents(0);
-    tableView->resizeColumnToContents(1);
-    tableView->resizeColumnToContents(2);
-
-    tableView->selectionModel()->disconnect(this);
-    connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-            this, SLOT(crossoverFromTable()));
-
-    genSlider->setMaximum(generations.length() - 2);
-    genSpin->setMaximum(generations.length() - 2);
-}
-
-void GPVis::showMutTable()
-{
-    selectedView = MUTATIONS;
-    tableView->setModel(mutations);
+    selectedView = REPRODUCTIONS;
+    tableView->setModel(reproductions);
 
     tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
 
     tableView->selectionModel()->disconnect(this);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-            this, SLOT(mutationFromTable()));
+            this, SLOT(reproductionFromTable()));
 
     genSlider->setMaximum(generations.length() - 2);
     genSpin->setMaximum(generations.length() - 2);

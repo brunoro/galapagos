@@ -17,8 +17,7 @@ HEADERS += src/def.h \
     src/node.h \
     src/tree.h \
     src/generation.h \
-    src/mutation.h \
-    src/crossover.h \
+    src/reproduction.h \
     src/style.h
 SOURCES += src/def.cpp \
     src/edge.cpp \
@@ -28,5 +27,4 @@ SOURCES += src/def.cpp \
     src/tree.cpp \
     src/style.cpp \
     src/generation.cpp \
-    src/mutation.cpp \
-    src/crossover.cpp
+    src/reproduction.cpp

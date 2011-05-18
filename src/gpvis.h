@@ -30,7 +30,7 @@
 #include <QVector>
 #include <QWidget>
 
-enum Views{INDIVIDUALS, CROSSOVERS, MUTATIONS};
+enum Views{INDIVIDUALS, REPRODUCTIONS};
 
 class GPVis : public QWidget
 {
@@ -47,11 +47,10 @@ class GPVis : public QWidget
         /* data */
         QList<Generation*> generations;
         QStandardItemModel *individuals,
-                           *crossovers,
-                           *mutations;
+                           *reproductions;
+
         QStringList individualsHeader,
-                    crossoversHeader,
-                    mutationsHeader;
+                    reproductionsHeader;
 
         /* ui */
         QGridLayout *grid;
@@ -68,8 +67,7 @@ class GPVis : public QWidget
         
         QBoxLayout *viewLine;
         QRadioButton *viewInd,
-                     *viewCross,
-                     *viewMut;
+                     *viewRep;
         QTableView *tableView;
 
         QGraphicsView *preview;
@@ -87,20 +85,17 @@ class GPVis : public QWidget
         
         /* render stuff on canvas */
         void renderIndividual(int gen, int individual);
-        void renderCrossover(int gen, int parent1, int parent2, int offspring);
-        void renderMutation(int gen, int parent, int offspring);
+        void renderReproduction(int gen, QList<int> parent, int offspring);
 
     private slots:
         /* show data */
         void showGeneration(int gen);
         void individualFromTable();
-        void crossoverFromTable();
-        void mutationFromTable();
+        void reproductionFromTable();
 
         /* change tableView */
         void showIndTable();
-        void showCrossTable();
-        void showMutTable();
+        void showRepTable();
 
         /* file reading */
         void openFileDialog();

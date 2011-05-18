@@ -327,12 +327,12 @@ int main(int argc, char **argv)
             
             if(drand48() > CROSSOVER_PROB)
             {
-                fprintf(runlog, "\tcrossover: %d %d -> %d\n", parent1, parent2, indivs );
+                fprintf(runlog, "\treproduction: %d %d -> %d\n", parent1, parent2, indivs );
                 nupop[indivs] =  crossover( pop[parent1], pop[parent2] );
             }
             else
             {
-                fprintf(runlog, "\tmutation: %d -> %d\n", parent1, indivs);
+                fprintf(runlog, "\treproduction: %d -> %d\n", parent1, indivs);
                 nupop[indivs] = mutation( pop[parent1], PMUT_PER_NODE );
             }
             fitness[indivs] = fitness_function( nupop[indivs] );
