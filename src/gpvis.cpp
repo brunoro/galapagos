@@ -52,8 +52,11 @@ GPVis::GPVis(QWidget *parent)
     viewRep = new QRadioButton("Reproductions", this);
     viewRep->setEnabled(false);
 
+    /* add fake root tree to consensus */
+    consensusTree = NULL;
+
     consensusUse = new QCheckBox("Use consensus", this);
-    consensusUse->setChecked(false);
+    consensusUse->setChecked(true);
     consensusUse->setEnabled(false);
     consensusPush = new QPushButton("View Consensus", this);
     consensusPush->setEnabled(false);
@@ -344,17 +347,21 @@ void GPVis::renderIndividual(int gen, int ind)
     if(consensusUse->isChecked())
     {
         QList<Tree*> trees;
-        trees.append(consensusTree);
+        if(consensusTree != NULL)
+            trees.append(consensusTree);
         trees.append(generations[gen]->getIndividual(ind));
 
         Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
 
-        delete consensusTree;
-        consensusTree = Tree::joinMany(trees);
-    
         // TODO: store last drawn trees
-        for(int i=0; i < trees.length(); i++)
-            delete trees[i];
+        if(consensusTree != NULL)
+        {
+            consensusTree = Tree::joinMany(trees);
+            for(int i=0; i < trees.length(); i++)
+                delete trees[i];
+        }
+        else
+            consensusTree = generations[gen]->getIndividual(ind);
     }
     else
     {
@@ -383,7 +390,7 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
 {
     //TODO: render tooltip
     QList<Tree*> trees;
-    if(consensusUse->isChecked())
+    if(consensusUse->isChecked() && (consensusTree != NULL))
         trees.append(consensusTree);
 
     trees.append(generations[gen + 1]->getIndividual(offspring));

@@ -110,23 +110,25 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
     float sonAngle = refAngle - areaAngle/2 + hstep/2;
     for(int i = 0; i < merged.length(); i++)
     {
-        /* get son position */
-        QPointF sonCoord(origin.x() + level * step * cosf(sonAngle),
-                         origin.y() + level * step * sinf(sonAngle));
-        /* draw node and call recursion */
-        merged[i]->draw(canvas, sonCoord);
-        merged[i]->setSons(Node::recursiveDrawMany(canvas, merged[i]->getSons(), origin, sonCoord,
-                           step, level + 1, hstep, sonAngle, styles));
-        sonAngle += hstep;
-
-        /* update edges */
-        foreach(Node *son, merged[i]->getSons())
+        /* avoid drawing consensus tree */
+        if(!(merged[i]->getTreeId().contains(CONSENSUS_ID) && (merged[i]->getTreeId().size() <= 1)))
         {
-            foreach(int id, son->getTreeId())
-                merged[i]->addEdge(son, styles.value(id));
+            /* get son position */
+            QPointF sonCoord(origin.x() + level * step * cosf(sonAngle),
+                             origin.y() + level * step * sinf(sonAngle));
+            /* draw node and call recursion */
+            merged[i]->draw(canvas, sonCoord);
+            merged[i]->setSons(Node::recursiveDrawMany(canvas, merged[i]->getSons(), origin, sonCoord,
+                               step, level + 1, hstep, sonAngle, styles));
+            /* update edges */
+            foreach(Node *son, merged[i]->getSons())
+            {
+                foreach(int id, son->getTreeId())
+                    merged[i]->addEdge(son, styles.value(id));
+            }
+            merged[i]->updateEdges(canvas);
         }
-        merged[i]->updateEdges(canvas);
-
+        sonAngle += hstep;
     }
     return merged;
 }
