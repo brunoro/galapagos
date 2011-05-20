@@ -21,9 +21,9 @@ GPVis::GPVis(QWidget *parent)
     : QWidget(parent)
 {
     int WIDTH = 1024;
-    int HEIGHT = 768;
-    int SCENE_WIDTH = 550;
-    int SCENE_HEIGTH = 550;
+    int HEIGHT = 800;
+    int SCENE_WIDTH = 600;
+    int SCENE_HEIGTH = 500;
 
     resize(WIDTH, HEIGHT);
     center(this, WIDTH, HEIGHT);
@@ -48,9 +48,15 @@ GPVis::GPVis(QWidget *parent)
     genSlider->setTickPosition(QSlider::TicksBelow);
 
     viewInd = new QRadioButton("Individuals", this);
-    viewInd ->setEnabled(false);
+    viewInd->setEnabled(false);
     viewRep = new QRadioButton("Reproductions", this);
     viewRep->setEnabled(false);
+
+    consensusUse = new QCheckBox("Use consensus", this);
+    consensusUse->setChecked(false);
+    consensusUse->setEnabled(false);
+    consensusPush = new QPushButton("View Consensus", this);
+    consensusPush->setEnabled(false);
 
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
@@ -60,12 +66,15 @@ GPVis::GPVis(QWidget *parent)
     tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     tableView->setAlternatingRowColors(true);
     tableView->setEnabled(false);
-    
 
     fileLine = new QBoxLayout(QBoxLayout::LeftToRight);
     fileLine->addWidget(fileField);
     fileLine->addWidget(fileSelect);
     fileLine->addWidget(fileOpen);
+
+    conLine = new QBoxLayout(QBoxLayout::LeftToRight);
+    conLine->addWidget(consensusUse);
+    conLine->addWidget(consensusPush);
 
     genLine = new QBoxLayout(QBoxLayout::LeftToRight);
     genLine->addWidget(genSlider);
@@ -78,10 +87,11 @@ GPVis::GPVis(QWidget *parent)
     grid = new QGridLayout(this);
     grid->addWidget(preview, 0, 0, -1, 1);
     grid->addLayout(fileLine, 0, 1);
-    grid->addWidget(genLabel, 1, 1);
-    grid->addLayout(genLine, 2, 1);
-    grid->addLayout(viewLine, 3, 1);
-    grid->addWidget(tableView, 4, 1);
+    grid->addLayout(conLine, 1, 1);
+    grid->addWidget(genLabel, 2, 1);
+    grid->addLayout(genLine, 3, 1);
+    grid->addLayout(viewLine, 4, 1);
+    grid->addWidget(tableView, 5, 1);
  
     setLayout(grid);
     
@@ -190,6 +200,8 @@ void GPVis::readLogFile()
     tableView->setEnabled(true);
     viewInd->setEnabled(true);
     viewRep->setEnabled(true);
+    consensusUse->setEnabled(true);
+    consensusPush->setEnabled(true);
     
     /* define first generation read */
     showGeneration(0);
@@ -328,10 +340,29 @@ void GPVis::individualFromTable()
 
 void GPVis::renderIndividual(int gen, int ind)
 {
-    Tree *tree;
-    tree = generations[gen]->getIndividual(ind);
-    tree->draw(scene, *sceneCenter, Style::defaultStep);
-    delete tree;
+    /* use consensus tree */
+    if(consensusUse->isChecked())
+    {
+        QList<Tree*> trees;
+        trees.append(consensusTree);
+        trees.append(generations[gen]->getIndividual(ind));
+
+        Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
+
+        delete consensusTree;
+        consensusTree = Tree::joinMany(trees);
+    
+        // TODO: store last drawn trees
+        for(int i=0; i < trees.length(); i++)
+            delete trees[i];
+    }
+    else
+    {
+        Tree *tree;
+        tree = generations[gen]->getIndividual(ind);
+        tree->draw(scene, *sceneCenter, Style::defaultStep);
+        delete tree;
+    }
 }
 
 void GPVis::reproductionFromTable()
@@ -352,10 +383,23 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
 {
     //TODO: render tooltip
     QList<Tree*> trees;
+    if(consensusUse->isChecked())
+        trees.append(consensusTree);
+
     trees.append(generations[gen + 1]->getIndividual(offspring));
     for(int i = 0; i < parents.length(); i++)
         trees.append(generations[gen]->getIndividual(parents[i]));
+
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
+
+    /* make new consensus tree */
+    if(consensusUse->isChecked())
+    {
+        delete consensusTree;
+        consensusTree = Tree::joinMany(trees);
+    }
+    
+    // TODO: store last drawn trees
     for(int i=0; i < trees.length(); i++)
         delete trees[i];
 }

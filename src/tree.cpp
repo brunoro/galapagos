@@ -118,6 +118,54 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     return merged;
 }
 
+/* join multiple trees */
+Tree* Tree::joinMany(QList<Tree*> trees)
+{
+    /* start from trees root */
+    QList<Node*> nodes;
+    QList<int> ids;
+    bool needRoot = false;
+    foreach(Tree *tree, trees)
+    {
+        nodes.append(tree->getRoot());
+        ids.append(tree->getId());
+        foreach(Node *node, nodes)
+        {
+            if(!((*tree->getRoot()) == (*node)))
+                needRoot = true;
+        }
+    }
+
+    /* make new tree */
+    Tree *merged = new Tree(CONSENSUS_ID, FLT_MIN);
+
+    /* draw common root if needed */
+    int startLevel;
+    if(needRoot)
+    {
+        Node *root = new Node(ROOT, "");
+        merged->setRoot(root);
+    }
+
+    /* join subtree */
+    QList<Node*> sons = Node::recursiveJoinMany(nodes);
+
+    /* set consensus id */
+    QSet<int> consensusId;
+    consensusId.insert(CONSENSUS_ID);
+    foreach(Node *son, sons)
+        son->setTreeId(consensusId);
+
+    /* set root */
+    if(needRoot)
+        merged->getRoot()->setSons(sons);
+    else
+        merged->setRoot(sons[0]);
+
+    return merged;
+}
+
+
 /* calls recursiveDraw */
 /* TODO: add pens, brushes and constants */
 void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)

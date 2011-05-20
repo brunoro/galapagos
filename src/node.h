@@ -21,7 +21,9 @@
 #include <QSet>
 #include <QString>
 
+#define CONSENSUS_ID -2
 enum NodeType {OP, TERM, VAR, ROOT};
+
 class Edge;
 class Node
 {
@@ -45,6 +47,8 @@ class Node
                                               QPointF origin, QPointF coord,
                                               int step, int level,
                                               float areaAngle, float refAngle, QHash<int, QPen> style);
+        static QList<Node*> recursiveJoinMany(QList<Node*> nodes);
+
         QList<Node*> getSons();
         NodeType getType();
         QString getInfo();

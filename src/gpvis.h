@@ -8,6 +8,7 @@
 
 #include <QApplication>
 #include <QBoxLayout>
+#include <QCheckBox>
 #include <QClipboard>
 #include <QDesktopWidget>
 #include <QFileDialog>
@@ -50,9 +51,10 @@ class GPVis : public QWidget
         QList<Generation*> generations;
         QStandardItemModel *individuals,
                            *reproductions;
-
         QStringList individualsHeader,
                     reproductionsHeader;
+        Tree *consensusTree;
+        QList<Tree*> lastDrawnTrees;
 
         /* ui */
         QGridLayout *grid;
@@ -70,6 +72,11 @@ class GPVis : public QWidget
         QBoxLayout *viewLine;
         QRadioButton *viewInd,
                      *viewRep;
+
+        QBoxLayout *conLine;
+        QCheckBox *consensusUse;
+        QPushButton *consensusPush;
+
         QTableView *tableView;
 
         QGraphicsView *preview;
