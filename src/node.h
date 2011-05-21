@@ -22,7 +22,7 @@
 #include <QString>
 
 #define CONSENSUS_ID -2
-enum NodeType {OP, TERM, VAR, ROOT};
+enum NodeType {OP, TERM, ROOT};
 
 class Edge;
 class Node

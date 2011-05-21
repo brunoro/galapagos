@@ -9,15 +9,13 @@
 class Def
 {
     public:
-        Def(QString ops, QString vars, QString terms);
+        Def(QString ops, QString terms);
 
         int isOp(QString str);
-        bool isVar(QString str);
         bool isTerm(QString str);
         
     private:
         QHash<QString, int> ops;
-        QStringList vars;
         QStringList terms;
 };
 

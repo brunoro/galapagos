@@ -153,28 +153,20 @@ void GPVis::readLogFile()
             fileBuffer = fileStream->readLine();
 
             /* ops */
-            if(fileBuffer.contains(QRegExp("\tops:*.")))
+            if(fileBuffer.contains(QRegExp("\\s*ops:*.")))
             {
-                ops = fileBuffer.remove(QRegExp("\tops:\\s*"));
+                ops = fileBuffer.remove(QRegExp("\\s*ops:\\s*"));
                 //qDebug() << "GPVis::readLogFile found ops " << ops;
                 continue;
             }
 
-            /* vars */
-            if(fileBuffer.contains(QRegExp("\tvars:*.")))
-            {
-                vars = fileBuffer.remove(QRegExp("\tvars:\\s*"));
-                //qDebug() << "GPVis::readLogFile found vars" << vars;
-                continue;
-            }
-            
             /* terms */
-            if(fileBuffer.contains(QRegExp("\tterms:*.")))
+            if(fileBuffer.contains(QRegExp("\\s*terms:*.")))
             {
-                terms = fileBuffer.remove(QRegExp("\tterms:\\s*"));
+                terms = fileBuffer.remove(QRegExp("\\s*terms:\\s*"));
                 //qDebug() << "GPVis::readLogFile found terms" << terms;
 
-                definition = new Def(ops, vars, terms); // TODO: change this
+                definition = new Def(ops, terms); // TODO: change this
 
                 continue;
             }
@@ -302,18 +294,18 @@ void GPVis::readGeneration()
         /* individuals */
         if(fileBuffer.contains(QRegExp("ind:*.")))
         {
-            individual = fileBuffer.remove(QRegExp("\tind:\\s*"));
+            individual = fileBuffer.remove(QRegExp("\\s*ind:\\s*"));
             tokens = individual.split("\t", QString::SkipEmptyParts);
-            //qDebug() << "GPVis::readLogFile found individual" << tokens;
+            qDebug() << "GPVis::readLogFile found individual" << tokens;
             gen->addIndividual(tokens[2], tokens[1].toFloat());
             continue;
         }
         /* reproduction */
-        if(fileBuffer.contains(QRegExp("reproduction:*.")))
+        if(fileBuffer.contains(QRegExp("rep:*.")))
         {
-            reproduction = fileBuffer.remove(QRegExp("\treproduction:\\s*"));
+            reproduction = fileBuffer.remove(QRegExp("\\s*rep:\\s*"));
             //qDebug() << "GPVis::readLogFile found reproduction" << reproduction;
-            tokens = reproduction.split(" ");
+            tokens = reproduction.split(QRegExp("\\s+"));
 
             QList<int> parents;
             int i = 0;
@@ -454,9 +446,9 @@ void GPVis::openFileDialog()
 
 void GPVis::test()
 {
-    fileField->setText("tinygp/test/problem.log");
+    //fileField->setText("test/palotti.log");
     //fileField->setText("../../../tinygp/test/problem.log");
-    QTest::mouseClick(fileOpen, Qt::LeftButton);
+    //QTest::mouseClick(fileOpen, Qt::LeftButton);
 
     //Tree::test(scene);
     /*

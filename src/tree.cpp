@@ -26,15 +26,12 @@ Node *Tree::parseTree(QStringList nodes, int pos, int id)
     extern Def *definition;
     Node *turn = NULL;
 
+    qDebug() << nodes << pos;
     if (definition->isOp(nodes[pos]))
     {
         turn = new Node(OP, nodes[pos]);
         turn->addSon(parseTree(nodes, ++pos, id));
         turn->addSon(parseTree(nodes, ++pos, id));
-    }
-    else if (definition->isVar(nodes[pos]))
-    {
-        turn = new Node(VAR, nodes[pos]);
     }
     else if (definition->isTerm(nodes[pos]))
     {
