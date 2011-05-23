@@ -1,5 +1,5 @@
 definition:
-    ops: (+,2) (-,2) (*,2) (%,2) (Log,2) (Pow,2) 
+	ops: (+,2) (-,2) (*,2) (%,2) (Log,2) (Pow,2)
 	terms: MaxTFICF MaxTFIDF MaxCTD MaxOR MaxCC MaxGSS MaxCHI MaxAM MaxIG MaxDom sumDF DF sumTF TF TFIDF TFICF CTD OR CE CC GSS CHI IG DOM GINI P' P AM
 generation 0:
 	ind: 0	40.6667	* MaxTFIDF CHI

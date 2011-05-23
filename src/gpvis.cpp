@@ -56,7 +56,7 @@ GPVis::GPVis(QWidget *parent)
     consensusTree = NULL;
 
     consensusUse = new QCheckBox("Use consensus", this);
-    consensusUse->setChecked(true);
+    consensusUse->setChecked(false);
     consensusUse->setEnabled(false);
     consensusPush = new QPushButton("View Consensus", this);
     consensusPush->setEnabled(false);
@@ -195,7 +195,7 @@ void GPVis::readLogFile()
     tableView->setEnabled(true);
     viewInd->setEnabled(true);
     viewRep->setEnabled(true);
-    consensusUse->setEnabled(true);
+    consensusUse->setEnabled(false);
     consensusPush->setEnabled(true);
     
     /* define first generation read */
@@ -208,6 +208,54 @@ void GPVis::readLogFile()
     /* individual 0 is the first one shown */
     selectedRow = 0;
     tableView->selectRow(selectedRow);
+}
+
+void GPVis::readGeneration()
+{
+    Generation *gen = new Generation();
+    QString fileBuffer,
+            individual,
+            reproduction;
+    QStringList tokens;
+
+    do
+    {
+        fileBuffer = fileStream->readLine();
+        /* individuals */
+        if(fileBuffer.contains(QRegExp("ind:*.")))
+        {
+            individual = fileBuffer;
+            individual.remove(QRegExp("\\s*ind:\\s*"));
+            tokens = individual.split("\t", QString::SkipEmptyParts);
+            //qDebug() << "GPVis::readLogFile found individual" << tokens;
+            gen->addIndividual(tokens[2], tokens[1].toFloat());
+        }
+        /* reproduction */
+        if(fileBuffer.contains(QRegExp("rep:*.")))
+        {
+            reproduction = fileBuffer;
+            reproduction.remove(QRegExp("\\s*rep:\\s*"));
+            //qDebug() << "GPVis::readLogFile found reproduction" << reproduction;
+            tokens = reproduction.split(QRegExp("\\s+"));
+
+            QList<int> parents;
+            int i = 0;
+            for(; i < tokens.length(); i++)
+            {
+                if(tokens[i] == "->")
+                    break;
+                parents.append(tokens[i].toInt());
+            }
+            gen->addReproduction(Reproduction(parents,
+                                              tokens[++i].toInt()));
+        }
+    } while(fileBuffer[0] == ('\t') && !(fileStream->atEnd()));
+
+    generations.append(gen);
+    
+    /* read another generation */
+    if(fileBuffer.contains(QRegExp("generation*.")))
+        readGeneration();
 }
 
 /* builds model from a generation */
@@ -278,50 +326,6 @@ void GPVis::showGeneration(int gen)
     
     /* keep same row selected */
     tableView->selectRow(selectedRow);
-}
-
-void GPVis::readGeneration()
-{
-    Generation *gen = new Generation();
-    QString fileBuffer = fileStream->readLine(),
-            individual,
-            reproduction;
-    QStringList tokens;
-
-    while(!(fileBuffer.contains(QRegExp("generation:*."))) &&
-          !(fileStream->atEnd()))
-    {
-        /* individuals */
-        if(fileBuffer.contains(QRegExp("ind:*.")))
-        {
-            individual = fileBuffer.remove(QRegExp("\\s*ind:\\s*"));
-            tokens = individual.split("\t", QString::SkipEmptyParts);
-            qDebug() << "GPVis::readLogFile found individual" << tokens;
-            gen->addIndividual(tokens[2], tokens[1].toFloat());
-            continue;
-        }
-        /* reproduction */
-        if(fileBuffer.contains(QRegExp("rep:*.")))
-        {
-            reproduction = fileBuffer.remove(QRegExp("\\s*rep:\\s*"));
-            //qDebug() << "GPVis::readLogFile found reproduction" << reproduction;
-            tokens = reproduction.split(QRegExp("\\s+"));
-
-            QList<int> parents;
-            int i = 0;
-            for(; i < tokens.length(); i++)
-            {
-                if(tokens[i] == "->")
-                    break;
-                parents.append(tokens[i].toInt());
-            }
-            gen->addReproduction(Reproduction(parents,
-                                              tokens[++i].toInt()));
-            continue;
-        }
-        fileBuffer = fileStream->readLine();
-    }
-    generations.append(gen);
 }
 
 void GPVis::individualFromTable()
@@ -446,9 +450,8 @@ void GPVis::openFileDialog()
 
 void GPVis::test()
 {
-    //fileField->setText("test/palotti.log");
-    //fileField->setText("../../../tinygp/test/problem.log");
-    //QTest::mouseClick(fileOpen, Qt::LeftButton);
+    fileField->setText("test/palotti.log");
+    QTest::mouseClick(fileOpen, Qt::LeftButton);
 
     //Tree::test(scene);
     /*

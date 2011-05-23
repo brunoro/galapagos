@@ -26,7 +26,6 @@ Node *Tree::parseTree(QStringList nodes, int pos, int id)
     extern Def *definition;
     Node *turn = NULL;
 
-    qDebug() << nodes << pos;
     if (definition->isOp(nodes[pos]))
     {
         turn = new Node(OP, nodes[pos]);
