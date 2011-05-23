@@ -74,11 +74,18 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         }
     }
 
-    /* set styles */
+    /* set styles adjusting ids to be unique */
     QHash<int, QPen> styles;
     QList<QColor> colors = Style::getColorPalette(ids.length());
     for(int i = 0; i < ids.length(); i++)
+    {
+        if(styles.contains(ids[i]))
+        {
+            ids[i] = -ids[i];
+            trees[i]->setId(ids[i]);
+        }
         styles[ids[i]] = QPen(QBrush(colors[i]), Style::edgeWeight);
+    }
     styles[CONSENSUS_ID] = QPen(QBrush(QColor("grey")), Style::edgeWeight);
 
     /* make new tree */
@@ -206,6 +213,15 @@ void Tree::addOffspring(Tree *offspring)
 void Tree::setRoot(Node *node)
 {
     root = node;
+}
+
+void Tree::setId(int tree_id)
+{
+    id = tree_id;
+    QSet<int> id_set;
+    id_set.insert(tree_id);
+    for(int i = 0; i < index.length(); i++)
+        index[i]->setTreeId(id_set);
 }
 
 int Tree::getId()

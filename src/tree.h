@@ -30,6 +30,7 @@ class Tree
         void addOffspring(Tree *offspring);
         void setRoot(Node *node);
 
+        void setId(int id);
         int getId();
         float getFitness();
         Node *getRoot();

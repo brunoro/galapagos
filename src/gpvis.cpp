@@ -195,7 +195,7 @@ void GPVis::readLogFile()
     tableView->setEnabled(true);
     viewInd->setEnabled(true);
     viewRep->setEnabled(true);
-    consensusUse->setEnabled(false);
+    consensusUse->setEnabled(true);
     consensusPush->setEnabled(true);
     
     /* define first generation read */
@@ -221,6 +221,7 @@ void GPVis::readGeneration()
     do
     {
         fileBuffer = fileStream->readLine();
+
         /* individuals */
         if(fileBuffer.contains(QRegExp("ind:*.")))
         {

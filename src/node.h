@@ -4,6 +4,7 @@
 #include "edge.h"
 
 #include <cmath>
+#include <climits>
 
 #include <QBrush>
 #include <QDebug>
@@ -21,7 +22,7 @@
 #include <QSet>
 #include <QString>
 
-#define CONSENSUS_ID -2
+#define CONSENSUS_ID INT_MIN
 enum NodeType {OP, TERM, ROOT};
 
 class Edge;
