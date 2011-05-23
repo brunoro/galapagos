@@ -390,7 +390,9 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     if(consensusUse->isChecked() && (consensusTree != NULL))
         trees.append(consensusTree);
 
-    trees.append(generations[gen + 1]->getIndividual(offspring));
+    Tree *offspringTree = generations[gen + 1]->getIndividual(offspring);
+    offspringTree->setId(-offspring);
+    trees.append(offspringTree);
     for(int i = 0; i < parents.length(); i++)
         trees.append(generations[gen]->getIndividual(parents[i]));
 

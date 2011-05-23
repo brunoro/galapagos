@@ -79,11 +79,6 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     QList<QColor> colors = Style::getColorPalette(ids.length());
     for(int i = 0; i < ids.length(); i++)
     {
-        if(styles.contains(ids[i]))
-        {
-            ids[i] = -ids[i];
-            trees[i]->setId(ids[i]);
-        }
         styles[ids[i]] = QPen(QBrush(colors[i]), Style::edgeWeight);
     }
     styles[CONSENSUS_ID] = QPen(QBrush(QColor("grey")), Style::edgeWeight);
