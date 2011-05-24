@@ -37,3 +37,9 @@ bool Def::isTerm(QString str)
     //qDebug() << "Def::isTerm" << str << terms.indexOf(str);
     return (terms.indexOf(str) >= 0) ? true : false;
 }
+
+QHashIterator<QString, int> Def::getOpIterator()
+{
+    QHashIterator<QString, int> iter(ops);
+    return iter;
+}

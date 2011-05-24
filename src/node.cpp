@@ -133,58 +133,29 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
     return merged;
 }
 
-/* join subtrees */
-QList<Node*> Node::recursiveJoinMany(QList<Node*> nodes)
+void Node::opsConsensus(int depth)
 {
-    QVector<bool> toRemove(nodes.length());
-    /* iterates on nodes search for duplicates */
-    for(int i = 0; i < nodes.length(); i++)
+    extern Def *definition;
+
+    if(depth == 0)
+        return;
+    
+    int degree = (type == ROOT) ? 1 : definition->isOp(info);
+    /* insert as many times as the degree */
+    for(int d = 0; d < degree; d++)
     {
-        toRemove[i] = false;
-        for(int j = i + 1; j < nodes.length(); j++)
+        QHashIterator<QString, int> opIterator = definition->getOpIterator();
+        while(opIterator.hasNext())
         {
-            QSet<int> intersection = nodes[i]->getTreeId() & nodes[j]->getTreeId();
-            /* if it is duplicate, merge */
-            if( (*(nodes[i]) == *(nodes[j])) && intersection.isEmpty())
-            {
-                //qDebug() << "Node::recursiveDrawMany nodes are equal " << nodes[i]->getInfo() << nodes[j]->getInfo();
-                Node *old_j = nodes[j];
-                nodes[j] = new Node(old_j->getType(), old_j->getInfo());
+            opIterator.next();
 
-                nodes[j]->addTreeId(nodes[i]->getTreeId());
-                nodes[j]->addTreeId(old_j->getTreeId());
-                foreach(Node *son, nodes[i]->getSons())
-                    nodes[j]->addSon(son);
-                foreach(Node *son, old_j->getSons())
-                    nodes[j]->addSon(son);
+            /* make new node */
+            Node *turn = new Node(ROOT, opIterator.key());
+            turn->opsConsensus(depth - 1);
 
-                /* mark as merged and do not merge this node again */
-                toRemove[i] = true; 
-                break;
-            }
+            addSon(turn);
         }
     }
-
-    /* remove doubles */
-    QList<Node*> merged;
-    for(int i = 0; i < nodes.length(); i++)
-    {
-        if(!toRemove[i])
-            merged.append(nodes[i]);
-    }
-
-    for(int i = 0; i < merged.length(); i++)
-    {
-        /* call recursion */
-        merged[i]->setSons(Node::recursiveJoinMany(merged[i]->getSons()));
-
-        /* set consensus id */
-        QSet<int> consensusId;
-        consensusId.insert(CONSENSUS_ID);
-        foreach(Node *son, merged[i]->getSons())
-            son->setTreeId(consensusId);
-    }
-    return merged;
 }
 
 void Node::updateEdges(QGraphicsScene *canvas)

@@ -65,13 +65,18 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     bool needRoot = false;
     foreach(Tree *tree, trees)
     {
-        nodes.append(tree->getRoot());
+        if(tree->getId() == CONSENSUS_ID)
+            nodes.append(tree->root->getSons());
+        else
+            nodes.append(tree->getRoot());
+        
         ids.append(tree->getId());
-        foreach(Node *node, nodes)
-        {
-            if(!((*tree->getRoot()) == (*node)))
-                needRoot = true;
-        }
+        if(trees.last()->getId() != CONSENSUS_ID)
+            foreach(Node *node, nodes)
+            {
+                if(!((*tree->getRoot()) == (*node)))
+                    needRoot = true;
+            }
     }
 
     /* set styles adjusting ids to be unique */
@@ -81,7 +86,6 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     {
         styles[ids[i]] = QPen(QBrush(colors[i]), Style::edgeWeight);
     }
-    styles[CONSENSUS_ID] = QPen(QBrush(QColor("grey")), Style::edgeWeight);
 
     /* make new tree */
     Tree *merged = new Tree(-1, -1); // TODO: change this
@@ -90,10 +94,15 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     int startLevel;
     if(needRoot)
     {
-        Node *root = new Node(ROOT, "");
+        startLevel = 1;
+        Node *root;
+        /* consensus tree becomes root*/
+        if(trees.last()->getId() == CONSENSUS_ID)
+            merged->setRoot(trees.last()->getRoot());
+        else
+            root = new Node(ROOT, "");
         root->draw(canvas, coord);
         merged->setRoot(root);
-        startLevel = 1;
     }
     else
         startLevel = 0;
@@ -117,53 +126,6 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     return merged;
 }
 
-/* join multiple trees */
-Tree* Tree::joinMany(QList<Tree*> trees)
-{
-    /* start from trees root */
-    QList<Node*> nodes;
-    QList<int> ids;
-    bool needRoot = false;
-    foreach(Tree *tree, trees)
-    {
-        nodes.append(tree->getRoot());
-        ids.append(tree->getId());
-        foreach(Node *node, nodes)
-        {
-            if(!((*tree->getRoot()) == (*node)))
-                needRoot = true;
-        }
-    }
-
-    /* make new tree */
-    Tree *merged = new Tree(CONSENSUS_ID, FLT_MIN);
-
-    /* draw common root if needed */
-    if(needRoot)
-    {
-        Node *root = new Node(ROOT, "");
-        merged->setRoot(root);
-    }
-
-    /* join subtree */
-    QList<Node*> sons = Node::recursiveJoinMany(nodes);
-
-    /* set consensus id */
-    QSet<int> consensusId;
-    consensusId.insert(CONSENSUS_ID);
-    foreach(Node *son, sons)
-        son->setTreeId(consensusId);
-
-    /* set root */
-    if(needRoot)
-        merged->getRoot()->setSons(sons);
-    else
-        merged->setRoot(sons[0]);
-
-    return merged;
-}
-
-
 /* calls recursiveDraw */
 /* TODO: add pens, brushes and constants */
 void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
@@ -176,6 +138,21 @@ void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
 
     Tree::drawRings(canvas, coord, depth, step);
 
+}
+
+Tree *Tree::opsConsensusTree()
+{
+    Tree *opCon = new Tree(CONSENSUS_ID, FLT_MIN);
+
+    Node *root = new Node(ROOT, "");
+    opCon->setRoot(root);
+
+    int maxDepth = MAX_DEPTH;
+    root->opsConsensus(MAX_DEPTH);
+
+    opCon->setId(CONSENSUS_ID);
+
+    return opCon;
 }
 
 void Tree::drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step)

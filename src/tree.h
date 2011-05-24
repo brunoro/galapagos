@@ -1,6 +1,8 @@
 #ifndef TREE_H
 #define TREE_H
 
+#define MAX_DEPTH 5
+
 #include "def.h"
 #include "node.h"
 
@@ -40,7 +42,7 @@ class Tree
 
         static Tree* drawMany(QGraphicsScene *canvas, QList<Tree*> trees,
                               QPointF coord, int step);
-        static Tree* joinMany(QList<Tree*> trees);
+        static Tree *opsConsensusTree();
         static void drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step);
         static void test(QGraphicsScene *canvas);
 

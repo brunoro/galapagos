@@ -52,9 +52,6 @@ GPVis::GPVis(QWidget *parent)
     viewRep = new QRadioButton("Reproductions", this);
     viewRep->setEnabled(false);
 
-    /* add fake root tree to consensus */
-    consensusTree = NULL;
-
     consensusUse = new QCheckBox("Use consensus", this);
     consensusUse->setChecked(false);
     consensusUse->setEnabled(false);
@@ -167,6 +164,7 @@ void GPVis::readLogFile()
                 //qDebug() << "GPVis::readLogFile found terms" << terms;
 
                 definition = new Def(ops, terms); // TODO: change this
+                consensusTree = Tree::opsConsensusTree();
 
                 continue;
             }
@@ -340,25 +338,18 @@ void GPVis::individualFromTable()
 
 void GPVis::renderIndividual(int gen, int ind)
 {
-    /* use consensus tree */
+    /* use reference tree */
     if(consensusUse->isChecked())
     {
         QList<Tree*> trees;
+        trees.append(generations[gen]->getIndividual(ind));
         if(consensusTree != NULL)
             trees.append(consensusTree);
-        trees.append(generations[gen]->getIndividual(ind));
 
         Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
 
-        // TODO: store last drawn trees
-        if(consensusTree != NULL)
-        {
-            consensusTree = Tree::joinMany(trees);
-            for(int i=0; i < trees.length(); i++)
-                delete trees[i];
-        }
-        else
-            consensusTree = generations[gen]->getIndividual(ind);
+        for(int i=0; i < trees.length() - 1; i++)
+            delete trees[i];
     }
     else
     {
@@ -387,8 +378,6 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
 {
     //TODO: render tooltip
     QList<Tree*> trees;
-    if(consensusUse->isChecked() && (consensusTree != NULL))
-        trees.append(consensusTree);
 
     /* id table */
     QList< QVector<int> > idTable;
@@ -412,18 +401,14 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
         idTable.append(pair);
     }
 
+    /* reference tree */
+    if(consensusUse->isChecked() && (consensusTree != NULL))
+        trees.append(consensusTree);
 
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
 
-    /* make new consensus tree */
-    if(consensusUse->isChecked())
-    {
-        delete consensusTree;
-        consensusTree = Tree::joinMany(trees);
-    }
-    
     // TODO: store last drawn trees
-    for(int i=0; i < trees.length(); i++)
+    for(int i=0; i < trees.length() - 1; i++)
         delete trees[i];
 }
 
