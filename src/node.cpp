@@ -84,7 +84,7 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                 Node *old_j = nodes[j];
                 nodes[j] = new Node(old_j->getType(), old_j->getInfo());
 
-                nodes[j]->addTreeId(nodes[i]->getTreeId());
+                nodes[j]->setTreeId(nodes[i]->getTreeId());
                 nodes[j]->addTreeId(old_j->getTreeId());
                 foreach(Node *son, nodes[i]->getSons())
                     nodes[j]->addSon(son);
@@ -137,6 +137,10 @@ void Node::opsConsensus(int depth)
 {
     extern Def *definition;
 
+    QSet<int> conid;
+    conid.insert(CONSENSUS_ID);
+    tree_id = conid;
+
     if(depth == 0)
         return;
     
@@ -163,8 +167,8 @@ void Node::updateEdges(QGraphicsScene *canvas)
     // TODO: get offset based on edges from same nodes
     foreach(QList<Edge*> sonEdges, edges)
     {
-      if(sonEdges.length() == 0)
-            continue;
+        if(sonEdges.length() == 0)
+              continue;
 
         // TODO: use distance from style
         float edgeDistance = Style::edgeDistance;

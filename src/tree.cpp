@@ -71,7 +71,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
             nodes.append(tree->getRoot());
         
         ids.append(tree->getId());
-        if(trees.last()->getId() != CONSENSUS_ID)
+        if(trees.first()->getId() != CONSENSUS_ID)
             foreach(Node *node, nodes)
             {
                 if(!((*tree->getRoot()) == (*node)))
@@ -97,8 +97,8 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         startLevel = 1;
         Node *root;
         /* consensus tree becomes root*/
-        if(trees.last()->getId() == CONSENSUS_ID)
-            merged->setRoot(trees.last()->getRoot());
+        if(trees.first()->getId() == CONSENSUS_ID)
+            merged->setRoot(trees.first()->getRoot());
         else
             root = new Node(ROOT, "");
         root->draw(canvas, coord);
@@ -113,6 +113,8 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         merged->setRoot(sons[0]);
     foreach(Node *son, sons)
     {
+        if(son->getTreeId().contains(CONSENSUS_ID))
+            continue;
         merged->getRoot()->addSon(son);
         foreach(int id, son->getTreeId())
         {
@@ -147,10 +149,12 @@ Tree *Tree::opsConsensusTree()
     Node *root = new Node(ROOT, "");
     opCon->setRoot(root);
 
+    QSet<int> conid;
+    conid.insert(CONSENSUS_ID);
+    root->setTreeId(conid);
+
     int maxDepth = MAX_DEPTH;
     root->opsConsensus(MAX_DEPTH);
-
-    opCon->setId(CONSENSUS_ID);
 
     return opCon;
 }

@@ -342,13 +342,13 @@ void GPVis::renderIndividual(int gen, int ind)
     if(consensusUse->isChecked())
     {
         QList<Tree*> trees;
-        trees.append(generations[gen]->getIndividual(ind));
         if(consensusTree != NULL)
             trees.append(consensusTree);
+        trees.append(generations[gen]->getIndividual(ind));
 
         Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
 
-        for(int i=0; i < trees.length() - 1; i++)
+        for(int i=1; i < trees.length(); i++)
             delete trees[i];
     }
     else
@@ -382,6 +382,10 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     /* id table */
     QList< QVector<int> > idTable;
 
+    /* reference tree */
+    if(consensusUse->isChecked() && (consensusTree != NULL))
+        trees.append(consensusTree);
+
     /* offspring */
     trees.append(generations[gen + 1]->getIndividual(offspring));
     trees[0]->setId(0);
@@ -401,14 +405,10 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
         idTable.append(pair);
     }
 
-    /* reference tree */
-    if(consensusUse->isChecked() && (consensusTree != NULL))
-        trees.append(consensusTree);
-
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
 
     // TODO: store last drawn trees
-    for(int i=0; i < trees.length() - 1; i++)
+    for(int i=1; i < trees.length(); i++)
         delete trees[i];
 }
 
