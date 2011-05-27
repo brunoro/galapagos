@@ -184,7 +184,7 @@ void Node::updateEdges(QGraphicsScene *canvas)
 void Node::draw(QGraphicsScene *canvas, QPointF coord)
 {
     /* set colors */
-    ((QGraphicsEllipseItem*)bound)->setBrush(QBrush(QColor(Style::nodeBrushColor[type])));
+    ((QGraphicsEllipseItem*)bound)->setBrush(QBrush(QColor(Style::defaultNodeColor)));
     ((QGraphicsEllipseItem*)bound)->setPen(QPen(QColor(Style::nodePenColor)));
     ((QGraphicsSimpleTextItem*)text)->setBrush(QBrush(QColor(Style::nodeTextColor)));
 

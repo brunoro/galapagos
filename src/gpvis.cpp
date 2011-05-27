@@ -26,7 +26,7 @@ GPVis::GPVis(QWidget *parent)
     int SCENE_HEIGTH = 500;
 
     resize(WIDTH, HEIGHT);
-    center(this, WIDTH, HEIGHT);
+    //center(this, WIDTH, HEIGHT);
 
     scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGTH, this);
     sceneCenter = new QPointF(SCENE_WIDTH/2, SCENE_HEIGTH/2);
@@ -383,26 +383,32 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     QList< QVector<int> > idTable;
 
     /* reference tree */
-    if(consensusUse->isChecked() && (consensusTree != NULL))
+    int j = 0;
+    if(consensusUse->isChecked())
+    {
         trees.append(consensusTree);
+        j++;
+    }
 
     /* offspring */
     trees.append(generations[gen + 1]->getIndividual(offspring));
-    trees[0]->setId(0);
+    trees[j]->setId(j);
     QVector<int> pair(2);
     pair[0] = gen + 1;
     pair[1] = offspring;
     idTable.append(pair);
+    j++;
 
     /* parents */
     for(int i = 0; i < parents.length(); i++)
     {
         trees.append(generations[gen]->getIndividual(parents[i]));
-        trees[i + 1]->setId(i + 1);
+        trees[j]->setId(j);
         QVector<int> pair(2);
         pair[0] = gen;
-        pair[1] = parents[i + 1];
+        pair[1] = parents[i];
         idTable.append(pair);
+        j++;
     }
 
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);

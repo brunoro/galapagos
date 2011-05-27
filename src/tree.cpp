@@ -17,6 +17,7 @@ Tree::Tree(int tree_id, float tree_fitness)
 
 Tree::~Tree()
 {
+    /* TODO: make this work */
     for(int i = 0; i < index.length(); i++)
         delete index[i];
 }
