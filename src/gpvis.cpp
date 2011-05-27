@@ -414,7 +414,7 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
 
     // TODO: store last drawn trees
-    for(int i=1; i < trees.length(); i++)
+    for(int i = 1; i < trees.length(); i++)
         delete trees[i];
 }
 

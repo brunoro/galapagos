@@ -101,12 +101,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     if(needRoot)
     {
         startLevel = 1;
-        Node *root;
-        /* consensus tree becomes root*/
-        if(trees.first()->getId() == CONSENSUS_ID)
-            root = trees.first()->getRoot();
-        else
-            root = new Node(ROOT, "");
+        Node *root = new Node(ROOT, "");
         root->draw(canvas, coord);
         merged->setRoot(root);
     }
