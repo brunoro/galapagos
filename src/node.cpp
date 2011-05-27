@@ -72,42 +72,56 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
     QVector<bool> toRemove(nodes.length());
     /* iterates on nodes search for duplicates */
     for(int i = 0; i < nodes.length(); i++)
-    {
         toRemove[i] = false;
+    for(int i = 0; i < nodes.length(); i++)
+    {
+        if(toRemove[i])
+            continue;
         for(int j = i + 1; j < nodes.length(); j++)
         {
+            if(toRemove[j])
+                continue;
             QSet<int> intersection = nodes[i]->getTreeId() & nodes[j]->getTreeId();
             /* if it is duplicate, merge */
-            if( (*(nodes[i]) == *(nodes[j])) && intersection.isEmpty())
+            if( (*(nodes[j]) == *(nodes[i])) && intersection.isEmpty())
             {
-                //qDebug() << "Node::recursiveDrawMany nodes are equal " << nodes[i]->getInfo() << nodes[j]->getInfo();
-                Node *old_j = nodes[j];
-                nodes[j] = new Node(old_j->getType(), old_j->getInfo());
+                //qDebug() << "Node::recursiveDrawMany nodes are equal " << nodes[j]->getInfo() << nodes[i]->getInfo();
+                Node *old_i = nodes[i];
+                nodes[i] = new Node(old_i->getType(), old_i->getInfo());
 
-                nodes[j]->setTreeId(nodes[i]->getTreeId());
-                nodes[j]->addTreeId(old_j->getTreeId());
-                foreach(Node *son, nodes[i]->getSons())
-                    nodes[j]->addSon(son);
-                foreach(Node *son, old_j->getSons())
-                    nodes[j]->addSon(son);
+                nodes[i]->setTreeId(nodes[j]->getTreeId());
+                nodes[i]->addTreeId(old_i->getTreeId());
+                foreach(Node *son, nodes[j]->getSons())
+                    nodes[i]->addSon(son);
+                foreach(Node *son, old_i->getSons())
+                    nodes[i]->addSon(son);
 
                 /* mark as merged and do not merge this node again */
-                toRemove[i] = true; 
-                break;
+                toRemove[j] = true; 
             }
         }
     }
 
     /* remove doubles */
     QList<Node*> merged;
+    int drawables = 0;
     for(int i = 0; i < nodes.length(); i++)
     {
         if(!toRemove[i])
+        {
             merged.append(nodes[i]);
+            if(!(nodes[i]->getTreeId().contains(CONSENSUS_ID) && (nodes[i]->getTreeId().size() <= 1)))
+                drawables++;
+        }
     }
 
-    float hstep = areaAngle / merged.length();
+    float hstep;
+    if(level < CONSENSUS_LIMIT)
+        hstep = areaAngle / merged.length();
+    else
+        hstep = areaAngle / drawables;
     float sonAngle = refAngle - areaAngle/2 + hstep/2;
+
     for(int i = 0; i < merged.length(); i++)
     {
         /* avoid drawing consensus tree */
@@ -124,11 +138,21 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
             foreach(Node *son, merged[i]->getSons())
             {
                 foreach(int id, son->getTreeId())
+                {
+                    if(id == CONSENSUS_ID)
+                        continue;
                     merged[i]->addEdge(son, styles.value(id));
+                }
             }
             merged[i]->updateEdges(canvas);
+            if(level >= CONSENSUS_LIMIT)
+            {
+                sonAngle += hstep;
+                continue;
+            }
         }
-        sonAngle += hstep;
+        if(level < CONSENSUS_LIMIT)
+            sonAngle += hstep;
     }
     return merged;
 }
@@ -154,7 +178,7 @@ void Node::opsConsensus(int depth)
             opIterator.next();
 
             /* make new node */
-            Node *turn = new Node(ROOT, opIterator.key());
+            Node *turn = new Node(OP, opIterator.key());
             turn->opsConsensus(depth - 1);
 
             addSon(turn);

@@ -24,6 +24,7 @@
 #include <QString>
 
 #define CONSENSUS_ID INT_MIN
+#define CONSENSUS_LIMIT 2 
 enum NodeType {OP, TERM, ROOT};
 
 class Edge;
