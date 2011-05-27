@@ -71,12 +71,17 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
             nodes.append(tree->getRoot());
         
         ids.append(tree->getId());
-        if(trees.first()->getId() != CONSENSUS_ID)
-            foreach(Node *node, nodes)
-            {
-                if(!((*tree->getRoot()) == (*node)))
-                    needRoot = true;
-            }
+
+        if(trees.first()->getId() == CONSENSUS_ID)
+        {
+            needRoot = true;
+            continue;
+        }
+        foreach(Node *node, nodes)
+        {
+            if(!((*tree->getRoot()) == (*node)))
+                needRoot = true;
+        }
     }
 
     /* set styles adjusting ids to be unique */
@@ -98,7 +103,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         Node *root;
         /* consensus tree becomes root*/
         if(trees.first()->getId() == CONSENSUS_ID)
-            merged->setRoot(trees.first()->getRoot());
+            root = trees.first()->getRoot();
         else
             root = new Node(ROOT, "");
         root->draw(canvas, coord);
@@ -113,11 +118,12 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         merged->setRoot(sons[0]);
     foreach(Node *son, sons)
     {
-        if(son->getTreeId().contains(CONSENSUS_ID))
-            continue;
         merged->getRoot()->addSon(son);
         foreach(int id, son->getTreeId())
         {
+            /* avoid drawing edge to consensus */
+            if(id == CONSENSUS_ID)
+                continue;
             merged->getRoot()->addEdge(son, styles.value(id));
             //qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
