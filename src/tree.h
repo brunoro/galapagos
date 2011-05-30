@@ -1,8 +1,6 @@
 #ifndef TREE_H
 #define TREE_H
 
-#define MAX_DEPTH 5
-
 #include "def.h"
 #include "node.h"
 

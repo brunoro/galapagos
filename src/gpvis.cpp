@@ -59,7 +59,7 @@ GPVis::GPVis(QWidget *parent)
     consensusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     consensusLabel->setEnabled(false);
     consensusSpin = new QSpinBox(this);
-    consensusSpin->setRange(1, MAX_DEPTH);
+    consensusSpin->setRange(1, CONSENSUS_DEPTH);
     consensusSpin->setValue(CONSENSUS_DEPTH);
     consensusSpin->setEnabled(false);
 
@@ -281,13 +281,13 @@ void GPVis::showGeneration(int gen)
     for(int i = 0; i < actual->population.length(); i++)
     {
         QStandardItem *tree_id = new QStandardItem();
-        tree_id->setData(QString::number(i), Qt::DisplayRole);
         tree_id->setData(i, Qt::UserRole);
+        tree_id->setData(QString::number(i), Qt::DisplayRole);
         individuals->setItem(i, 0, tree_id);
 
         QStandardItem *tree_fit = new QStandardItem();
-        tree_fit->setData(QString::number(actual->population[i].fit), Qt::DisplayRole);
         tree_fit->setData(actual->population[i].fit, Qt::UserRole);
+        tree_fit->setData(QString::number(actual->population[i].fit), Qt::DisplayRole);
         individuals->setItem(i, 1, tree_fit);
 
         individuals->setItem(i, 2, new QStandardItem(actual->population[i].str));
@@ -318,13 +318,13 @@ void GPVis::showGeneration(int gen)
 
             QStandardItem *tree_fit = new QStandardItem();
             float fit_dif = max_fit - next->population[actual->reproductions[i].offspring].fit;
-            tree_fit->setData(QString::number(fit_dif), Qt::DisplayRole);
             tree_fit->setData(fit_dif, Qt::UserRole);
+            tree_fit->setData(QString::number(fit_dif), Qt::DisplayRole);
             reproductions->setItem(i, 0, tree_fit);
         
             QStandardItem *tree_id = new QStandardItem();
-            tree_id->setData(QString::number(actual->reproductions[i].offspring), Qt::DisplayRole);
             tree_id->setData(actual->reproductions[i].offspring, Qt::UserRole);
+            tree_id->setData(QString::number(actual->reproductions[i].offspring), Qt::DisplayRole);
             reproductions->setItem(i, 1, tree_id);
 
             reproductions->setItem(i, 2, new QStandardItem(parents));
@@ -487,7 +487,7 @@ void GPVis::openFileDialog()
 
 void GPVis::test()
 {
-    fileField->setText("test/palotti.log");
+    fileField->setText("test/palotti_big.log");
     QTest::mouseClick(fileOpen, Qt::LeftButton);
 
     //Tree::test(scene);

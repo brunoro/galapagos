@@ -155,8 +155,8 @@ Tree *Tree::opsConsensusTree()
     conid.insert(CONSENSUS_ID);
     root->setTreeId(conid);
 
-    int maxDepth = MAX_DEPTH;
-    root->opsConsensus(MAX_DEPTH);
+    int maxDepth = CONSENSUS_DEPTH;
+    root->opsConsensus(CONSENSUS_DEPTH);
 
     return opCon;
 }
