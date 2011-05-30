@@ -54,9 +54,13 @@ GPVis::GPVis(QWidget *parent)
 
     consensusUse = new QCheckBox("Use consensus", this);
     consensusUse->setChecked(false);
-    consensusUse->setEnabled(false);
-    consensusPush = new QPushButton("View Consensus", this);
-    consensusPush->setEnabled(false);
+    consensusUse->setEnabled(true);
+    consensusLabel = new QLabel("Depth", this);
+    consensusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    consensusSpin = new QSpinBox(this);
+    consensusSpin->setRange(1, MAX_DEPTH);
+    consensusSpin->setValue(consensusLimit);
+    consensusSpin->setEnabled(false);
 
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
@@ -74,7 +78,8 @@ GPVis::GPVis(QWidget *parent)
 
     conLine = new QBoxLayout(QBoxLayout::LeftToRight);
     conLine->addWidget(consensusUse);
-    conLine->addWidget(consensusPush);
+    conLine->addWidget(consensusLabel);
+    conLine->addWidget(consensusSpin);
 
     genLine = new QBoxLayout(QBoxLayout::LeftToRight);
     genLine->addWidget(genSlider);
@@ -101,6 +106,8 @@ GPVis::GPVis(QWidget *parent)
     connect(genSlider, SIGNAL(valueChanged(int)), genSpin, SLOT(setValue(int)));
     connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
+    
+    connect(consensusSpin, SIGNAL(valueChanged(int)), this, SLOT(setConsensusDepth(int)));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
@@ -195,7 +202,7 @@ void GPVis::readLogFile()
     viewInd->setEnabled(true);
     viewRep->setEnabled(true);
     consensusUse->setEnabled(true);
-    consensusPush->setEnabled(true);
+    consensusSpin->setEnabled(true);
     
     /* define first generation read */
     showGeneration(0);
@@ -488,4 +495,20 @@ void GPVis::test()
     Tree *test_tree = new Tree(line, -1, float(0.22222));
     //qDebug() << "Tree::test : " << test_tree->index;
     */
+}
+
+void GPVis::setConsensusDepth(int depth)
+{
+    consensusLimit = depth;
+    /* redraw */
+    switch(selectedView)
+    {
+        case INDIVIDUALS:
+            individualFromTable();
+            break;
+        case REPRODUCTIONS:
+            reproductionFromTable();
+            break;
+    }
+
 }

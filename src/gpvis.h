@@ -75,7 +75,8 @@ class GPVis : public QWidget
 
         QBoxLayout *conLine;
         QCheckBox *consensusUse;
-        QPushButton *consensusPush;
+        QLabel *consensusLabel;
+        QSpinBox *consensusSpin;
 
         QTableView *tableView;
 
@@ -98,6 +99,7 @@ class GPVis : public QWidget
 
     private slots:
         /* show data */
+        void setConsensusDepth(int depth);
         void showGeneration(int gen);
         void individualFromTable();
         void reproductionFromTable();

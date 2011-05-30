@@ -116,7 +116,7 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
     }
 
     float hstep;
-    if(level < CONSENSUS_LIMIT)
+    if(level < consensusLimit)
         hstep = areaAngle / merged.length();
     else
         hstep = areaAngle / drawables;
@@ -145,13 +145,13 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                 }
             }
             merged[i]->updateEdges(canvas);
-            if(level >= CONSENSUS_LIMIT)
+            if(level >= consensusLimit)
             {
                 sonAngle += hstep;
                 continue;
             }
         }
-        if(level < CONSENSUS_LIMIT)
+        if(level < consensusLimit)
             sonAngle += hstep;
     }
     return merged;
