@@ -53,13 +53,14 @@ GPVis::GPVis(QWidget *parent)
     viewRep->setEnabled(false);
 
     consensusUse = new QCheckBox("Use consensus", this);
-    consensusUse->setChecked(false);
-    consensusUse->setEnabled(true);
+    consensusUse->setChecked(true);
+    consensusUse->setEnabled(false);
     consensusLabel = new QLabel("Depth", this);
     consensusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    consensusLabel->setEnabled(false);
     consensusSpin = new QSpinBox(this);
     consensusSpin->setRange(1, MAX_DEPTH);
-    consensusSpin->setValue(consensusLimit);
+    consensusSpin->setValue(CONSENSUS_DEPTH);
     consensusSpin->setEnabled(false);
 
     tableView = new QTableView(this);
@@ -107,7 +108,7 @@ GPVis::GPVis(QWidget *parent)
     connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
     
-    connect(consensusSpin, SIGNAL(valueChanged(int)), this, SLOT(setConsensusDepth(int)));
+    //connect(consensusSpin, SIGNAL(valueChanged(int)), this, SLOT(setConsensusDepth(int)));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
@@ -202,7 +203,7 @@ void GPVis::readLogFile()
     viewInd->setEnabled(true);
     viewRep->setEnabled(true);
     consensusUse->setEnabled(true);
-    consensusSpin->setEnabled(true);
+    //consensusSpin->setEnabled(true);
     
     /* define first generation read */
     showGeneration(0);
@@ -497,10 +498,11 @@ void GPVis::test()
     */
 }
 
+/*
 void GPVis::setConsensusDepth(int depth)
 {
-    consensusLimit = depth;
-    /* redraw */
+    consensusDepth = depth;
+    // redraw
     switch(selectedView)
     {
         case INDIVIDUALS:
@@ -511,4 +513,4 @@ void GPVis::setConsensusDepth(int depth)
             break;
     }
 
-}
+}*/

@@ -24,7 +24,7 @@
 #include <QString>
 
 #define CONSENSUS_ID INT_MIN
-static int consensusLimit = 2;
+#define CONSENSUS_DEPTH 2
 
 enum NodeType {OP, TERM, ROOT};
 

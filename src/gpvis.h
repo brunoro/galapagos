@@ -99,7 +99,7 @@ class GPVis : public QWidget
 
     private slots:
         /* show data */
-        void setConsensusDepth(int depth);
+        //void setConsensusDepth(int depth);
         void showGeneration(int gen);
         void individualFromTable();
         void reproductionFromTable();
