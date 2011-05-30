@@ -191,6 +191,7 @@ void GPVis::readLogFile()
 
     /* enable viewer */
     tableView->setEnabled(true);
+    tableView->setSortingEnabled(true);
     viewInd->setEnabled(true);
     viewRep->setEnabled(true);
     consensusUse->setEnabled(true);
@@ -268,12 +269,19 @@ void GPVis::showGeneration(int gen)
     Generation *actual = generations[gen];
 
     /* population */
-
     individuals->setHorizontalHeaderLabels(individualsHeader);
     for(int i = 0; i < actual->population.length(); i++)
     {
-        individuals->setItem(i, 0, new QStandardItem(QString::number(i)));
-        individuals->setItem(i, 1, new QStandardItem(QString::number(actual->population[i].fit)));
+        QStandardItem *tree_id = new QStandardItem();
+        tree_id->setData(QString::number(i), Qt::DisplayRole);
+        tree_id->setData(i, Qt::UserRole);
+        individuals->setItem(i, 0, tree_id);
+
+        QStandardItem *tree_fit = new QStandardItem();
+        tree_fit->setData(QString::number(actual->population[i].fit), Qt::DisplayRole);
+        tree_fit->setData(actual->population[i].fit, Qt::UserRole);
+        individuals->setItem(i, 1, tree_fit);
+
         individuals->setItem(i, 2, new QStandardItem(actual->population[i].str));
     }
 
@@ -299,8 +307,18 @@ void GPVis::showGeneration(int gen)
                 if(par_fit > max_fit)
                     max_fit = par_fit;
             }
-            reproductions->setItem(i, 0, new QStandardItem(QString::number(max_fit - next->population[actual->reproductions[i].offspring].fit)));
-            reproductions->setItem(i, 1, new QStandardItem(QString::number(actual->reproductions[i].offspring)));
+
+            QStandardItem *tree_fit = new QStandardItem();
+            float fit_dif = max_fit - next->population[actual->reproductions[i].offspring].fit;
+            tree_fit->setData(QString::number(fit_dif), Qt::DisplayRole);
+            tree_fit->setData(fit_dif, Qt::UserRole);
+            reproductions->setItem(i, 0, tree_fit);
+        
+            QStandardItem *tree_id = new QStandardItem();
+            tree_id->setData(QString::number(actual->reproductions[i].offspring), Qt::DisplayRole);
+            tree_id->setData(actual->reproductions[i].offspring, Qt::UserRole);
+            reproductions->setItem(i, 1, tree_id);
+
             reproductions->setItem(i, 2, new QStandardItem(parents));
         }
         /* set radios */
