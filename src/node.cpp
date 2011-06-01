@@ -294,3 +294,10 @@ void Node::setTreeId(QSet<int> ids)
 {
     tree_id = ids;
 }
+
+void Node::recursiveSetTreeId(QSet<int> ids)
+{
+    tree_id = ids;
+    for(int i = 0; i < sons.length(); i++)
+        sons[i]->recursiveSetTreeId(ids);
+}

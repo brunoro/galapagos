@@ -61,6 +61,7 @@ class Node
         void setSons(QList<Node*> node_sons);
         void setCoord(QPointF node_coord);
         void setTreeId(QSet<int> id);
+        void recursiveSetTreeId(QSet<int> id);
         void addTreeId(QSet<int> ids);
 
         inline bool operator==(const Node &other) const

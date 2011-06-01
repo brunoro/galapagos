@@ -384,15 +384,20 @@ void GPVis::renderIndividual(int gen, int ind)
 
         Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
 
-        for(int i=1; i < trees.length(); i++)
-            delete trees[i];
+        for(int i = 1; i < lastDrawnTrees.length(); i++)
+            delete lastDrawnTrees[i];
+        lastDrawnTrees.clear();
+        lastDrawnTrees = trees;
     }
     else
     {
         Tree *tree;
         tree = generations[gen]->getIndividual(ind);
         tree->draw(scene, *sceneCenter, Style::defaultStep);
-        delete tree;
+        for(int i = 0; i < lastDrawnTrees.length(); i++)
+            delete lastDrawnTrees[i];
+        lastDrawnTrees.clear();
+        lastDrawnTrees.append(tree);
     }
 }
 
@@ -447,10 +452,14 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     }
 
     Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
-
-    // TODO: store last drawn trees
-    for(int i = 1; i < trees.length(); i++)
-        delete trees[i];
+    
+    int i = 0;
+    if(consensusUse->isChecked())
+        i = 1;
+    for(; i < lastDrawnTrees.length(); i++)
+        delete lastDrawnTrees[i];
+    lastDrawnTrees.clear();
+    lastDrawnTrees = trees;
 }
 
 void GPVis::showIndTable()

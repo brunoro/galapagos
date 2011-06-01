@@ -48,8 +48,6 @@ Node *Tree::parseTree(QStringList nodes, int pos, int id)
     QSet<int> tree_id;
     tree_id.insert(id);
     turn->setTreeId(tree_id);
-
-    index.append(turn);
     
     return turn;
 }
@@ -69,9 +67,10 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         if(tree->getId() == CONSENSUS_ID)
             nodes.append(tree->root->getSons());
         else
-            nodes.append(tree->getRoot());
-        
-        ids.append(tree->getId());
+        {
+           nodes.append(tree->getRoot());
+           ids.append(tree->getId());
+        }
 
         if(trees.first()->getId() == CONSENSUS_ID)
         {
@@ -196,8 +195,7 @@ void Tree::setId(int tree_id)
     id = tree_id;
     QSet<int> id_set;
     id_set.insert(tree_id);
-    for(int i = 0; i < index.length(); i++)
-        index[i]->setTreeId(id_set);
+    root->recursiveSetTreeId(id_set);
 }
 
 int Tree::getId()
