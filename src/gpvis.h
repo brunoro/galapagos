@@ -33,6 +33,8 @@
 #include <QVector>
 #include <QWidget>
 
+#define DEFAULT_ROW 0
+#define DEFAULT_GENERATION 0
 enum Views{INDIVIDUALS, REPRODUCTIONS};
 
 class GPVis : public QWidget
@@ -85,7 +87,6 @@ class GPVis : public QWidget
         QPointF *sceneCenter;
         
         Views selectedView;
-        int selectedRow;
 
         /* file reading */
         QFile *fileFile;

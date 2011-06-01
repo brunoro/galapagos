@@ -2,7 +2,6 @@ TODO
 ----
 - Search space visualization 
 - Collision detection
-- Keep sorting on changing generations
 - Reference box for edge colors
 - Link parents to offspring to parents to offspring
 - Input file reading exceptions

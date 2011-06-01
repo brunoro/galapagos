@@ -206,15 +206,15 @@ void GPVis::readLogFile()
     //consensusSpin->setEnabled(true);
     
     /* define first generation read */
-    showGeneration(0);
+    showGeneration(DEFAULT_GENERATION);
     
     /* set individuals as default view */
     viewInd->setChecked(true);
     showIndTable();
     
-    /* individual 0 is the first one shown */
-    selectedRow = 0;
-    tableView->selectRow(selectedRow);
+    /* first one shown */
+    tableView->selectRow(DEFAULT_ROW);
+    tableView->sortByColumn(0, Qt::AscendingOrder);
 }
 
 void GPVis::readGeneration()
@@ -269,6 +269,14 @@ void GPVis::readGeneration()
 /* builds model from a generation */
 void GPVis::showGeneration(int gen)
 {
+    /* store tableView 'state' */
+    int selectedRow = DEFAULT_ROW;
+    if(tableView->selectionModel())
+        selectedRow = tableView->selectionModel()->currentIndex().row();
+
+    int sortedColumn = tableView->horizontalHeader()->sortIndicatorSection();
+    Qt::SortOrder sortedOrder = tableView->horizontalHeader()->sortIndicatorOrder();
+
     /* cleanup last viewed */
     individuals->clear();
     reproductions->clear();
@@ -351,15 +359,15 @@ void GPVis::showGeneration(int gen)
             break;
     }
     
-    /* keep same row selected */
+    /* restore tableView 'state' */
+    tableView->sortByColumn(sortedColumn, sortedOrder);
     tableView->selectRow(selectedRow);
 }
 
 void GPVis::individualFromTable()
 {
-    int row = tableView->selectionModel()->currentIndex().row(),
-        ind = tableView->model()->index(row, 0).data().toInt();
-    selectedRow = row;
+    int row = tableView->selectionModel()->currentIndex().row();
+    int ind = tableView->model()->index(row, 0).data().toInt();
     scene->clear();
     renderIndividual(genSpin->value(), ind);
 }
@@ -390,14 +398,13 @@ void GPVis::renderIndividual(int gen, int ind)
 
 void GPVis::reproductionFromTable()
 {
-    int row = tableView->selectionModel()->currentIndex().row(),
-        off_num = tableView->model()->index(row, 1).data().toInt();
+    int row = tableView->selectionModel()->currentIndex().row();
+    int off_num = tableView->model()->index(row, 1).data().toInt();
     QStringList str_par_num = tableView->model()->index(row, 2).data().toString().split(QRegExp("\\s+"));
     QList<int> par_num;
     // TODO: fix last element of str_par_num getting 0
     for(int i = 0; i < str_par_num.length() - 1; i++)
         par_num << str_par_num[i].toInt();
-    selectedRow = row;
     scene->clear();
     renderReproduction(genSpin->value(), par_num, off_num);
 }
