@@ -236,7 +236,7 @@ void GPVis::readGeneration()
             individual.remove(QRegExp("\\s*ind:\\s*"));
             tokens = individual.split("\t", QString::SkipEmptyParts);
             //qDebug() << "GPVis::readLogFile found individual" << tokens;
-            gen->addIndividual(tokens[2], tokens[1].toFloat());
+            gen->addIndividual(tokens[1], tokens[0].toFloat());
         }
         /* reproduction */
         if(fileBuffer.contains(QRegExp("rep:*.")))
