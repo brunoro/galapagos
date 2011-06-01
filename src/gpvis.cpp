@@ -278,6 +278,7 @@ void GPVis::showGeneration(int gen)
 
     /* population */
     individuals->setHorizontalHeaderLabels(individualsHeader);
+    individuals->setSortRole(Qt::UserRole);
     for(int i = 0; i < actual->population.length(); i++)
     {
         QStandardItem *tree_id = new QStandardItem();
@@ -297,6 +298,7 @@ void GPVis::showGeneration(int gen)
 
     /* reproductions */
     reproductions->setHorizontalHeaderLabels(reproductionsHeader);
+    reproductions->setSortRole(Qt::UserRole);
 
     /* if it is not last generation, get next */
     if(gen < generations.length() - 1)
