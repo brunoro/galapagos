@@ -17,9 +17,7 @@ Tree::Tree(int tree_id, float tree_fitness)
 
 Tree::~Tree()
 {
-    /* TODO: make this work */
-    for(int i = 0; i < index.length(); i++)
-        delete index[i];
+    delete root;
 }
 
 Node *Tree::parseTree(QStringList nodes, int pos, int id)
@@ -121,6 +119,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
             //qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
     }
+    merged->getRoot()->correctCollisions(canvas);
     merged->getRoot()->updateEdges(canvas);
 
     Tree::drawRings(canvas, coord, 10, step); // TODO: get depth from merged tree
@@ -152,7 +151,6 @@ Tree *Tree::opsConsensusTree()
     conid.insert(CONSENSUS_ID);
     root->setTreeId(conid);
 
-    int maxDepth = CONSENSUS_DEPTH;
     root->opsConsensus(CONSENSUS_DEPTH);
 
     return opCon;
@@ -211,11 +209,6 @@ float Tree::getFitness()
 Node* Tree::getRoot()
 {
     return root;
-}
-
-QList<Node*> Tree::getIndex()
-{
-    return index;
 }
 
 QList<Tree*> Tree::getParents()

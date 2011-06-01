@@ -56,7 +56,7 @@ class GPVis : public QWidget
         QStringList individualsHeader,
                     reproductionsHeader;
         Tree *consensusTree;
-        QList<Tree*> lastDrawnTrees;
+        Tree* lastDrawnTree;
 
         /* ui */
         QGridLayout *grid;

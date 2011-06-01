@@ -16,9 +16,10 @@ Node::Node(NodeType nodetype, QString nodeinfo)
 
 Node::~Node()
 {
-    /* TODO: make this work */
-    //delete text;
-    //delete bound;
+    for(int i = 0; i < sons.length(); i++)
+        delete sons[i];
+    delete text;
+    delete bound;
 }
 
 void Node::addSon(Node *son)
@@ -186,6 +187,12 @@ void Node::opsConsensus(int depth)
     }
 }
 
+void Node::correctCollisions(QGraphicsScene *canvas)
+{
+    /* iterates on son nodes 2 x 2 and apply delta d to move them */
+    return;
+}
+
 void Node::updateEdges(QGraphicsScene *canvas)
 {
     // TODO: get offset based on edges from same nodes
@@ -278,6 +285,11 @@ QPointF Node::getCoord()
 QSet<int> Node::getTreeId()
 {
     return tree_id;
+}
+
+QGraphicsItem *Node::getBound()
+{
+    return bound;
 }
 
 void Node::setCoord(QPointF node_coord)

@@ -34,7 +34,6 @@ class Tree
         int getId();
         float getFitness();
         Node *getRoot();
-        QList<Node*> getIndex();
         QList<Tree*> getParents();
         QList<Tree*> getOffspring();
 
@@ -48,7 +47,6 @@ class Tree
         int id;
         float fitness;
         Node *root;
-        QList<Node*> index;
         QList<Tree*> parents;
         QList<Tree*> offspring;
         

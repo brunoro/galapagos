@@ -52,11 +52,13 @@ class Node
                                               QPointF origin, QPointF coord,
                                               int step, int level,
                                               float areaAngle, float refAngle, QHash<int, QPen> style);
+        void correctCollisions(QGraphicsScene *canvas);
         QList<Node*> getSons();
         NodeType getType();
         QString getInfo();
         QPointF getCoord();
         QSet<int> getTreeId();
+        QGraphicsItem *getBound();
 
         void setSons(QList<Node*> node_sons);
         void setCoord(QPointF node_coord);
