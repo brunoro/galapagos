@@ -80,9 +80,12 @@ void Node::adjustPosition(QPointF origin, Node *other)
     float dist = sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
     float adjust = Style::nodeSize.width() - dist;
 
+    float angle = QLineF(from, to).angle() * Style::pi / 180;
+    float dx = adjust * cosf(angle),
+          dy = adjust * sinf(angle);
     /* adjust position so they won't collide */
-    /* get direction from axis */
-    return;
+    update(QPointF(getCoord().x() + dx,
+                   getCoord().y() + dy));
 }
 
 /* draw joint tree */
@@ -225,6 +228,13 @@ void Node::updateEdges(QGraphicsScene *canvas)
             offset += edgeDistance;
         }
     }
+}
+
+void Node::recursiveUpdateEdges(QGraphicsScene *canvas)
+{
+    updateEdges(canvas);
+    foreach(Node *son, sons)
+        son->recursiveUpdateEdges(canvas);
 }
 
 void Node::draw(QGraphicsScene *canvas, QPointF coord)

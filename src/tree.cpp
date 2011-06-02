@@ -120,7 +120,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         }
     }
     merged->correctCollisions(canvas, coord);
-    merged->getRoot()->updateEdges(canvas);
+    merged->getRoot()->recursiveUpdateEdges(canvas);
 
     Tree::drawRings(canvas, coord, 10, step); // TODO: get depth from merged tree
     return merged;

@@ -40,6 +40,7 @@ class Node
         void addEdge(Node *son, QPen style);
         void draw(QGraphicsScene *canvas, QPointF coord);
         void updateEdges(QGraphicsScene *canvas);
+        void recursiveUpdateEdges(QGraphicsScene *canvas);
         bool collidesWith(Node *other);
         void adjustPosition(QPointF origin, Node *other);
         int recursiveDraw(QGraphicsScene *canvas,
