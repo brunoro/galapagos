@@ -42,7 +42,7 @@ class Node
         void updateEdges(QGraphicsScene *canvas);
         void recursiveUpdateEdges(QGraphicsScene *canvas);
         bool collidesWith(Node *other);
-        void adjustPosition(QPointF origin, Node *other);
+        void adjustPosition(QPointF origin, Node *other, int step, int level);
         int recursiveDraw(QGraphicsScene *canvas,
                           QPointF origin, QPointF coord,
                           int step, int level,
@@ -50,6 +50,7 @@ class Node
         void opsConsensus(int depth);
 
         void update(QPointF coord);
+        void rotateSubtree(float angle, float dist, int step, int level);
 
         static QList<Node*> recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                                               QPointF origin, QPointF coord,

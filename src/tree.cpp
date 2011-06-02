@@ -119,7 +119,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
             //qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
     }
-    merged->correctCollisions(canvas, coord);
+    merged->correctCollisions(canvas, coord, step);
     merged->getRoot()->recursiveUpdateEdges(canvas);
 
     Tree::drawRings(canvas, coord, 10, step); // TODO: get depth from merged tree
@@ -156,11 +156,12 @@ Tree *Tree::opsConsensusTree()
     return opCon;
 }
 
-void Tree::correctCollisions(QGraphicsScene *canvas, QPointF origin)
+void Tree::correctCollisions(QGraphicsScene *canvas, QPointF origin, int step)
 {
     /* use BFS to get nodes */
     QList<Node*> thisLevel = root->getSons();
     QList<Node*> nextLevel;
+    int level = 1;
     do
     {
         for(int i = 0; i < thisLevel.length(); i++)
@@ -179,7 +180,7 @@ void Tree::correctCollisions(QGraphicsScene *canvas, QPointF origin)
                 if(thisLevel[i]->collidesWith(thisLevel[j]))
                 {
                     /* adjust node j */
-                    thisLevel[j]->adjustPosition(origin, thisLevel[i]);
+                    thisLevel[j]->adjustPosition(origin, thisLevel[i], step, level);
                 }
             }
             /* get next level */
@@ -187,6 +188,7 @@ void Tree::correctCollisions(QGraphicsScene *canvas, QPointF origin)
         }
         thisLevel = nextLevel;
         nextLevel.clear();
+        level++;
     } while(!thisLevel.isEmpty());
 }
 
