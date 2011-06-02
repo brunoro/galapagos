@@ -40,6 +40,8 @@ class Node
         void addEdge(Node *son, QPen style);
         void draw(QGraphicsScene *canvas, QPointF coord);
         void updateEdges(QGraphicsScene *canvas);
+        bool collidesWith(Node *other);
+        void adjustPosition(QPointF origin, Node *other);
         int recursiveDraw(QGraphicsScene *canvas,
                           QPointF origin, QPointF coord,
                           int step, int level,
@@ -52,7 +54,6 @@ class Node
                                               QPointF origin, QPointF coord,
                                               int step, int level,
                                               float areaAngle, float refAngle, QHash<int, QPen> style);
-        void correctCollisions(QGraphicsScene *canvas);
         QList<Node*> getSons();
         NodeType getType();
         QString getInfo();

@@ -119,7 +119,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
             //qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
     }
-    merged->getRoot()->correctCollisions(canvas);
+    merged->correctCollisions(canvas, coord);
     merged->getRoot()->updateEdges(canvas);
 
     Tree::drawRings(canvas, coord, 10, step); // TODO: get depth from merged tree
@@ -154,6 +154,40 @@ Tree *Tree::opsConsensusTree()
     root->opsConsensus(CONSENSUS_DEPTH);
 
     return opCon;
+}
+
+void Tree::correctCollisions(QGraphicsScene *canvas, QPointF origin)
+{
+    /* use BFS to get nodes */
+    QList<Node*> thisLevel = root->getSons();
+    QList<Node*> nextLevel;
+    do
+    {
+        for(int i = 0; i < thisLevel.length(); i++)
+        {
+            /* avoid consensus */
+            if(thisLevel[i]->getTreeId().contains(CONSENSUS_ID) && (thisLevel[i]->getTreeId().size() <= 1))
+                continue;
+
+            for(int j = i + 1; j < thisLevel.length(); j++)
+            {
+                /* avoid consensus */
+                if(thisLevel[j]->getTreeId().contains(CONSENSUS_ID) && (thisLevel[j]->getTreeId().size() <= 1))
+                    continue;
+
+                /* check if nodes i and j collide */
+                if(thisLevel[i]->collidesWith(thisLevel[j]))
+                {
+                    /* adjust node j */
+                    thisLevel[j]->adjustPosition(origin, thisLevel[i]);
+                }
+            }
+            /* get next level */
+            nextLevel += thisLevel[i]->getSons();
+        }
+        thisLevel = nextLevel;
+        nextLevel.clear();
+    } while(!thisLevel.isEmpty());
 }
 
 void Tree::drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step)

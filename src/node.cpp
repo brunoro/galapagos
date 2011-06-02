@@ -64,6 +64,27 @@ int Node::recursiveDraw(QGraphicsScene *canvas,
     return maxLevel + 1;
 }
 
+bool Node::collidesWith(Node *other)
+{
+    QPointF from = getCoord(),
+            to = other->getCoord();
+    float dist = sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
+    return (dist <= Style::nodeSize.width());
+}
+
+void Node::adjustPosition(QPointF origin, Node *other)
+{
+    /* get how much they collide */
+    QPointF from = getCoord(),
+            to = other->getCoord();
+    float dist = sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
+    float adjust = Style::nodeSize.width() - dist;
+
+    /* adjust position so they won't collide */
+    /* get direction from axis */
+    return;
+}
+
 /* draw joint tree */
 QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                                      QPointF origin, QPointF coord,
@@ -185,12 +206,6 @@ void Node::opsConsensus(int depth)
             addSon(turn);
         }
     }
-}
-
-void Node::correctCollisions(QGraphicsScene *canvas)
-{
-    /* iterates on son nodes 2 x 2 and apply delta d to move them */
-    return;
 }
 
 void Node::updateEdges(QGraphicsScene *canvas)
