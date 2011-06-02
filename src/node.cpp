@@ -78,11 +78,11 @@ void Node::adjustPosition(QPointF origin, Node *other)
     QPointF from = getCoord(),
             to = other->getCoord();
     float dist = sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
-    float adjust = Style::nodeSize.width() - dist;
+    float diff = Style::nodeSize.width() - dist;
 
-    float angle = QLineF(from, to).angle() * Style::pi / 180;
-    float dx = adjust * cosf(angle),
-          dy = adjust * sinf(angle);
+    float angle = (180 - QLineF(from, to).angle()) * Style::pi / 180;
+    float dx = diff * cosf(angle),
+          dy = diff * sinf(angle);
     /* adjust position so they won't collide */
     update(QPointF(getCoord().x() + dx,
                    getCoord().y() + dy));
