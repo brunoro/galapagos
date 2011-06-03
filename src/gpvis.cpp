@@ -166,7 +166,7 @@ void GPVis::readLogFile()
     /* search definition in file */
     if(fileBuffer.contains(QRegExp("definition:*.")))
     {
-        qDebug() << "GPVis::readLogFile found definition"; 
+        //qDebug() << "GPVis::readLogFile found definition"; 
         while(!fileStream->atEnd())
         {
             fileBuffer = fileStream->readLine();
@@ -175,7 +175,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\\s*ops:*.")))
             {
                 ops = fileBuffer.remove(QRegExp("\\s*ops:\\s*"));
-                qDebug() << "GPVis::readLogFile found ops " << ops;
+                //qDebug() << "GPVis::readLogFile found ops " << ops;
                 
                 definition->addOperators(ops);
                 
@@ -186,7 +186,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\\s*terms:*.")))
             {
                 terms = fileBuffer.remove(QRegExp("\\s*terms:\\s*"));
-                qDebug() << "GPVis::readLogFile found terms" << terms;
+                //qDebug() << "GPVis::readLogFile found terms" << terms;
                
                 definition->addTerms(terms);
 
@@ -198,7 +198,7 @@ void GPVis::readLogFile()
             /* end of definition */
             if(fileBuffer.contains(QRegExp("generation*.")))
             {
-                qDebug() << "GPVis::reading generation ";
+                //qDebug() << "GPVis::reading generation ";
                 readGeneration();
             }
         }
