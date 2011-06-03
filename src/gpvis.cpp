@@ -209,23 +209,16 @@ void GPVis::readLogFile()
         QString error("File \"" + fileField->text() + "\" is not valid. ");
         message.setText(error);
         message.exec();
+        turnEverythingOff();
         return;
     }
 
     /* set up the generation stuff */
     genSpin->setRange(0, generations.length() - 1);
-    genSpin->setEnabled(true);
-    
-    genSlider->setRange(0, generations.length() - 1);
-    genSlider->setEnabled(true);
 
-    /* enable viewer */
-    tableView->setEnabled(true);
-    tableView->setSortingEnabled(true);
-    viewInd->setEnabled(true);
-    viewRep->setEnabled(true);
-    consensusUse->setEnabled(true);
-    //consensusSpin->setEnabled(true);
+    genSlider->setRange(0, generations.length() - 1);
+
+    turnEverythingOn();
 
     /* define first generation read */
     showGeneration(DEFAULT_GENERATION);
@@ -288,6 +281,32 @@ void GPVis::readGeneration()
     if(fileBuffer.contains(QRegExp("generation*.")))
         readGeneration();
 }
+
+
+void GPVis::turnEverythingOn(){
+    /* enable viewer */
+    genSlider->setEnabled(true);
+    genSpin->setEnabled(true);
+    tableView->setEnabled(true);
+    tableView->setSortingEnabled(true);
+    viewInd->setEnabled(true);
+    viewRep->setEnabled(true);
+    consensusUse->setEnabled(true);
+    //consensusSpin->setEnabled(true);
+}
+
+void GPVis::turnEverythingOff(){
+    /* disable viewer */
+    genSlider->setEnabled(false);
+    genSpin->setEnabled(false);
+    tableView->setEnabled(false);
+    tableView->setSortingEnabled(false);
+    viewInd->setEnabled(false);
+    viewRep->setEnabled(false);
+    consensusUse->setEnabled(false);
+    //consensusSpin->setEnabled(false);
+}
+
 
 /* builds model from a generation */
 void GPVis::showGeneration(int gen)

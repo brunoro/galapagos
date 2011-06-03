@@ -101,6 +101,9 @@ class GPVis : public QWidget
         void renderIndividual(int gen, int individual);
         void renderReproduction(int gen, QList<int> parent, int offspring);
 
+        void turnEverythingOn();
+        void turnEverythingOff();
+
     private slots:
         /* show data */
         //void setConsensusDepth(int depth);
