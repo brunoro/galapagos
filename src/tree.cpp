@@ -18,6 +18,12 @@ Tree::Tree(int tree_id, float tree_fitness)
 Tree::~Tree()
 {
     delete root;
+    
+    while (!parents.isEmpty())
+        delete parents.takeFirst();
+
+    while (!offspring.isEmpty())
+        delete offspring.takeFirst();
 }
 
 Node *Tree::parseTree(QStringList nodes, int pos, int id)

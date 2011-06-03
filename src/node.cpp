@@ -16,8 +16,18 @@ Node::Node(NodeType nodetype, QString nodeinfo)
 
 Node::~Node()
 {
-    for(int i = 0; i < sons.length(); i++)
-        delete sons[i];
+    
+    while (!sons.isEmpty())
+        delete sons.takeFirst();
+
+    foreach(QList<Edge*> edge, edges)
+    {
+        foreach(Edge *ed, edge)
+        {
+            delete ed;
+        }
+    }
+    
     delete text;
     delete bound;
 }
