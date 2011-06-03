@@ -22,7 +22,7 @@ class Tree
     public:
         Tree(QString line, int tree_id, float tree_fitness);
         Tree(int tree_id, float tree_fitness);
-        ~Tree();
+        virtual ~Tree();
 
         void draw(QGraphicsScene *canvas, QPointF coord, int step);
         void correctCollisions(QGraphicsScene *canvas, QPointF origin);

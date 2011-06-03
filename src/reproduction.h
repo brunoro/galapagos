@@ -10,6 +10,7 @@ class Reproduction
 {
     public:
         Reproduction(QList<int> rep_parent, int rep_offspring);
+        virtual ~Reproduction(){}
         QList<int> parents;
         int offspring;
 };

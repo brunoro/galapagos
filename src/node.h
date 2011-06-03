@@ -34,7 +34,7 @@ class Node
 
     public:
         Node(NodeType type, QString info);
-        ~Node();
+        virtual ~Node();
 
         void addSon(Node *son);
         void addEdge(Node *son, QPen style);

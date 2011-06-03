@@ -18,6 +18,7 @@ class Generation
 
     public:
         Generation();
+        virtual ~Generation(){}
 
         void addIndividual(QString individual, float fitness);
         void addReproduction(Reproduction rep);

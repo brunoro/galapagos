@@ -18,7 +18,7 @@ void center(QWidget *widget, int w, int h)
 }
 
 GPVis::GPVis(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent), fileFile(NULL), fileStream(NULL)
 {
     int WIDTH = 1024;
     int HEIGHT = 800;
@@ -125,34 +125,48 @@ GPVis::GPVis(QWidget *parent)
 
 void GPVis::readLogFile()
 {
+    if(fileFile != NULL){
+        delete fileFile;
+    }
+
     fileFile = new QFile(fileField->text());
     //qDebug() << "GPVis::readLogFile using file" << fileField->text();
-    ////qDebug() << fileField->text();
+    //qDebug() << fileField->text();
     
     /* check if file and can be read */
     if(!fileFile->open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        //TODO: implement exception if file doesnt exist
+        QMessageBox message(this);
+        QString error("File \"" + fileField->text() + "\" does not exist. ");
+        message.setText(error);
+        message.exec();
+
         return;
+    }
+
+    if(fileStream != NULL){
+        delete fileStream;
     }
 
     fileStream = new QTextStream(fileFile);
     QString ops, vars, terms;
-    
+
     QString fileBuffer = fileStream->readLine();
 
-    extern Def *definition;
-
     /* delete everything from generations */
-    generations.clear();
+    if(!generations.isEmpty())
+        generations.clear();
 
     /* if other definition was there */
+    extern Def *definition;
+
     if(definition != NULL) delete definition;
+    definition = new Def();
 
     /* search definition in file */
     if(fileBuffer.contains(QRegExp("definition:*.")))
     {
-        //qDebug() << "GPVis::readLogFile found definition"; 
+        qDebug() << "GPVis::readLogFile found definition"; 
         while(!fileStream->atEnd())
         {
             fileBuffer = fileStream->readLine();
@@ -161,7 +175,10 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\\s*ops:*.")))
             {
                 ops = fileBuffer.remove(QRegExp("\\s*ops:\\s*"));
-                //qDebug() << "GPVis::readLogFile found ops " << ops;
+                qDebug() << "GPVis::readLogFile found ops " << ops;
+                
+                definition->addOperators(ops);
+                
                 continue;
             }
 
@@ -169,9 +186,10 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("\\s*terms:*.")))
             {
                 terms = fileBuffer.remove(QRegExp("\\s*terms:\\s*"));
-                //qDebug() << "GPVis::readLogFile found terms" << terms;
+                qDebug() << "GPVis::readLogFile found terms" << terms;
+               
+                definition->addTerms(terms);
 
-                definition = new Def(ops, terms); // TODO: change this
                 consensusTree = Tree::opsConsensusTree();
 
                 continue;
@@ -180,13 +198,17 @@ void GPVis::readLogFile()
             /* end of definition */
             if(fileBuffer.contains(QRegExp("generation*.")))
             {
+                qDebug() << "GPVis::reading generation ";
                 readGeneration();
             }
         }
     }
     else
     {
-        // TODO: definition reading exception
+        QMessageBox message(this);
+        QString error("File \"" + fileField->text() + "\" is not valid. ");
+        message.setText(error);
+        message.exec();
         return;
     }
 
@@ -204,7 +226,7 @@ void GPVis::readLogFile()
     viewRep->setEnabled(true);
     consensusUse->setEnabled(true);
     //consensusSpin->setEnabled(true);
-    
+
     /* define first generation read */
     showGeneration(DEFAULT_GENERATION);
     
@@ -215,6 +237,7 @@ void GPVis::readLogFile()
     /* first one shown */
     tableView->selectRow(DEFAULT_ROW);
     tableView->sortByColumn(0, Qt::AscendingOrder);
+
 }
 
 void GPVis::readGeneration()

@@ -6,6 +6,7 @@
 
 #include <cfloat>
 
+#include <QMessageBox>
 #include <QApplication>
 #include <QBoxLayout>
 #include <QCheckBox>
@@ -43,12 +44,14 @@ class GPVis : public QWidget
 
     public:
         GPVis(QWidget *parent = 0);
+        virtual ~GPVis(){}
 
         int newTreeId();
         void addTree(Tree *tree);
         void test();
 
     private:
+        
         /* data */
         QList<Generation*> generations;
         QStandardItemModel *individuals,
