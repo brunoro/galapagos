@@ -119,8 +119,14 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
             //qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
     }
-    merged->correctCollisions(canvas, coord);
-    merged->getRoot()->recursiveUpdateEdges(canvas);
+    /* TODO: add flag to collision detection */
+    if(trees.first()->getId() == CONSENSUS_ID)
+    {
+        merged->correctCollisions(canvas, coord);
+        merged->getRoot()->recursiveUpdateEdges(canvas);
+    }
+    else
+        merged->getRoot()->updateEdges(canvas);
 
     Tree::drawRings(canvas, coord, 10, step); // TODO: get depth from merged tree
     return merged;
