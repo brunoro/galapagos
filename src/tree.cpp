@@ -122,7 +122,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     /* TODO: add flag to collision detection */
     if(trees.first()->getId() == CONSENSUS_ID)
     {
-        merged->correctCollisions(canvas, coord);
+        merged->correctCollisions(canvas, coord, step);
         merged->getRoot()->recursiveUpdateEdges(canvas);
     }
     else
@@ -162,7 +162,7 @@ Tree *Tree::opsConsensusTree()
     return opCon;
 }
 
-void Tree::correctCollisions(QGraphicsScene *canvas, QPointF origin)
+void Tree::correctCollisions(QGraphicsScene *canvas, QPointF origin, int step)
 {
     /* use BFS to get nodes */
     QList<Node*> thisLevel = root->getSons();
@@ -186,7 +186,7 @@ void Tree::correctCollisions(QGraphicsScene *canvas, QPointF origin)
                 if(thisLevel[i]->collidesWith(thisLevel[j]))
                 {
                     /* adjust node j */
-                    thisLevel[j]->adjustPosition(origin, thisLevel[i], level);
+                    thisLevel[j]->adjustPosition(origin, thisLevel[i], level, step);
                 }
             }
             /* get next level */
