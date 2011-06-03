@@ -25,7 +25,7 @@ class Tree
         ~Tree();
 
         void draw(QGraphicsScene *canvas, QPointF coord, int step);
-        void correctCollisions(QGraphicsScene *canvas, QPointF origin, int step);
+        void correctCollisions(QGraphicsScene *canvas, QPointF origin);
 
         void addParent(Tree *parent);
         void addOffspring(Tree *offspring);

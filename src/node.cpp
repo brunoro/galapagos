@@ -72,7 +72,7 @@ bool Node::collidesWith(Node *other)
     return (dist <= Style::nodeSize.width());
 }
 
-void Node::adjustPosition(QPointF origin, Node *other, int step, int level)
+void Node::adjustPosition(QPointF origin, Node *other, int level)
 {
     /* get how much they collide */
     QPointF from = getCoord(),
@@ -82,10 +82,10 @@ void Node::adjustPosition(QPointF origin, Node *other, int step, int level)
     float angle = QLineF(from, origin).angle() * Style::pi / 180;
 
     /* adjust position of all the subtrees so they won't collide */
-    rotateSubtree(angle, diff, step, level);
+    rotateSubtree(angle, diff, level);
 }
 
-void Node::rotateSubtree(float angle, float dist, int step, int level)
+void Node::rotateSubtree(float angle, float dist, int level)
 {
     /* swap cos with sin to get normal vector */
     float dx, dy;
@@ -102,7 +102,7 @@ void Node::rotateSubtree(float angle, float dist, int step, int level)
     update(QPointF(getCoord().x() + dx,
                    getCoord().y() + dy));
     foreach(Node *son, sons)
-        son->rotateSubtree(angle, dist, step, level + 1);
+        son->rotateSubtree(angle, dist, level + 1);
 }
 
 /* draw joint tree */
