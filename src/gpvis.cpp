@@ -1,4 +1,7 @@
 #include "gpvis.h"
+#include "myExceptions.h"
+
+#include <QMessageBox>
 
 void center(QWidget *widget, int w, int h)
 {
@@ -126,16 +129,21 @@ GPVis::GPVis(QWidget *parent)
 void GPVis::readLogFile()
 {
     fileFile = new QFile(fileField->text());
-    //qDebug() << "GPVis::readLogFile using file" << fileField->text();
-    ////qDebug() << fileField->text();
-    
-    /* check if file and can be read */
-    if(!fileFile->open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        //TODO: implement exception if file doesnt exist
+    qDebug() << "GPVis::readLogFile using file" << fileField->text();
+    qDebug() << fileField->text();
+    /*
+    if( !fileFile->exists())
+    { 
+        QMessageBox message(this);
+        QString error("File \"" + fileField->text() + "\" is not valid or does not exist. ");
+        message.setText(error);
+        message.exec();
+        
         return;
     }
-
+    */
+    qDebug() << "GPVis::readLogFile File exists!";
+   
     fileStream = new QTextStream(fileFile);
     QString ops, vars, terms;
     
@@ -148,11 +156,12 @@ void GPVis::readLogFile()
 
     /* if other definition was there */
     if(definition != NULL) delete definition;
+//  definition = new Def();
 
     /* search definition in file */
     if(fileBuffer.contains(QRegExp("definition:*.")))
     {
-        //qDebug() << "GPVis::readLogFile found definition"; 
+        qDebug() << "GPVis::readLogFile found definition"; 
         while(!fileStream->atEnd())
         {
             fileBuffer = fileStream->readLine();
@@ -162,6 +171,8 @@ void GPVis::readLogFile()
             {
                 ops = fileBuffer.remove(QRegExp("\\s*ops:\\s*"));
                 //qDebug() << "GPVis::readLogFile found ops " << ops;
+                
+//              definition->addOperators(ops);
                 continue;
             }
 
@@ -171,7 +182,7 @@ void GPVis::readLogFile()
                 terms = fileBuffer.remove(QRegExp("\\s*terms:\\s*"));
                 //qDebug() << "GPVis::readLogFile found terms" << terms;
 
-                definition = new Def(ops, terms); // TODO: change this
+//              definition->addTerms(terms); 
                 consensusTree = Tree::opsConsensusTree();
 
                 continue;
@@ -186,6 +197,11 @@ void GPVis::readLogFile()
     }
     else
     {
+        QMessageBox message(this);
+        QString error("File \"" + fileField->text() + "\" is not valid. ");
+        message.setText(error);
+        message.exec();
+
         // TODO: definition reading exception
         return;
     }
@@ -490,8 +506,8 @@ void GPVis::openFileDialog()
 
 void GPVis::test()
 {
-    fileField->setText("test/palotti_big.log");
-    QTest::mouseClick(fileOpen, Qt::LeftButton);
+    //fileField->setText("test/palotti_big.log");
+    //QTest::mouseClick(fileOpen, Qt::LeftButton);
 
     //Tree::test(scene);
     /*

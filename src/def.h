@@ -10,7 +10,9 @@
 class Def
 {
     public:
-        Def(QString ops, QString terms);
+        Def();
+        void addOperators(QString opstr);
+        void addTerms(QString terms);
 
         int isOp(QString str);
         bool isTerm(QString str);
