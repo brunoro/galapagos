@@ -23,6 +23,7 @@
 #include <QSet>
 #include <QString>
 
+#define TO_RADIANS(a) (a) * Style::pi / 180;
 #define CONSENSUS_ID INT_MIN
 #define CONSENSUS_DEPTH 3
 

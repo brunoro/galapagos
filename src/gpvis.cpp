@@ -40,10 +40,8 @@ GPVis::GPVis(QWidget *parent)
     genLabel = new QLabel("Generation");
 
     genSpin = new QSpinBox(this);
-    genSpin->setEnabled(false);
 
     genSlider = new QSlider(this);
-    genSlider->setEnabled(false);
     genSlider->setOrientation(Qt::Horizontal);
     genSlider->setTickPosition(QSlider::TicksBelow);
 
@@ -54,14 +52,11 @@ GPVis::GPVis(QWidget *parent)
 
     consensusUse = new QCheckBox("Use consensus", this);
     consensusUse->setChecked(true);
-    consensusUse->setEnabled(false);
-    consensusLabel = new QLabel("Depth", this);
+    collisionUse = new QCheckBox("Treat collisions ", this);
+    collisionUse->setChecked(true);
+    consensusLabel = new QLabel("consensus depth", this);
     consensusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    consensusLabel->setEnabled(false);
-    consensusSpin = new QSpinBox(this);
-    consensusSpin->setRange(1, CONSENSUS_DEPTH);
-    consensusSpin->setValue(CONSENSUS_DEPTH);
-    consensusSpin->setEnabled(false);
+    consensusDepth = new QLabel(QString::number(CONSENSUS_DEPTH));
 
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
@@ -70,7 +65,8 @@ GPVis::GPVis(QWidget *parent)
     tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     tableView->setAlternatingRowColors(true);
-    tableView->setEnabled(false);
+
+    turnEverythingOff();
 
     fileLine = new QBoxLayout(QBoxLayout::LeftToRight);
     fileLine->addWidget(fileField);
@@ -79,8 +75,9 @@ GPVis::GPVis(QWidget *parent)
 
     conLine = new QBoxLayout(QBoxLayout::LeftToRight);
     conLine->addWidget(consensusUse);
+    conLine->addWidget(collisionUse);
     conLine->addWidget(consensusLabel);
-    conLine->addWidget(consensusSpin);
+    conLine->addWidget(consensusDepth);
 
     genLine = new QBoxLayout(QBoxLayout::LeftToRight);
     genLine->addWidget(genSlider);
@@ -108,7 +105,7 @@ GPVis::GPVis(QWidget *parent)
     connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
     
-    //connect(consensusSpin, SIGNAL(valueChanged(int)), this, SLOT(setConsensusDepth(int)));
+    //connect(consensusDepth, SIGNAL(valueChanged(int)), this, SLOT(setConsensusDepth(int)));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
@@ -292,7 +289,8 @@ void GPVis::turnEverythingOn(){
     viewInd->setEnabled(true);
     viewRep->setEnabled(true);
     consensusUse->setEnabled(true);
-    //consensusSpin->setEnabled(true);
+    collisionUse->setEnabled(true);
+    //consensusDepth->setEnabled(true);
 }
 
 void GPVis::turnEverythingOff(){
@@ -304,7 +302,8 @@ void GPVis::turnEverythingOff(){
     viewInd->setEnabled(false);
     viewRep->setEnabled(false);
     consensusUse->setEnabled(false);
-    //consensusSpin->setEnabled(false);
+    collisionUse->setEnabled(false);
+    //consensusDepth->setEnabled(false);
 }
 
 
@@ -423,7 +422,7 @@ void GPVis::renderIndividual(int gen, int ind)
         trees.append(consensusTree);
         trees.append(generations[gen]->getIndividual(ind));
 
-        Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
+        Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked());
         lastDrawnTree = drawn;
     }
     else
@@ -485,7 +484,7 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
         j++;
     }
 
-    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep);
+    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked());
     lastDrawnTree = drawn;
 }
 

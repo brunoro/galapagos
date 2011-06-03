@@ -39,7 +39,7 @@ class Tree
         QList<Tree*> getOffspring();
 
         static Tree* drawMany(QGraphicsScene *canvas, QList<Tree*> trees,
-                              QPointF coord, int step);
+                              QPointF coord, int step, bool treatCollisions);
         static Tree *opsConsensusTree();
         static void drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step);
         static void test(QGraphicsScene *canvas);

@@ -77,9 +77,9 @@ void Node::adjustPosition(QPointF origin, Node *other, int level, int step)
     /* get how much they collide */
     QPointF from = getCoord(),
             to = other->getCoord();
-    float dist = -1 * sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
+    float dist = sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
     float diff = Style::nodeSize.width() - dist;
-    float angle = QLineF(from, origin).angle() * Style::pi / 180;
+    float angle = TO_RADIANS(QLineF(from, origin).angle());
     
     /* adjust position of all the subtrees so they won't collide */
     rotateSubtree(origin, angle, diff, level, step);
@@ -93,6 +93,13 @@ void Node::rotateSubtree(QPointF origin, float angle, float dist, int level, int
     dy = dist * ((level + 1) / level) * cosf(angle);
     QPointF dpos = QPointF(getCoord().x() + dx,
                            getCoord().y() + dy);
+
+    /* fix dpos so distance from origin equals level * step */
+    QLineF lineOrigin = QLineF(dpos, origin);
+    float deltaDist = level * step - lineOrigin.length(),
+          deltaAngle = TO_RADIANS(lineOrigin.angle());
+    dpos += QPointF(deltaDist * cosf(deltaAngle) + dx/10,
+                    deltaDist * sinf(deltaAngle) + dy/10);
     update(dpos);
     
     foreach(Node *son, sons)

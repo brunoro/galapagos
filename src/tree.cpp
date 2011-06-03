@@ -51,7 +51,7 @@ Node *Tree::parseTree(QStringList nodes, int pos, int id)
 }
 
 /* draw multiple trees */
-Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, int step)
+Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, int step, bool treatCollisions)
 {
     canvas->clear();
 
@@ -119,8 +119,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
             //qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
     }
-    /* TODO: add flag to collision detection */
-    if(trees.first()->getId() == CONSENSUS_ID)
+    if(treatCollisions)
     {
         merged->correctCollisions(canvas, coord, step);
         merged->getRoot()->recursiveUpdateEdges(canvas);
@@ -182,12 +181,9 @@ void Tree::correctCollisions(QGraphicsScene *canvas, QPointF origin, int step)
                 if(thisLevel[j]->getTreeId().contains(CONSENSUS_ID) && (thisLevel[j]->getTreeId().size() <= 1))
                     continue;
 
-                /* check if nodes i and j collide */
+                /* check if nodes i and j collide and adjust */
                 if(thisLevel[i]->collidesWith(thisLevel[j]))
-                {
-                    /* adjust node j */
                     thisLevel[j]->adjustPosition(origin, thisLevel[i], level, step);
-                }
             }
             /* get next level */
             nextLevel += thisLevel[i]->getSons();
@@ -277,5 +273,5 @@ void Tree::test(QGraphicsScene *canvas)
     QList<Tree*> trees;
     trees.append(test_tree1);
     trees.append(test_tree2);
-    Tree *merged = Tree::drawMany(canvas, trees, center, 60);
+    Tree *merged = Tree::drawMany(canvas, trees, center, 60, true);
 }
