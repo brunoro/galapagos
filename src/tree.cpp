@@ -59,7 +59,7 @@ Node *Tree::parseTree(QStringList nodes, int pos, int id)
 }
 
 /* draw multiple trees */
-Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, int step, bool treatCollisions)
+Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, int step, bool treatCollisions, int consensusDepth)
 {
     canvas->clear();
 
@@ -111,7 +111,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     else
         startLevel = 0;
 
-    QList<Node*> sons = Node::recursiveDrawMany(canvas, nodes, coord, coord, step, startLevel, 2 * pi, pi/2, styles);
+    QList<Node*> sons = Node::recursiveDrawMany(canvas, nodes, coord, coord, step, startLevel, 2 * pi, pi/2, styles, consensusDepth);
 
     if(!needRoot)
         merged->setRoot(sons[0]);
@@ -152,7 +152,7 @@ void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
 
 }
 
-Tree *Tree::opsConsensusTree()
+Tree *Tree::opsConsensusTree(int consensusDepth)
 {
     Tree *opCon = new Tree(CONSENSUS_ID, GENERATED_TREE_FITNESS);
 
@@ -163,7 +163,7 @@ Tree *Tree::opsConsensusTree()
     conid.insert(CONSENSUS_ID);
     root->setTreeId(conid);
 
-    root->opsConsensus(CONSENSUS_DEPTH, Tree::definition);
+    root->opsConsensus(consensusDepth, Tree::definition);
 
     return opCon;
 }
@@ -266,7 +266,7 @@ QList<Tree*> Tree::getOffspring()
     return offspring;
 }
 
-void Tree::test(QGraphicsScene *canvas)
+void Tree::test(QGraphicsScene *canvas, int consensusDepth)
 {
     QString line1 = QString("-  x^0  /  -  x^0  *  x^0  x^1  /  x^2  x^2");
     QString line2 = QString("-  x^0  /  -  x^0  +  x^0  x^1  /  x^2  x^2");
@@ -280,5 +280,5 @@ void Tree::test(QGraphicsScene *canvas)
     QList<Tree*> trees;
     trees.append(test_tree1);
     trees.append(test_tree2);
-    Tree *merged = Tree::drawMany(canvas, trees, center, 60, true);
+    Tree *merged = Tree::drawMany(canvas, trees, center, 60, true, consensusDepth);
 }

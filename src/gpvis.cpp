@@ -18,7 +18,7 @@ void center(QWidget *widget, int w, int h)
 }
 
 GPVis::GPVis(QWidget *parent)
-    : QWidget(parent), fileFile(NULL), fileStream(NULL)
+    : QWidget(parent), fileFile(NULL), fileStream(NULL), consensusDepthValue(CONSENSUS_INITIAL_DEPTH)
 {
     int WIDTH = 1024;
     int HEIGHT = 800;
@@ -55,7 +55,7 @@ GPVis::GPVis(QWidget *parent)
     collisionUse = new QCheckBox("Treat collisions ", this);
     collisionUse->setChecked(true);
     consensusDepth = new QSpinBox(this);
-    consensusDepth->setValue(CONSENSUS_DEPTH);
+    consensusDepth->setValue(CONSENSUS_INITIAL_DEPTH);
 
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
@@ -103,6 +103,7 @@ GPVis::GPVis(QWidget *parent)
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
     
     connect(consensusUse, SIGNAL(toggled(bool)), consensusDepth, SLOT(setEnabled(bool)));
+    connect(consensusDepth, SIGNAL(valueChanged(int)), this, SLOT(setConsensusDepth(int)));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
@@ -168,9 +169,8 @@ void GPVis::readLogFile()
             {
                 ops = fileBuffer.remove(QRegExp("\\s*ops:\\s*"));
                 //qDebug() << "GPVis::readLogFile found ops " << ops;
-                
+
                 Tree::definition->addOperators(ops);
-                
                 continue;
             }
             /* terms */
@@ -178,18 +178,15 @@ void GPVis::readLogFile()
             {
                 terms = fileBuffer.remove(QRegExp("\\s*terms:\\s*"));
                 //qDebug() << "GPVis::readLogFile found terms" << terms;
-               
+
                 Tree::definition->addTerms(terms);
-
-
                 continue;
-           }
-           
-
+            }
             /* end of definition */
             if(fileBuffer.contains(QRegExp("generation*.")))
             {
-                consensusTree = Tree::opsConsensusTree();
+                //we must have the operators and terms already defined.
+                consensusTree = Tree::opsConsensusTree(consensusDepthValue);
 
                 //qDebug() << "GPVis::reading generation ";
                 readGeneration();
@@ -223,7 +220,6 @@ void GPVis::readLogFile()
     /* first one shown */
     tableView->selectRow(DEFAULT_ROW);
     tableView->sortByColumn(0, Qt::AscendingOrder);
-
 }
 
 void GPVis::readGeneration()
@@ -302,6 +298,21 @@ void GPVis::turnEverythingOff(){
     consensusDepth->setEnabled(false);
 }
 
+
+void GPVis::setConsensusDepth(int depth){
+    consensusDepthValue = depth;
+    
+    /* select right view */
+    switch(selectedView)
+    {
+        case INDIVIDUALS:
+            showIndTable();
+            break;
+        case REPRODUCTIONS:
+            showRepTable();
+            break;
+    }
+}
 
 /* builds model from a generation */
 void GPVis::showGeneration(int gen)
@@ -445,7 +456,7 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
         j++;
     }
 
-    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked());
+    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepthValue);
     lastDrawnTree = drawn;
 }
 
@@ -499,7 +510,7 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
         j++;
     }
 
-    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked());
+    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepthValue);
     lastDrawnTree = drawn;
 }
 

@@ -26,7 +26,7 @@
 #define TO_RADIANS(a) (a) * Style::pi / 180
 #define TO_DEGREES(a) (a) / Style::pi * 180
 #define CONSENSUS_ID INT_MIN
-#define CONSENSUS_DEPTH 3
+#define CONSENSUS_INITIAL_DEPTH 3
 
 enum NodeType {OP, TERM, ROOT};
 
@@ -57,7 +57,8 @@ class Node
         static QList<Node*> recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                                               QPointF origin, QPointF coord,
                                               int step, int level,
-                                              float areaAngle, float refAngle, QHash<int, QPen> style);
+                                              float areaAngle, float refAngle, QHash<int, QPen> style,
+                                              int consensusDepth);
         QList<Node*> getSons();
         NodeType getType();
         QString getInfo();

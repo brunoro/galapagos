@@ -113,7 +113,7 @@ void Node::rotateSubtree(QPointF origin, float angle)
 QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                                      QPointF origin, QPointF coord,
                                      int step, int level,
-                                     float areaAngle, float refAngle, QHash<int, QPen> styles)
+                                     float areaAngle, float refAngle, QHash<int, QPen> styles, int consensusDepth)
 {
     QVector<bool> toRemove(nodes.length());
     /* iterates on nodes search for duplicates */
@@ -162,7 +162,7 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
     }
 
     float hstep;
-    if(level < CONSENSUS_DEPTH)
+    if(level < consensusDepth)
         hstep = areaAngle / merged.length();
     else
         hstep = areaAngle / drawables;
@@ -179,7 +179,7 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
             /* draw node and call recursion */
             merged[i]->draw(canvas, sonCoord);
             merged[i]->setSons(Node::recursiveDrawMany(canvas, merged[i]->getSons(), origin, sonCoord,
-                               step, level + 1, hstep, sonAngle, styles));
+                               step, level + 1, hstep, sonAngle, styles, consensusDepth));
             /* update edges */
             foreach(Node *son, merged[i]->getSons())
             {
@@ -191,13 +191,13 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                 }
             }
             merged[i]->updateEdges(canvas);
-            if(level >= CONSENSUS_DEPTH)
+            if(level >= consensusDepth)
             {
                 sonAngle += hstep;
                 continue;
             }
         }
-        if(level < CONSENSUS_DEPTH)
+        if(level < consensusDepth)
             sonAngle += hstep;
     }
     return merged;
