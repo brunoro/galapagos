@@ -104,10 +104,14 @@ GPVis::GPVis(QWidget *parent)
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
     
     connect(consensusUse, SIGNAL(toggled(bool)), consensusDepth, SLOT(setEnabled(bool)));
+    /* temporary, so it won't loop forever */
+    connect(consensusUse, SIGNAL(toggled(bool)), collisionUse, SLOT(setChecked(bool)));
+    connect(consensusUse, SIGNAL(toggled(bool)), collisionUse, SLOT(setEnabled(bool)));
 
-    connect(collisionUse, SIGNAL(toggled(bool)), this, SLOT(redrawTree()));
+    /* keep these connections in this order! */
     connect(consensusUse, SIGNAL(toggled(bool)), this, SLOT(redrawTree()));
     connect(consensusDepth, SIGNAL(valueChanged(int)), this, SLOT(redrawTree()));
+    connect(collisionUse, SIGNAL(toggled(bool)), this, SLOT(redrawTree()));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
