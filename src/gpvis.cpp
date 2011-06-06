@@ -102,7 +102,7 @@ GPVis::GPVis(QWidget *parent)
     connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
     
-    connect(consensusUse, SIGNAL(stateChanged(int)), consensusDepth, SLOT(setEnabled(bool)));
+    connect(consensusUse, SIGNAL(toggled(bool)), consensusDepth, SLOT(setEnabled(bool)));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
