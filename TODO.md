@@ -1,10 +1,12 @@
 TODO
 ----
 - Search space visualization 
-- Collision detection *almost*
+- Collision detection *done*
 - Reference box for edge colors
 - Link parents to offspring to parents to offspring
 - Input file reading exceptions *done*
 - Fix memory usage
+- Fix "item has already been added to this scene" problem on edges
+- Change CONSENSUS_DEPTH to a variable and add MAX_CONSENSUS_DEPTH flag
 - Application icon
 - New name ?
