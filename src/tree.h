@@ -20,6 +20,7 @@
 
 #define GENERATED_TREE_ID INT_MAX - 1
 #define GENERATED_TREE_FITNESS FLT_MAX - 1
+#define MAX_DEPTH 10
 
 class Tree
 {

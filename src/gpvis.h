@@ -36,6 +36,10 @@
 
 #define DEFAULT_ROW 0
 #define DEFAULT_GENERATION 0
+#define CONSENSUS_INITIAL_DEPTH 3
+#define CONSENSUS_MIN_DEPTH 2
+#define CONSENSUS_MAX_DEPTH 4
+
 enum Views{INDIVIDUALS, REPRODUCTIONS};
 
 class GPVis : public QWidget
@@ -59,7 +63,6 @@ class GPVis : public QWidget
         QStringList individualsHeader,
                     reproductionsHeader;
         Tree *consensusTree;
-        Tree* lastDrawnTree;
 
         /* ui */
         QGridLayout *grid;
@@ -108,10 +111,10 @@ class GPVis : public QWidget
 
     private slots:
         /* show data */
-        void setConsensusDepth(int depth);
         void showGeneration(int gen);
         void individualFromTable();
         void reproductionFromTable();
+        void redrawTree();
 
         /* change tableView */
         void showIndTable();

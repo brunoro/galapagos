@@ -135,7 +135,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
     else
         merged->getRoot()->updateEdges(canvas);
 
-    Tree::drawRings(canvas, coord, 10, step); // TODO: get depth from merged tree
+    Tree::drawRings(canvas, coord, MAX_DEPTH, step);
     return merged;
 }
 
@@ -148,7 +148,7 @@ void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
     int depth = root->recursiveDraw(canvas, coord, coord, step, 1, 2 * pi, pi/2);
     //qDebug() << "Tree::draw depth" << depth;
 
-    Tree::drawRings(canvas, coord, depth, step);
+    Tree::drawRings(canvas, coord, MAX_DEPTH, step);
 
 }
 

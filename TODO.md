@@ -1,9 +1,10 @@
 TODO
 ----
 - Fitness space visualization 
-- Link parents to offspring to parents to offspring
+- Link parents to offspring to parents to offspring to parents to parents to offspring to parents
 - Collision detection *done*
 - Reference box for edge colors
+- Connect checkboxes directly to drawing
 - Add possibility to select multiple individuals on table view *done*
 - Keep multiple selection upon generation changes
 - Fix collision detection without consensus tree

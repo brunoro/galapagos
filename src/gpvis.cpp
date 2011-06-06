@@ -56,6 +56,7 @@ GPVis::GPVis(QWidget *parent)
     collisionUse->setChecked(true);
     consensusDepth = new QSpinBox(this);
     consensusDepth->setValue(CONSENSUS_INITIAL_DEPTH);
+    consensusDepth->setRange(CONSENSUS_MIN_DEPTH, CONSENSUS_MAX_DEPTH);
 
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
@@ -103,7 +104,10 @@ GPVis::GPVis(QWidget *parent)
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
     
     connect(consensusUse, SIGNAL(toggled(bool)), consensusDepth, SLOT(setEnabled(bool)));
-    connect(consensusDepth, SIGNAL(valueChanged(int)), this, SLOT(setConsensusDepth(int)));
+
+    connect(collisionUse, SIGNAL(toggled(bool)), this, SLOT(redrawTree()));
+    connect(consensusUse, SIGNAL(toggled(bool)), this, SLOT(redrawTree()));
+    connect(consensusDepth, SIGNAL(valueChanged(int)), this, SLOT(redrawTree()));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
@@ -186,7 +190,7 @@ void GPVis::readLogFile()
             if(fileBuffer.contains(QRegExp("generation*.")))
             {
                 //we must have the operators and terms already defined.
-                consensusTree = Tree::opsConsensusTree(consensusDepthValue);
+                consensusTree = Tree::opsConsensusTree(CONSENSUS_MAX_DEPTH);
 
                 //qDebug() << "GPVis::reading generation ";
                 readGeneration();
@@ -299,21 +303,6 @@ void GPVis::turnEverythingOff(){
 }
 
 
-void GPVis::setConsensusDepth(int depth){
-    consensusDepthValue = depth;
-    
-    /* select right view */
-    switch(selectedView)
-    {
-        case INDIVIDUALS:
-            showIndTable();
-            break;
-        case REPRODUCTIONS:
-            showRepTable();
-            break;
-    }
-}
-
 /* builds model from a generation */
 void GPVis::showGeneration(int gen)
 {
@@ -412,6 +401,19 @@ void GPVis::showGeneration(int gen)
     tableView->selectRow(selectedRow);
 }
 
+void GPVis::redrawTree()
+{
+    switch(selectedView)
+    {
+        case INDIVIDUALS:
+            individualFromTable();
+            break;
+        case REPRODUCTIONS:
+            reproductionFromTable();
+            break;
+    }
+}
+
 void GPVis::individualFromTable()
 {
     QList<QModelIndex> rowIndexes = tableView->selectionModel()->selectedRows();
@@ -430,7 +432,6 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
         Tree *tree;
         tree = generations[gen]->getIndividual(ind[0]);
         tree->draw(scene, *sceneCenter, Style::defaultStep);
-        lastDrawnTree = tree;
         return;
     }
 
@@ -456,8 +457,7 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
         j++;
     }
 
-    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepthValue);
-    lastDrawnTree = drawn;
+    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
 }
 
 void GPVis::reproductionFromTable()
@@ -510,8 +510,7 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
         j++;
     }
 
-    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepthValue);
-    lastDrawnTree = drawn;
+    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
 }
 
 void GPVis::showIndTable()

@@ -26,7 +26,6 @@
 #define TO_RADIANS(a) (a) * Style::pi / 180
 #define TO_DEGREES(a) (a) / Style::pi * 180
 #define CONSENSUS_ID INT_MIN
-#define CONSENSUS_INITIAL_DEPTH 3
 
 enum NodeType {OP, TERM, ROOT};
 
