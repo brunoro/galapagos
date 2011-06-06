@@ -203,10 +203,8 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
     return merged;
 }
 
-void Node::opsConsensus(int depth)
+void Node::opsConsensus(int depth, Def* definition)
 {
-    extern Def *definition;
-
     QSet<int> conid;
     conid.insert(CONSENSUS_ID);
     tree_id = conid;
@@ -225,7 +223,7 @@ void Node::opsConsensus(int depth)
 
             /* make new node */
             Node *turn = new Node(OP, opIterator.key());
-            turn->opsConsensus(depth - 1);
+            turn->opsConsensus(depth - 1, definition);
 
             addSon(turn);
         }

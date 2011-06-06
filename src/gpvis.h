@@ -97,7 +97,7 @@ class GPVis : public QWidget
         QTextStream *fileStream;
 
         void readGeneration();
-        
+
         /* render stuff on canvas */
         void renderIndividual(int gen, QList<int> ind);
         void renderReproduction(int gen, QList<int> parent, int offspring);

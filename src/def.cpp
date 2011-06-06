@@ -41,7 +41,13 @@ void Def::addTerms(QString termstr){
 int Def::isOp(QString str)
 {
     //qDebug() << "Def::isOp" << str << ops[str];
-    return ops[str];
+    
+    //TODO: burn after read!
+    /*From documentation ( http://doc.qt.nokia.com/4.7/qhash.html )
+    In general, we recommend that you use contains() and value() rather than operator[]() for looking up a key in a hash. The reason is that operator[]() silently inserts an item into the hash if no item exists with the same key (unless the hash is const). For example, the following code snippet will create 1000 items in memory:
+    */
+
+    return ops.contains(str) ? ops.value(str) : 0;  //assuming that 0 is a good default value. TODO: is 0 a good default value brunoro?
 }
 
 bool Def::isTerm(QString str)
@@ -55,3 +61,4 @@ QHashIterator<QString, int> Def::getOpIterator()
     QHashIterator<QString, int> iter(ops);
     return iter;
 }
+

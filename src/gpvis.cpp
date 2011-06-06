@@ -154,10 +154,8 @@ void GPVis::readLogFile()
         generations.clear();
 
     /* if other definition was there */
-    extern Def *definition;
-
-    if(definition != NULL) delete definition;
-    definition = new Def();
+    if(Tree::definition != NULL) delete Tree::definition;
+    Tree::definition = new Def();
 
     /* search definition in file */
     if(fileBuffer.contains(QRegExp("definition:*.")))
@@ -173,27 +171,28 @@ void GPVis::readLogFile()
                 ops = fileBuffer.remove(QRegExp("\\s*ops:\\s*"));
                 //qDebug() << "GPVis::readLogFile found ops " << ops;
                 
-                definition->addOperators(ops);
+                Tree::definition->addOperators(ops);
                 
                 continue;
             }
-
             /* terms */
             if(fileBuffer.contains(QRegExp("\\s*terms:*.")))
             {
                 terms = fileBuffer.remove(QRegExp("\\s*terms:\\s*"));
                 //qDebug() << "GPVis::readLogFile found terms" << terms;
                
-                definition->addTerms(terms);
+                Tree::definition->addTerms(terms);
 
-                consensusTree = Tree::opsConsensusTree();
 
                 continue;
-            }
+           }
+           
 
             /* end of definition */
             if(fileBuffer.contains(QRegExp("generation*.")))
             {
+                consensusTree = Tree::opsConsensusTree();
+
                 //qDebug() << "GPVis::reading generation ";
                 readGeneration();
             }

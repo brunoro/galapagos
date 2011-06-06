@@ -25,7 +25,7 @@ class Tree
 {
     public:
         Tree(QString line, int tree_id, float tree_fitness);
-        Tree(int tree_id, float tree_fitness);
+        Tree(int tree_id, float tree_fitnes);
         virtual ~Tree();
 
         void draw(QGraphicsScene *canvas, QPointF coord, int step);
@@ -48,13 +48,15 @@ class Tree
         static void drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step);
         static void test(QGraphicsScene *canvas);
 
+        static Def* definition;
+        
     private:
         int id;
         float fitness;
         Node *root;
         QList<Tree*> parents;
         QList<Tree*> offspring;
-        
+
         Node *parseTree(QStringList nodes, int pos, int id);
 };
 

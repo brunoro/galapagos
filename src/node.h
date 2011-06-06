@@ -52,7 +52,7 @@ class Node
                           QPointF origin, QPointF coord,
                           int step, int level,
                           float areaAngle, float refAngle);
-        void opsConsensus(int depth);
+        void opsConsensus(int depth, Def* definition);
 
         static QList<Node*> recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                                               QPointF origin, QPointF coord,

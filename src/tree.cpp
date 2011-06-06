@@ -1,5 +1,7 @@
 #include "tree.h"
 
+Def* Tree::definition = NULL;
+
 Tree::Tree(QString line, int tree_id, float tree_fitness)
 {
     id = tree_id;
@@ -7,6 +9,7 @@ Tree::Tree(QString line, int tree_id, float tree_fitness)
     QStringList str_list = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
     //qDebug() << "Tree::Tree" << str_list;
     root = parseTree(str_list.replaceInStrings(QRegExp("\\s+"), " "), 0, id);
+
 }
 
 Tree::Tree(int tree_id, float tree_fitness)
@@ -28,7 +31,6 @@ Tree::~Tree()
 
 Node *Tree::parseTree(QStringList nodes, int pos, int id)
 {
-    extern Def *definition;
     Node *turn = NULL;
 
     if (definition->isOp(nodes[pos]))
@@ -162,7 +164,7 @@ Tree *Tree::opsConsensusTree()
     conid.insert(CONSENSUS_ID);
     root->setTreeId(conid);
 
-    root->opsConsensus(CONSENSUS_DEPTH);
+    root->opsConsensus(CONSENSUS_DEPTH, Tree::definition);
 
     return opCon;
 }
