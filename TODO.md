@@ -3,7 +3,10 @@ TODO
 - Fitness space visualization 
 - Collision detection *done*
 - Reference box for edge colors
-- Add possibility to select whatever individuals on table view *done*
+- Add possibility to select multiple individuals on table view *done*
+- Keep multiple selection upon generation changes
+- Fix collision detection without consensus tree
+- Tooltips on gui elements 
 - Fix font size inside nodes
 - Link parents to offspring to parents to offspring
 - Input file reading exceptions *done*

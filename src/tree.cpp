@@ -95,7 +95,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         styles[ids[i]] = QPen(QBrush(colors[i]), Style::edgeWeight);
 
     /* make new tree */
-    Tree *merged = new Tree(-1, -1); // TODO: change this
+    Tree *merged = new Tree(GENERATED_TREE_ID, GENERATED_TREE_FITNESS);
 
     /* draw common root if needed */
     int startLevel;
@@ -153,7 +153,7 @@ void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
 
 Tree *Tree::opsConsensusTree()
 {
-    Tree *opCon = new Tree(CONSENSUS_ID, FLT_MIN);
+    Tree *opCon = new Tree(CONSENSUS_ID, GENERATED_TREE_FITNESS);
 
     Node *root = new Node(ROOT, "");
     opCon->setRoot(root);

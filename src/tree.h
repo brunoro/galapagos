@@ -5,6 +5,7 @@
 #include "node.h"
 
 #include <cfloat>
+#include <climits>
 
 #include <QDebug>
 #include <QGraphicsLineItem>
@@ -16,6 +17,9 @@
 #include <QString>
 #include <QStringList>
 #include <QVector>
+
+#define GENERATED_TREE_ID INT_MAX - 1
+#define GENERATED_TREE_FITNESS FLT_MAX - 1
 
 class Tree
 {
