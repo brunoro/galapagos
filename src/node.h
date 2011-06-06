@@ -23,7 +23,8 @@
 #include <QSet>
 #include <QString>
 
-#define TO_RADIANS(a) (a) * Style::pi / 180;
+#define TO_RADIANS(a) (a) * Style::pi / 180
+#define TO_DEGREES(a) (a) / Style::pi * 180
 #define CONSENSUS_ID INT_MIN
 #define CONSENSUS_DEPTH 3
 
@@ -45,7 +46,7 @@ class Node
         bool collidesWith(Node *other);
         void adjustPosition(QPointF origin, Node *other, int level, int step);
         void update(QPointF coord);
-        void rotateSubtree(QPointF origin, float angle, float dist, int level, int step);
+        void rotateSubtree(QPointF origin, float angle);
 
         int recursiveDraw(QGraphicsScene *canvas,
                           QPointF origin, QPointF coord,

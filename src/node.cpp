@@ -16,7 +16,6 @@ Node::Node(NodeType nodetype, QString nodeinfo)
 
 Node::~Node()
 {
-    
     while (!sons.isEmpty())
         delete sons.takeFirst();
 
@@ -89,31 +88,25 @@ void Node::adjustPosition(QPointF origin, Node *other, int level, int step)
             to = other->getCoord();
     float dist = sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
     float diff = Style::nodeSize.width() - dist;
-    float angle = TO_RADIANS(QLineF(from, origin).angle());
+
+    /* get new ideal angle */
+    float angleDelta = TO_DEGREES(acosf(1 - powf(diff, 2) / (2 * powf(step * level, 2))));
+    float angleOrigin = QLineF(origin, from).angle();
     
     /* adjust position of all the subtrees so they won't collide */
-    rotateSubtree(origin, angle, diff, level, step);
+    rotateSubtree(origin, angleOrigin - angleDelta);
 }
 
-void Node::rotateSubtree(QPointF origin, float angle, float dist, int level, int step)
+void Node::rotateSubtree(QPointF origin, float angle)
 {
-    /* swap cos with sin to get normal vector */
-    float dx, dy;
-    dx = dist * ((level + 1) / level) * sinf(angle);
-    dy = dist * ((level + 1) / level) * cosf(angle);
-    QPointF dpos = QPointF(getCoord().x() + dx,
-                           getCoord().y() + dy);
+    /* rotate ray vector */
+    QLineF ray(origin, getCoord());
+    ray.setAngle(angle);
+    update(ray.p2());
 
-    /* fix dpos so distance from origin equals level * step */
-    QLineF lineOrigin = QLineF(dpos, origin);
-    float deltaDist = level * step - lineOrigin.length(),
-          deltaAngle = TO_RADIANS(lineOrigin.angle());
-    dpos += QPointF(deltaDist * cosf(deltaAngle) + dx/10,
-                    deltaDist * sinf(deltaAngle) + dy/10);
-    update(dpos);
-    
+    /* rotate sons */
     foreach(Node *son, sons)
-        son->rotateSubtree(origin, angle, dist, level + 1, step);
+        son->rotateSubtree(origin, angle);
 }
 
 /* draw joint tree */
