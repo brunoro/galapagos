@@ -54,9 +54,8 @@ GPVis::GPVis(QWidget *parent)
     consensusUse->setChecked(true);
     collisionUse = new QCheckBox("Treat collisions ", this);
     collisionUse->setChecked(true);
-    consensusLabel = new QLabel("consensus depth", this);
-    consensusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    consensusDepth = new QLabel(QString::number(CONSENSUS_DEPTH));
+    consensusDepth = new QSpinBox(this);
+    consensusDepth->setValue(CONSENSUS_DEPTH);
 
     tableView = new QTableView(this);
     tableView->horizontalHeader()->setStretchLastSection(true);
@@ -74,9 +73,8 @@ GPVis::GPVis(QWidget *parent)
 
     conLine = new QBoxLayout(QBoxLayout::LeftToRight);
     conLine->addWidget(consensusUse);
-    conLine->addWidget(collisionUse);
-    conLine->addWidget(consensusLabel);
     conLine->addWidget(consensusDepth);
+    conLine->addWidget(collisionUse);
 
     genLine = new QBoxLayout(QBoxLayout::LeftToRight);
     genLine->addWidget(genSlider);
@@ -104,7 +102,7 @@ GPVis::GPVis(QWidget *parent)
     connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
     
-    //connect(consensusDepth, SIGNAL(valueChanged(int)), this, SLOT(setConsensusDepth(int)));
+    connect(consensusUse, SIGNAL(stateChanged(int)), consensusDepth, SLOT(setEnabled(bool)));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
@@ -288,7 +286,7 @@ void GPVis::turnEverythingOn(){
     viewRep->setEnabled(true);
     consensusUse->setEnabled(true);
     collisionUse->setEnabled(true);
-    //consensusDepth->setEnabled(true);
+    consensusDepth->setEnabled(true);
 }
 
 void GPVis::turnEverythingOff(){
@@ -301,7 +299,7 @@ void GPVis::turnEverythingOff(){
     viewRep->setEnabled(false);
     consensusUse->setEnabled(false);
     collisionUse->setEnabled(false);
-    //consensusDepth->setEnabled(false);
+    consensusDepth->setEnabled(false);
 }
 
 
@@ -561,18 +559,7 @@ void GPVis::test()
 }
 
 /*
-void GPVis::setConsensusDepth(int depth)
-{
-    consensusDepth = depth;
-    // redraw
-    switch(selectedView)
-    {
-        case INDIVIDUALS:
-            individualFromTable();
-            break;
-        case REPRODUCTIONS:
-            reproductionFromTable();
-            break;
-    }
-
+ * para escrever o spin : consensusDepth->setValue()
+ * para ler o spin : consensusDepth->value()
+ * para setar o range dele : consensusDepth->setRange(mínimo, máximo)
 }*/

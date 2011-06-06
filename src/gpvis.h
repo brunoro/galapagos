@@ -81,8 +81,7 @@ class GPVis : public QWidget
         QBoxLayout *conLine;
         QCheckBox *consensusUse;
         QCheckBox *collisionUse;
-        QLabel *consensusLabel;
-        QLabel *consensusDepth;
+        QSpinBox *consensusDepth;
 
         QTableView *tableView;
 

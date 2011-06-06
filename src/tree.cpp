@@ -140,7 +140,6 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
 }
 
 /* calls recursiveDraw */
-/* TODO: add pens, brushes and constants */
 void Tree::draw(QGraphicsScene *canvas, QPointF coord, int step)
 {
     canvas->clear();

@@ -1,6 +1,7 @@
 TODO
 ----
 - Fitness space visualization 
+- Link parents to offspring to parents to offspring
 - Collision detection *done*
 - Reference box for edge colors
 - Add possibility to select multiple individuals on table view *done*
@@ -8,7 +9,6 @@ TODO
 - Fix collision detection without consensus tree
 - Tooltips on gui elements 
 - Fix font size inside nodes
-- Link parents to offspring to parents to offspring
 - Input file reading exceptions *done*
 - Fix memory usage *1/2 done*
 - Fix "item has already been added to this scene" problem on edges
