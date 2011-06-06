@@ -426,7 +426,6 @@ void GPVis::individualFromTable()
 
 void GPVis::renderIndividual(int gen, QList<int> ind)
 {
-    /* drawing one tree */
     if((ind.length() == 1) && !consensusUse->isChecked())
     {
         Tree *tree;
