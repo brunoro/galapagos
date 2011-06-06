@@ -62,7 +62,6 @@ GPVis::GPVis(QWidget *parent)
     tableView->horizontalHeader()->setStretchLastSection(true);
     tableView->verticalHeader()->hide();
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     tableView->setAlternatingRowColors(true);
 
@@ -407,31 +406,50 @@ void GPVis::showGeneration(int gen)
 
 void GPVis::individualFromTable()
 {
-    int row = tableView->selectionModel()->currentIndex().row();
-    int ind = tableView->model()->index(row, 0).data().toInt();
+    QList<QModelIndex> rowIndexes = tableView->selectionModel()->selectedRows();
+    QList<int> inds;
+    foreach(QModelIndex rowIndex, rowIndexes)
+        inds.append(tableView->model()->index(rowIndex.row(), 0).data().toInt());
     scene->clear();
-    renderIndividual(genSpin->value(), ind);
+    renderIndividual(genSpin->value(), inds);
 }
 
-void GPVis::renderIndividual(int gen, int ind)
+void GPVis::renderIndividual(int gen, QList<int> ind)
 {
+    /* drawing one tree */
+    if((ind.length() == 1) && !consensusUse->isChecked())
+    {
+        Tree *tree;
+        tree = generations[gen]->getIndividual(ind[0]);
+        tree->draw(scene, *sceneCenter, Style::defaultStep);
+        lastDrawnTree = tree;
+        return;
+    }
+
+    QList<Tree*> trees;
+    
+    /* id table */
+    QList<int> idTable;
+    int j = 0;
+    
     /* use reference tree */
     if(consensusUse->isChecked())
     {
-        QList<Tree*> trees;
         trees.append(consensusTree);
-        trees.append(generations[gen]->getIndividual(ind));
+        j++;
+    }
 
-        Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked());
-        lastDrawnTree = drawn;
-    }
-    else
+    /* append other trees */
+    for(int i = 0; i < ind.length(); i++)
     {
-        Tree *tree;
-        tree = generations[gen]->getIndividual(ind);
-        tree->draw(scene, *sceneCenter, Style::defaultStep);
-        lastDrawnTree = tree;
+        trees.append(generations[gen]->getIndividual(ind[i]));
+        trees[j]->setId(j);
+        idTable.append(ind[i]);
+        j++;
     }
+
+    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked());
+    lastDrawnTree = drawn;
 }
 
 void GPVis::reproductionFromTable()
@@ -495,8 +513,9 @@ void GPVis::showIndTable()
 
     tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
-
+    
     tableView->selectionModel()->disconnect(this);
+    tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(individualFromTable()));
 
@@ -514,6 +533,7 @@ void GPVis::showRepTable()
     tableView->resizeColumnToContents(0);
 
     tableView->selectionModel()->disconnect(this);
+    tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(reproductionFromTable()));
 

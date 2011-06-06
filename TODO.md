@@ -1,11 +1,13 @@
 TODO
 ----
-- Search space visualization 
+- Fitness space visualization 
 - Collision detection *done*
 - Reference box for edge colors
+- Add possibility to select whatever individuals on table view *done*
+- Fix font size inside nodes
 - Link parents to offspring to parents to offspring
 - Input file reading exceptions *done*
-- Fix memory usage
+- Fix memory usage *1/2 done*
 - Fix "item has already been added to this scene" problem on edges
 - Change CONSENSUS_DEPTH to a variable and add MAX_CONSENSUS_DEPTH flag
 - Application icon

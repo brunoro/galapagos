@@ -99,7 +99,7 @@ class GPVis : public QWidget
         void readGeneration();
         
         /* render stuff on canvas */
-        void renderIndividual(int gen, int individual);
+        void renderIndividual(int gen, QList<int> ind);
         void renderReproduction(int gen, QList<int> parent, int offspring);
 
         void turnEverythingOn();
