@@ -18,7 +18,7 @@ void center(QWidget *widget, int w, int h)
 }
 
 GPVis::GPVis(QWidget *parent)
-    : QWidget(parent), fileFile(NULL), fileStream(NULL), consensusDepthValue(CONSENSUS_INITIAL_DEPTH)
+    : QWidget(parent), fileFile(NULL), fileStream(NULL), consensusDepthValue(CONSENSUS_INITIAL_DEPTH), drawnTree(NULL)
 {
     int WIDTH = 1024;
     int HEIGHT = 800;
@@ -123,6 +123,94 @@ GPVis::GPVis(QWidget *parent)
     individualsHeader << "id" << "fitness" << "tree";
     reproductionsHeader = QStringList();
     reproductionsHeader << "fitness gain" << "offspring" << "parent" ;
+
+}
+
+GPVis::~GPVis(){
+    foreach(Generation* gen, generations){
+        delete gen; gen = NULL;
+    }
+
+    if(individuals){
+        delete individuals; individuals = NULL;
+    }
+    if(reproductions){
+        delete reproductions; reproductions = NULL;
+    }
+    if(consensusTree){
+        delete consensusTree; consensusTree = NULL;
+    }
+    if(fileOpen){
+        delete fileOpen;  fileOpen = NULL;
+    }
+    if(fileSelect){
+        delete fileSelect; fileSelect = NULL;
+    }
+    if(fileField){
+        delete fileField; fileField = NULL;
+    }
+    if(genLabel){
+        delete genLabel; genLabel = NULL;
+    }
+    if(genSlider){
+        delete genSlider; genSlider = NULL;
+    }
+    if(genSpin){
+        delete genSpin; genSpin = NULL;
+    }
+    if(viewInd){
+        delete viewInd; viewInd = NULL;
+    }
+    if(viewRep){
+        delete viewRep; viewRep = NULL;
+    }
+    if(consensusUse){
+        delete consensusUse; consensusUse = NULL;
+    }
+    if(collisionUse){
+        delete collisionUse; collisionUse = NULL;
+    }
+    if(consensusDepth){
+        delete consensusDepth; consensusDepth = NULL;
+    }
+    if(tableView){
+        delete tableView; tableView = NULL;
+    }
+    if(preview){
+        delete preview; preview = NULL;
+    } 
+    if(scene){
+        delete scene; scene = NULL;
+    } 
+    if(sceneCenter){
+        delete sceneCenter; sceneCenter = NULL;
+    }    
+    if(fileFile){
+        delete fileFile; fileFile = NULL;
+    }
+    if(fileStream){
+        delete fileStream; fileStream = NULL;
+    }    
+    if(viewLine){
+        delete viewLine; viewLine = NULL;
+    }
+    if(fileLine){
+        delete fileLine;  fileLine = NULL;
+    }
+    if(genLine){
+        delete genLine; genLine = NULL;
+    }
+    if(conLine){
+        delete conLine; conLine = NULL;
+    }
+ 
+    //last one because it contains some layouts inside that must be deleted before
+    if(grid){
+        delete grid;  grid = NULL;
+    }
+    if(drawnTree){
+        delete drawnTree; drawnTree = NULL;
+    }
 
 }
 
@@ -379,6 +467,7 @@ void GPVis::showGeneration(int gen)
             reproductions->setItem(i, 1, tree_id);
 
             reproductions->setItem(i, 2, new QStandardItem(parents));
+
         }
         /* set radios */
         viewRep->setEnabled(true);
@@ -400,6 +489,9 @@ void GPVis::showGeneration(int gen)
             break;
     }
     
+    actual = NULL;
+    delete actual;
+
     /* restore tableView 'state' */
     tableView->sortByColumn(sortedColumn, sortedOrder);
     tableView->selectRow(selectedRow);
@@ -439,7 +531,7 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
     }
 
     QList<Tree*> trees;
-    
+
     /* id table */
     QList<int> idTable;
     int j = 0;
@@ -461,6 +553,7 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
     }
 
     Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
+    //drawnTree = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
 }
 
 void GPVis::reproductionFromTable()
@@ -571,8 +664,3 @@ void GPVis::test()
     */
 }
 
-/*
- * para escrever o spin : consensusDepth->setValue()
- * para ler o spin : consensusDepth->value()
- * para setar o range dele : consensusDepth->setRange(mínimo, máximo)
-}*/

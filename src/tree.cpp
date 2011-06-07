@@ -21,12 +21,18 @@ Tree::Tree(int tree_id, float tree_fitness)
 Tree::~Tree()
 {
     delete root;
-    
+    root = NULL;
+
     while (!parents.isEmpty())
         delete parents.takeFirst();
 
     while (!offspring.isEmpty())
         delete offspring.takeFirst();
+
+    if(definition){
+        delete definition;
+        definition = NULL;
+    }
 }
 
 Node *Tree::parseTree(QStringList nodes, int pos, int id)
@@ -59,7 +65,7 @@ Node *Tree::parseTree(QStringList nodes, int pos, int id)
 }
 
 /* draw multiple trees */
-Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, int step, bool treatCollisions, int consensusDepth)
+Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*>& trees, QPointF coord, int step, bool treatCollisions, int consensusDepth)
 {
     canvas->clear();
 
@@ -136,6 +142,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*> trees, QPointF coord, 
         merged->getRoot()->updateEdges(canvas);
 
     Tree::drawRings(canvas, coord, MAX_DEPTH, step);
+    
     return merged;
 }
 

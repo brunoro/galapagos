@@ -16,19 +16,25 @@ Node::Node(NodeType nodetype, QString nodeinfo)
 
 Node::~Node()
 {
-    while (!sons.isEmpty())
-        delete sons.takeFirst();
-
+    foreach(Node* son, sons){
+        delete son;
+        son = NULL;
+    }
+    
     foreach(QList<Edge*> edge, edges)
     {
         foreach(Edge *ed, edge)
         {
             delete ed;
+            ed = NULL;
         }
     }
     
     delete text;
+    text = NULL;
+
     delete bound;
+    bound = NULL;
 }
 
 void Node::addSon(Node *son)
@@ -144,6 +150,9 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
 
                 /* mark as merged and do not merge this node again */
                 toRemove[j] = true; 
+            
+                old_i = NULL;
+                delete old_i;
             }
         }
     }

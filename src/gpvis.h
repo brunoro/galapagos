@@ -48,7 +48,7 @@ class GPVis : public QWidget
 
     public:
         GPVis(QWidget *parent = 0);
-        virtual ~GPVis(){}
+        virtual ~GPVis();
 
         int newTreeId();
         void addTree(Tree *tree);
@@ -108,6 +108,8 @@ class GPVis : public QWidget
 
         void turnEverythingOn();
         void turnEverythingOff();
+
+        Tree* drawnTree;
 
     private slots:
         /* show data */
