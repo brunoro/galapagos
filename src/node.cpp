@@ -143,16 +143,21 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
 
                 nodes[i]->setTreeId(nodes[j]->getTreeId());
                 nodes[i]->addTreeId(old_i->getTreeId());
-                foreach(Node *son, nodes[j]->getSons())
+                foreach(Node *son, nodes[j]->getSons()){
                     nodes[i]->addSon(son);
-                foreach(Node *son, old_i->getSons())
+                    son = NULL;
+                }
+                foreach(Node *son, old_i->getSons()){
                     nodes[i]->addSon(son);
+                    son = NULL;
+                }
 
                 /* mark as merged and do not merge this node again */
                 toRemove[j] = true; 
-            
+           
+                //TODO: we should delete the old_i...but now i am getting segfault here
+                //delete old_i;
                 old_i = NULL;
-                delete old_i;
             }
         }
     }
