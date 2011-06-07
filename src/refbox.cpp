@@ -34,6 +34,7 @@ void Refbox::draw(QGraphicsScene *canvas)
     pointPos += QPointF(Style::refboxPadding / 2, Style::refboxPadding);
 
     float maxTextLen = FLT_MIN;
+    float boxHeight = 0;
     for(int i = 0; i < lines.length(); i++)
     {
         QGraphicsTextItem *text = new QGraphicsTextItem(labels[i]);
@@ -50,15 +51,13 @@ void Refbox::draw(QGraphicsScene *canvas)
         elements->addToGroup(text);
         elements->addToGroup(line);
 
-        if(i != lines.length() - 1)
-            pointPos += QPointF(0, bbox.height() * 1.5);
-        else
-            pointPos += QPointF(0, bbox.height());
+        pointPos += QPointF(0, bbox.height() * 1.5);
+        boxHeight += bbox.height() * 1.5;
     }
 
     bound->setRect(pos.x(), pos.y(), 
-                   pointPos.x() + maxTextLen + Style::refboxLineLen + Style::refboxPadding * 3,
-                   pointPos.y() + Style::refboxPadding);
+                   maxTextLen + Style::refboxLineLen + Style::refboxPadding * 3,
+                   boxHeight + Style::refboxPadding);
     elements->setFlags(QGraphicsItem::ItemIsMovable);
     canvas->addItem(elements);
 }
