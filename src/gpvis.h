@@ -2,6 +2,7 @@
 #define GPVIS_H
 
 #include "tree.h"
+#include "refbox.h"
 #include "generation.h"
 
 #include <cfloat>
@@ -63,6 +64,7 @@ class GPVis : public QWidget
         QStringList individualsHeader,
                     reproductionsHeader;
         Tree *consensusTree;
+        Refbox *ref;
 
         /* ui */
         QGridLayout *grid;
@@ -125,7 +127,6 @@ class GPVis : public QWidget
         /* file reading */
         void openFileDialog();
         void readLogFile();
-
 };
 
 #endif
