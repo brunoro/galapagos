@@ -5,14 +5,14 @@ Refbox::Refbox(QList<QColor> box_lines, QStringList box_labels)
     lines = box_lines;
     labels = box_labels;
     pos = QPointF(0, 0);
+    elements = new QGraphicsItemGroup();
 }
 
 void Refbox::setPos(QPointF npos)
 {
     QPointF diff = npos - pos;
     pos = npos;
-    for(int i = 0; i < elements.length(); i++)
-        elements[i]->setPos(elements[i]->pos() + diff);
+    elements->setPos(elements->pos() + diff);
 }
 
 void Refbox::draw(QGraphicsScene *canvas)
@@ -22,8 +22,7 @@ void Refbox::draw(QGraphicsScene *canvas)
     QGraphicsRectItem *bound = new QGraphicsRectItem(pointPos.x(), pointPos.y(), 2, 2);
     bound->setBrush(QBrush(Style::refboxBGColor));
     bound->setPen(Style::refboxBorder);
-    canvas->addItem(bound);
-    elements.append(bound);
+    elements->addToGroup(bound);
 
     pointPos += QPointF(Style::refboxPadding / 2, Style::refboxPadding);
 
@@ -41,10 +40,8 @@ void Refbox::draw(QGraphicsScene *canvas)
         if(bbox.width() > maxTextLen)
             maxTextLen = bbox.width();
 
-        canvas->addItem(text);
-        elements.append(text);
-        canvas->addItem(line);
-        elements.append(line);
+        elements->addToGroup(text);
+        elements->addToGroup(line);
 
         if(i != lines.length() - 1)
             pointPos += QPointF(0, bbox.height() * 1.5);
@@ -55,4 +52,6 @@ void Refbox::draw(QGraphicsScene *canvas)
     bound->setRect(pos.x(), pos.y(), 
                    pointPos.x() + maxTextLen + Style::refboxLineLen + Style::refboxPadding * 3,
                    pointPos.y() + Style::refboxPadding);
+    elements->setFlags(QGraphicsItem::ItemIsMovable);
+    canvas->addItem(elements);
 }

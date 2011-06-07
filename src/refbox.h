@@ -1,4 +1,4 @@
-#include <QGraphicsItem>
+#include <QGraphicsItemGroup>
 #include <QGraphicsLineItem>
 #include <QGraphicsTextItem>
 #include <QGraphicsScene>
@@ -21,5 +21,5 @@ class Refbox
         QPointF pos;
         QList<QColor> lines;
         QStringList labels;
-        QList<QGraphicsItem*> elements;
+        QGraphicsItemGroup *elements;
 };
