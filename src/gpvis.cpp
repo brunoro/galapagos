@@ -20,19 +20,21 @@ void center(QWidget *widget, int w, int h)
 GPVis::GPVis(QWidget *parent)
     : QWidget(parent), fileFile(NULL), fileStream(NULL), consensusDepthValue(CONSENSUS_INITIAL_DEPTH), drawnTree(NULL)
 {
+    /* setting scene up */
     int WIDTH = 1024;
     int HEIGHT = 800;
     int SCENE_WIDTH = 600;
-    int SCENE_HEIGTH = 500;
+    int SCENE_HEIGHT = 500;
 
     resize(WIDTH, HEIGHT);
     //center(this, WIDTH, HEIGHT);
 
-    scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGTH, this);
-    sceneCenter = new QPointF(SCENE_WIDTH/2, SCENE_HEIGTH/2);
+    scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGHT, this);
+    sceneCenter = new QPointF(SCENE_WIDTH/2, SCENE_HEIGHT/2);
     preview = new QGraphicsView(scene);
     preview->setRenderHint(QPainter::Antialiasing);
 
+    /* UI */
     fileField = new QLineEdit(this);
     fileSelect = new QPushButton("Select file", this);
     fileOpen = new QPushButton("Read file", this);
@@ -96,6 +98,11 @@ GPVis::GPVis(QWidget *parent)
  
     setLayout(grid);
     
+    /* initial point for refBox */
+    refPos = QPointF(0, 0);
+    ref = NULL;
+
+    /* connections */
     connect(fileSelect, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(fileOpen, SIGNAL(clicked()), this, SLOT(readLogFile()));
 
@@ -116,21 +123,20 @@ GPVis::GPVis(QWidget *parent)
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
 
+    /* models */
     individuals = new QStandardItemModel(this);
     reproductions = new QStandardItemModel(this);
     
+    /* table headers*/
     individualsHeader = QStringList();
     individualsHeader << "id" << "fitness" << "tree";
     reproductionsHeader = QStringList();
     reproductionsHeader << "fitness gain" << "offspring" << "parent" ;
 
-    
-    /*
-     * Setting tool tips
-    */
+    /* Setting tool tips */
     //TODO: change this labels
-    genSlider->setToolTip("Choose generation.");
-    genSpin->setToolTip("Navigate through the generations.");
+    genSlider->setToolTip("Choose generation");
+    genSpin->setToolTip("Navigate through the generations");
 
     viewInd->setToolTip("View individuals from the chosen generation.");  
     viewRep->setToolTip("View reproduction from the chosen generation.");  
@@ -533,6 +539,8 @@ void GPVis::redrawTree()
 
 void GPVis::individualFromTable()
 {
+    if(ref != NULL) refPos = ref->getPos();
+
     QList<QModelIndex> rowIndexes = tableView->selectionModel()->selectedRows();
     QList<int> inds;
     foreach(QModelIndex rowIndex, rowIndexes)
@@ -577,13 +585,16 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
 
     Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
     
-    ref = new Refbox(Style::getColorPalette(ind.length()), refBoxLabel);
+    // TODO: delete old refbox
+    ref = new Refbox(Style::getColorPalette(ind.length()), refBoxLabel, refPos);
     ref->draw(scene);
     //drawnTree = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
 }
 
 void GPVis::reproductionFromTable()
 {
+    if(ref != NULL) refPos = ref->getPos();
+
     int row = tableView->selectionModel()->currentIndex().row();
     int off_num = tableView->model()->index(row, 1).data().toInt();
     QStringList str_par_num = tableView->model()->index(row, 2).data().toString().split(QRegExp("\\s+"));
@@ -597,7 +608,6 @@ void GPVis::reproductionFromTable()
 
 void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
 {
-    //TODO: render tooltip
     QList<Tree*> trees;
 
     /* id table */
@@ -637,7 +647,8 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
 
     Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
 
-    ref = new Refbox(Style::getColorPalette(parents.length() + 1), refBoxLabel);
+    // TODO: delete old ref
+    ref = new Refbox(Style::getColorPalette(parents.length() + 1), refBoxLabel, refPos);
     ref->draw(scene);
 }
 

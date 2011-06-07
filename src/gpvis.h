@@ -65,6 +65,7 @@ class GPVis : public QWidget
                     reproductionsHeader;
         Tree *consensusTree;
         Refbox *ref;
+        QPointF refPos;
 
         /* ui */
         QGridLayout *grid;
@@ -108,6 +109,7 @@ class GPVis : public QWidget
         void renderIndividual(int gen, QList<int> ind);
         void renderReproduction(int gen, QList<int> parent, int offspring);
 
+        /* functions to turn UI on and off */
         void turnEverythingOn();
         void turnEverythingOff();
 

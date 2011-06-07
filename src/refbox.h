@@ -12,9 +12,11 @@
 
 class Refbox
 {
+    //TODO: implement destructor
     public:
-        Refbox(QList<QColor> box_lines, QStringList box_labels);
+        Refbox(QList<QColor> box_lines, QStringList box_labels, QPointF pos);
         void setPos(QPointF npos);
+        QPointF getPos();
         void draw(QGraphicsScene *canvas);
 
     private:

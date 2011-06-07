@@ -1,24 +1,31 @@
 #include "refbox.h"
 
-Refbox::Refbox(QList<QColor> box_lines, QStringList box_labels)
+Refbox::Refbox(QList<QColor> box_lines, QStringList box_labels, QPointF box_pos)
 {
     lines = box_lines;
     labels = box_labels;
-    pos = QPointF(0, 0);
-    elements = new QGraphicsItemGroup();
+    pos = box_pos;
+    elements = NULL;
 }
 
 void Refbox::setPos(QPointF npos)
 {
-    QPointF diff = npos - pos;
     pos = npos;
-    elements->setPos(elements->pos() + diff);
+}
+
+QPointF Refbox::getPos()
+{
+    if(elements != NULL)
+        return elements->scenePos();
+    else
+        return pos;
 }
 
 void Refbox::draw(QGraphicsScene *canvas)
 {
     QPointF pointPos = pos;
 
+    elements = new QGraphicsItemGroup();
     QGraphicsRectItem *bound = new QGraphicsRectItem(pointPos.x(), pointPos.y(), 2, 2);
     bound->setBrush(QBrush(Style::refboxBGColor));
     bound->setPen(Style::refboxBorder);
