@@ -124,6 +124,27 @@ GPVis::GPVis(QWidget *parent)
     reproductionsHeader = QStringList();
     reproductionsHeader << "fitness gain" << "offspring" << "parent" ;
 
+    
+    /*
+     * Setting tool tips
+    */
+    //TODO: change this labels
+    genSlider->setToolTip("Choose generation.");
+    genSpin->setToolTip("Navigate through the generations.");
+
+    viewInd->setToolTip("View individuals from the chosen generation.");  
+    viewRep->setToolTip("View reproduction from the chosen generation.");  
+
+    fileOpen->setToolTip("Read file chosen.");
+    fileSelect->setToolTip("Choose another file to analyse.");
+
+    collisionUse->setToolTip("Collision treatment could be used to improve individual visualization.");
+    consensusUse->setToolTip("Consensus is a good tool to compare individuals.");
+
+    consensusDepth->setToolTip("Maximum level to use consensus."); //TODO: no idea here!
+    
+    //TODO: should we delete this line?
+    tableView->setToolTip("Click to view individual.");
 }
 
 GPVis::~GPVis(){
