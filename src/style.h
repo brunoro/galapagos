@@ -6,6 +6,7 @@
 #include <QHash>
 #include <QList>
 #include <QSizeF>
+#include <QPen>
 
 namespace Style
 {
@@ -19,6 +20,9 @@ namespace Style
     const int defaultStep = 50;
     const int paletteS = 200,
               paletteV = 200;
+
+    const int refboxLineLen = 30;
+    const int refboxPadding = 10;
 
     /* colors */
     /*const QColor nodeBrushColor[4] = { QColor("dodgerblue"),
@@ -34,6 +38,9 @@ namespace Style
     const QColor nodePenColor(0, 0, 0, 0);
     const QColor nodeTextColor("grey");
     const QColor edgeColor("royalblue");
+    const QColor refboxBGColor("gainsboro");
+
+    const QPen refboxBorder(Qt::NoPen);
 
     QList<QColor> getColorPalette(int len);
     QList<Qt::PenStyle> getPenStylePalette(int len);

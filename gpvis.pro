@@ -18,6 +18,7 @@ HEADERS += src/def.h \
     src/tree.h \
     src/generation.h \
     src/reproduction.h \
+    src/refbox.h \
     src/style.h
 SOURCES += src/def.cpp \
     src/edge.cpp \
@@ -25,6 +26,7 @@ SOURCES += src/def.cpp \
     src/main.cpp \
     src/node.cpp \
     src/tree.cpp \
+    src/refbox.cpp \
     src/style.cpp \
     src/generation.cpp \
     src/reproduction.cpp

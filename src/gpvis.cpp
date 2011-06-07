@@ -564,9 +564,11 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
         j++;
     }
 
+    QStringList refBoxLabel;
     /* append other trees */
     for(int i = 0; i < ind.length(); i++)
     {
+        refBoxLabel.append("individual (gen " + QString::number(gen) + ", id " + QString::number(ind[i]) + ")");
         trees.append(generations[gen]->getIndividual(ind[i]));
         trees[j]->setId(j);
         idTable.append(ind[i]);
@@ -574,6 +576,9 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
     }
 
     Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
+    
+    ref = new Refbox(Style::getColorPalette(ind.length()), refBoxLabel);
+    ref->draw(scene);
     //drawnTree = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
 }
 
@@ -606,7 +611,9 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
         j++;
     }
 
+    QStringList refBoxLabel;
     /* offspring */
+    refBoxLabel.append("offspring (gen " + QString::number(gen + 1) + ", id " + QString::number(offspring) + ")");
     trees.append(generations[gen + 1]->getIndividual(offspring));
     trees[j]->setId(j);
     QVector<int> pair(2);
@@ -618,6 +625,7 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     /* parents */
     for(int i = 0; i < parents.length(); i++)
     {
+        refBoxLabel.append("parent (gen " + QString::number(gen) + ", id " + QString::number(parents[i]) + ")");
         trees.append(generations[gen]->getIndividual(parents[i]));
         trees[j]->setId(j);
         QVector<int> pair(2);
@@ -628,6 +636,9 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     }
 
     Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
+
+    ref = new Refbox(Style::getColorPalette(parents.length() + 1), refBoxLabel);
+    ref->draw(scene);
 }
 
 void GPVis::showIndTable()
