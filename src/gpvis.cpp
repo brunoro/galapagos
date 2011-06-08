@@ -539,7 +539,7 @@ void GPVis::redrawTree()
 
 void GPVis::individualFromTable()
 {
-    if(ref != NULL) refPos = ref->getPos();
+    if(ref != NULL) refPos += ref->getPos();
 
     QList<QModelIndex> rowIndexes = tableView->selectionModel()->selectedRows();
     QList<int> inds;
@@ -593,7 +593,7 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
 
 void GPVis::reproductionFromTable()
 {
-    if(ref != NULL) refPos = ref->getPos();
+    if(ref != NULL) refPos += ref->getPos();
 
     int row = tableView->selectionModel()->currentIndex().row();
     int off_num = tableView->model()->index(row, 1).data().toInt();

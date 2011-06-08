@@ -13,7 +13,7 @@ void Edge::draw(QGraphicsScene *canvas)
 {
     update();
     line->setPen(style);
-    line->setZValue(0);
+    line->setZValue(Style::edgeZValue);
     canvas->addItem(line);
 }
 
@@ -28,7 +28,7 @@ void Edge::drawOffset(QGraphicsScene *canvas, float offset)
     line->setLine(translated);
 
     line->setPen(style);
-    line->setZValue(0);
+    line->setZValue(Style::edgeZValue);
     canvas->addItem(line);
 }
 

@@ -1,11 +1,13 @@
 #ifndef STYLE_H
 #define STYLE_H
 
+#include <QApplication>
 #include <QColor>
 #include <QDebug>
 #include <QHash>
 #include <QList>
 #include <QSizeF>
+#include <QPalette>
 #include <QPen>
 
 namespace Style
@@ -24,11 +26,16 @@ namespace Style
     const int refboxLineLen = 30;
     const int refboxPadding = 10;
 
+    const int nodeZValue = 1;
+    const int edgeZValue = 0;
+    const int refboxZValue = 2;
     /* colors */
     /*const QColor nodeBrushColor[4] = { QColor("dodgerblue"),
                                        QColor("lightseagreen"),
                                        QColor("orange"),
                                        QColor("darkgrey") };*/
+
+    const QPalette systemColors = QApplication::palette();
 
     const QColor defaultNodeColor = QColor("gainsboro");
     const QColor nodeBrushColor[4] = { QColor(defaultNodeColor),
@@ -38,10 +45,11 @@ namespace Style
     const QColor nodePenColor(0, 0, 0, 0);
     const QColor nodeTextColor("grey");
     const QColor edgeColor("royalblue");
-    const QColor refboxBGColor("gainsboro");
 
+    const QBrush refboxBGColor = QColor("lightgrey");
     const QPen refboxBorder(Qt::NoPen);
 
+    /* palette functions */
     QList<QColor> getColorPalette(int len);
     QList<Qt::PenStyle> getPenStylePalette(int len);
 }

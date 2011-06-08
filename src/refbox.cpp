@@ -16,7 +16,7 @@ void Refbox::setPos(QPointF npos)
 QPointF Refbox::getPos()
 {
     if(elements != NULL)
-        return elements->scenePos();
+        return elements->pos();
     else
         return pos;
 }
@@ -27,11 +27,11 @@ void Refbox::draw(QGraphicsScene *canvas)
 
     elements = new QGraphicsItemGroup();
     QGraphicsRectItem *bound = new QGraphicsRectItem(pointPos.x(), pointPos.y(), 2, 2);
-    bound->setBrush(QBrush(Style::refboxBGColor));
+    bound->setBrush(Style::refboxBGColor);
     bound->setPen(Style::refboxBorder);
     elements->addToGroup(bound);
 
-    pointPos += QPointF(Style::refboxPadding / 2, Style::refboxPadding);
+    pointPos += QPointF(Style::refboxPadding, Style::refboxPadding);
 
     float maxTextLen = FLT_MIN;
     float boxHeight = 0;
@@ -44,7 +44,7 @@ void Refbox::draw(QGraphicsScene *canvas)
                                                         pointPos.x() + Style::refboxLineLen,
                                                         pointPos.y() + bbox.height()/2);
         line->setPen(QPen(lines[i], Style::edgeWeight));
-        text->setPos(QPointF(pointPos.x() + Style::refboxLineLen + 5, pointPos.y()));
+        text->setPos(QPointF(pointPos.x() + Style::refboxLineLen + Style::refboxPadding, pointPos.y()));
         if(bbox.width() > maxTextLen)
             maxTextLen = bbox.width();
 
@@ -52,12 +52,16 @@ void Refbox::draw(QGraphicsScene *canvas)
         elements->addToGroup(line);
 
         pointPos += QPointF(0, bbox.height() * 1.5);
-        boxHeight += bbox.height() * 1.5;
+        if(i < lines.length() - 1)
+            boxHeight += bbox.height() * 1.5;
+        else
+            boxHeight += bbox.height();
     }
 
     bound->setRect(pos.x(), pos.y(), 
                    maxTextLen + Style::refboxLineLen + Style::refboxPadding * 3,
-                   boxHeight + Style::refboxPadding);
+                   boxHeight + Style::refboxPadding * 2);
     elements->setFlags(QGraphicsItem::ItemIsMovable);
+    elements->setZValue(Style::refboxZValue);
     canvas->addItem(elements);
 }

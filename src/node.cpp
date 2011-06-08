@@ -283,11 +283,11 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
 
     ((QGraphicsEllipseItem*)bound)->setRect(QRectF(bbox.topLeft(), size));
     bound->setPos(coord - QPointF(size.width()/2, size.height()/2));
-    bound->setZValue(1);
+    bound->setZValue(Style::nodeZValue);
     canvas->addItem(bound);
 
     text->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));
-    text->setZValue(1);
+    text->setZValue(Style::nodeZValue);
     canvas->addItem(text);
 
     pos = coord;
