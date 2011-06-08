@@ -58,7 +58,7 @@ class Tree
         QList<Tree*> parents;
         QList<Tree*> offspring;
 
-        Node *parseTree(QStringList nodes, int pos, int id);
+        Node *parseTree(QStringList nodes, int *pos, int id);
 };
 
 #endif

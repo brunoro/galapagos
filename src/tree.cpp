@@ -8,8 +8,9 @@ Tree::Tree(QString line, int tree_id, float tree_fitness)
     fitness = tree_fitness;
     QStringList str_list = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
     //qDebug() << "Tree::Tree" << str_list;
-    root = parseTree(str_list.replaceInStrings(QRegExp("\\s+"), " "), 0, id);
-
+    int *pos = new int;
+    *pos = 0;
+    root = parseTree(str_list.replaceInStrings(QRegExp("\\s+"), " "), pos, id);
 }
 
 Tree::Tree(int tree_id, float tree_fitness)
@@ -35,19 +36,22 @@ Tree::~Tree()
     }
 }
 
-Node *Tree::parseTree(QStringList nodes, int pos, int id)
+Node *Tree::parseTree(QStringList nodes, int *pos, int id)
 {
     Node *turn = NULL;
 
-    if (definition->isOp(nodes[pos]))
+    int degree = definition->isOp(nodes[*pos]);
+    if (degree)
     {
-        turn = new Node(OP, nodes[pos]);
-        turn->addSon(parseTree(nodes, ++pos, id));
-        turn->addSon(parseTree(nodes, ++pos, id));
+        turn = new Node(OP, nodes[*pos]);
+        *pos += 1;
+        for(int i = 0; i < degree; i++)
+            turn->addSon(parseTree(nodes, pos, id));
     }
-    else if (definition->isTerm(nodes[pos]))
+    else if (definition->isTerm(nodes[*pos]))
     {
-        turn = new Node(TERM, nodes[pos]);
+        turn = new Node(TERM, nodes[*pos]);
+        *pos += 1;
     }
 
     /* TODO: raise exception */

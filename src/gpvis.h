@@ -41,7 +41,7 @@
 #define CONSENSUS_MIN_DEPTH 2
 #define CONSENSUS_MAX_DEPTH 4
 
-enum Views{INDIVIDUALS, REPRODUCTIONS};
+enum Views{INDIVIDUALS, REPRODUCTIONS, FITNESS};
 
 class GPVis : public QWidget
 {
