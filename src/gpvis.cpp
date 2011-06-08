@@ -52,7 +52,7 @@ GPVis::GPVis(QWidget *parent)
     viewRep = new QRadioButton("Reproductions", this);
     viewRep->setEnabled(false);
 
-    consensusUse = new QCheckBox("Use consensus", this);
+    consensusUse = new QCheckBox("Use consensus with depth: ", this);
     consensusUse->setChecked(true);
     collisionUse = new QCheckBox("Treat collisions ", this);
     collisionUse->setChecked(true);

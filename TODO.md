@@ -1,9 +1,7 @@
 TODO 
 ====
-- Reference box for edge colors
 - Fitness space visualization 
 - Link parents to offspring to parents to offspring to parents to parents to offspring to parents
-- Tooltips on gui elements 
 - Fix font size inside nodes
 - Keep multiple selection upon generation changes
 - Fix collision detection without consensus tree
@@ -11,6 +9,8 @@ TODO
 - Fix "item has already been added to this scene" problem on edges
 - Application icon
 - New name ?
+- Tooltips on gui elements __DONE__
+- Reference box for edge colors __DONE__
 - Add possibility to select multiple individuals on table view __DONE__
 - Collision detection __DONE__
 - Connect checkboxes directly to drawing __DONE__
