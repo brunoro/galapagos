@@ -16,6 +16,7 @@ HEADERS += src/def.h \
     src/gpvis.h \
     src/node.h \
     src/tree.h \
+    src/fitnessview.h \
     src/generation.h \
     src/reproduction.h \
     src/refbox.h \
@@ -26,6 +27,7 @@ SOURCES += src/def.cpp \
     src/main.cpp \
     src/node.cpp \
     src/tree.cpp \
+    src/fitnessview.cpp \
     src/refbox.cpp \
     src/style.cpp \
     src/generation.cpp \

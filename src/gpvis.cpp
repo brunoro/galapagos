@@ -51,6 +51,8 @@ GPVis::GPVis(QWidget *parent)
     viewInd->setEnabled(false);
     viewRep = new QRadioButton("Reproductions", this);
     viewRep->setEnabled(false);
+    viewFit = new QRadioButton("Fitness space", this);
+    viewFit->setEnabled(false);
 
     consensusUse = new QCheckBox("Use consensus with depth: ", this);
     consensusUse->setChecked(true);
@@ -86,6 +88,11 @@ GPVis::GPVis(QWidget *parent)
     viewLine = new QBoxLayout(QBoxLayout::LeftToRight);
     viewLine->addWidget(viewInd);
     viewLine->addWidget(viewRep);   
+    viewLine->addWidget(viewFit);
+
+    fitnessScene = new Histogram(0, 0, WIDTH - SCENE_WIDTH, HEIGHT - SCENE_HEIGHT, this);
+    fitnessView = new QGraphicsView(fitnessScene);
+    fitnessView->setRenderHint(QPainter::Antialiasing);
 
     grid = new QGridLayout(this);
     grid->addWidget(preview, 0, 0, -1, 1);
@@ -95,6 +102,8 @@ GPVis::GPVis(QWidget *parent)
     grid->addLayout(genLine, 3, 1);
     grid->addLayout(viewLine, 4, 1);
     grid->addWidget(tableView, 5, 1);
+    grid->addWidget(fitnessView, 5, 2);
+    fitnessView->hide();
  
     setLayout(grid);
     
@@ -122,6 +131,7 @@ GPVis::GPVis(QWidget *parent)
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
+    connect(viewFit, SIGNAL(toggled(bool)), this, SLOT(showFitView()));
 
     /* models */
     individuals = new QStandardItemModel(this);
@@ -134,23 +144,19 @@ GPVis::GPVis(QWidget *parent)
     reproductionsHeader << "fitness gain" << "offspring" << "parent" ;
 
     /* Setting tool tips */
-    //TODO: change this labels
     genSlider->setToolTip("Choose generation");
     genSpin->setToolTip("Navigate through the generations");
 
-    viewInd->setToolTip("View individuals from the chosen generation.");  
-    viewRep->setToolTip("View reproduction from the chosen generation.");  
+    viewInd->setToolTip("View individuals from the chosen generation");
+    viewRep->setToolTip("View reproduction from the chosen generation");  
 
-    fileOpen->setToolTip("Read file chosen.");
-    fileSelect->setToolTip("Choose another file to analyse.");
+    fileOpen->setToolTip("Read chosen file");
+    fileSelect->setToolTip("Choose another file to analyse");
 
-    collisionUse->setToolTip("Collision treatment could be used to improve individual visualization.");
-    consensusUse->setToolTip("Consensus is a good tool to compare individuals.");
+    collisionUse->setToolTip("Collision treatment could be used to improve individual visualization");
+    consensusUse->setToolTip("Consensus is a good tool to compare individuals");
 
-    consensusDepth->setToolTip("Maximum level to use consensus."); //TODO: no idea here!
-    
-    //TODO: should we delete this line?
-    tableView->setToolTip("Click to view individual.");
+    consensusDepth->setToolTip("Maximum level to use consensus");
 }
 
 GPVis::~GPVis(){
@@ -403,6 +409,7 @@ void GPVis::turnEverythingOn(){
     tableView->setSortingEnabled(true);
     viewInd->setEnabled(true);
     viewRep->setEnabled(true);
+    viewFit->setEnabled(true);
     consensusUse->setEnabled(true);
     collisionUse->setEnabled(true);
     consensusDepth->setEnabled(true);
@@ -416,6 +423,7 @@ void GPVis::turnEverythingOff(){
     tableView->setSortingEnabled(false);
     viewInd->setEnabled(false);
     viewRep->setEnabled(false);
+    viewFit->setEnabled(false);
     consensusUse->setEnabled(false);
     collisionUse->setEnabled(false);
     consensusDepth->setEnabled(false);
@@ -439,6 +447,10 @@ void GPVis::showGeneration(int gen)
 
     //qDebug() << "GPVis::showGeneration " << gen;
     Generation *actual = generations[gen];
+
+    /* new fitness space */
+    fitnessScene->setData(actual);
+    fitnessScene->draw();
 
     /* population */
     individuals->setHorizontalHeaderLabels(individualsHeader);
@@ -514,6 +526,9 @@ void GPVis::showGeneration(int gen)
         case REPRODUCTIONS:
             showRepTable();
             break;
+        case FITNESS:
+            showFitView();
+            break;
     }
     
     actual = NULL;
@@ -533,6 +548,8 @@ void GPVis::redrawTree()
             break;
         case REPRODUCTIONS:
             reproductionFromTable();
+            break;
+        case FITNESS:
             break;
     }
 }
@@ -665,6 +682,9 @@ void GPVis::showIndTable()
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(individualFromTable()));
 
+    tableView->show();
+    fitnessView->hide();
+
     genSlider->setMaximum(generations.length() - 1);
     genSpin->setMaximum(generations.length() - 1);
 }
@@ -683,8 +703,18 @@ void GPVis::showRepTable()
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(reproductionFromTable()));
 
+    tableView->show();
+    fitnessView->hide();
+
     genSlider->setMaximum(generations.length() - 2);
     genSpin->setMaximum(generations.length() - 2);
+}
+
+void GPVis::showFitView()
+{
+    selectedView = FITNESS;
+    tableView->hide();
+    fitnessView->show();
 }
 
 void GPVis::openFileDialog()

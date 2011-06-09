@@ -4,6 +4,7 @@
 #include "tree.h"
 #include "refbox.h"
 #include "generation.h"
+#include "fitnessview.h"
 
 #include <cfloat>
 
@@ -82,7 +83,8 @@ class GPVis : public QWidget
         
         QBoxLayout *viewLine;
         QRadioButton *viewInd,
-                     *viewRep;
+                     *viewRep,
+                     *viewFit;
 
         QBoxLayout *conLine;
         QCheckBox *consensusUse;
@@ -90,6 +92,9 @@ class GPVis : public QWidget
         QSpinBox *consensusDepth;
 
         QTableView *tableView;
+
+        QGraphicsView *fitnessView;
+        Histogram *fitnessScene;
 
         QGraphicsView *preview;
         QGraphicsScene *scene;
@@ -125,6 +130,7 @@ class GPVis : public QWidget
         /* change tableView */
         void showIndTable();
         void showRepTable();
+        void showFitView();
 
         /* file reading */
         void openFileDialog();

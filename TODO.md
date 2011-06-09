@@ -2,13 +2,13 @@ TODO
 ====
 - Fitness space visualization 
 - Link parents to offspring to parents to offspring to parents to parents to offspring to parents
-- Fix font size inside nodes
 - Keep multiple selection upon generation changes
 - Fix collision detection without consensus tree
-- Fix memory usage __1/2 DONE__
 - Fix "item has already been added to this scene" problem on edges
 - Application icon
 - New name ?
+- Fix memory usage __1/2 DONE__
+- Fix font size inside nodes __DONE__
 - Tooltips on gui elements __DONE__
 - Reference box for edge colors __DONE__
 - Add possibility to select multiple individuals on table view __DONE__

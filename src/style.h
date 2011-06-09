@@ -16,7 +16,7 @@ namespace Style
     const float pi = 3.14159265;
 
     /* sizes and distances */
-    const QSizeF nodeSize = QSizeF(45, 45);
+    const QSizeF nodeSize = QSizeF(40, 40);
     const int edgeDistance = 5;
     const int edgeWeight = 2;
     const int defaultStep = 50;
