@@ -1,12 +1,15 @@
 #include "node.h"
 
-Node::Node(NodeType nodetype, QString nodeinfo)
+Node::Node(NodeType nodetype, QString nodeinfo): tamToEllipse(4)
 {
     type = nodetype;
     info = nodeinfo;
 
     bound = new QGraphicsEllipseItem();
-    text = new QGraphicsSimpleTextItem(info);
+    if(nodeinfo.size()<=tamToEllipse)
+        text = new QGraphicsSimpleTextItem(info);
+    else
+        text = new QGraphicsSimpleTextItem(nodeinfo.replace(tamToEllipse, nodeinfo.size()-tamToEllipse,".."));
 
     ((QGraphicsEllipseItem*)bound)->setBrush(Qt::white); // TODO: change this
 
@@ -284,6 +287,8 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
     ((QGraphicsEllipseItem*)bound)->setRect(QRectF(bbox.topLeft(), size));
     bound->setPos(coord - QPointF(size.width()/2, size.height()/2));
     bound->setZValue(Style::nodeZValue);
+    if(info.size() > tamToEllipse)
+        bound->setToolTip(info);
     canvas->addItem(bound);
 
     text->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));

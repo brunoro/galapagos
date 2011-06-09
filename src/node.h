@@ -102,6 +102,7 @@ class Node
         QPointF pos;
         QGraphicsItem *text;
         QGraphicsItem *bound;
+        int tamToEllipse;
 };
 
 #endif
