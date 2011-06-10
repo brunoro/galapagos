@@ -668,6 +668,14 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     ref->draw(scene);
 }
 
+void GPVis::fitnessFromHistogram(QList<int> ids)
+{
+    if(ref != NULL) refPos += ref->getPos();
+
+    scene->clear();
+    renderIndividual(genSpin->value(), ids);
+}
+
 void GPVis::showIndTable()
 {
     selectedView = INDIVIDUALS;
@@ -716,6 +724,12 @@ void GPVis::showRepTable()
 void GPVis::showFitView()
 {
     selectedView = FITNESS;
+
+    tableView->selectionModel()->disconnect(this);
+    tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(fitnessScene, SIGNAL(clickedBar(QList<int>)),
+            this, SLOT(fitnessFromHistogram(QList<int>)));
+
     tableView->hide();
     fitnessView->show();
     grid->addWidget(fitnessView, 5, 1);

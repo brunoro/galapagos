@@ -87,10 +87,11 @@ void Histogram::draw()
 void Histogram::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     QGraphicsItem *item = mouseGrabberItem();
+    qDebug() << "clicked!" << item;
     if(item != NULL)
     {
         QList<int> ids = ((HistogramBar*)item)->getIds();
-        emit changedSelection(ids);
+        emit clickedBar(ids);
     }
 }
 

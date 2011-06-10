@@ -33,7 +33,7 @@ class Histogram: public QGraphicsScene
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     signals:
-        void changedSelection(QList<int> ids);
+        void clickedBar(QList<int> ids);
 };
 
 class HistogramBar: public QGraphicsRectItem
