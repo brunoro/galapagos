@@ -1,12 +1,17 @@
 TODO 
 ====
-- Fitness space visualization 
+- Make a proper normalization on histogram data
+- Draw labels on histogram axis
+- Get system colors to make styles
+- Put a button to hide and reset refbox
+- Change radio boxes to tabs
+- Application icon
 - Link parents to offspring to parents to offspring to parents to parents to offspring to parents
 - Keep multiple selection upon generation changes
 - Fix collision detection without consensus tree
 - Fix "item has already been added to this scene" problem on edges
-- Application icon
 - New name ?
+- Fitness space visualization __2/3 DONE__
 - Fix memory usage __1/2 DONE__
 - Fix font size inside nodes __DONE__
 - Tooltips on gui elements __DONE__
