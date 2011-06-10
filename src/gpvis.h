@@ -39,6 +39,7 @@
 
 #define DEFAULT_ROW 0
 #define DEFAULT_GENERATION 0
+#define DEFAULT_SLICE 0
 #define CONSENSUS_INITIAL_DEPTH 3
 #define CONSENSUS_MIN_DEPTH 2
 #define CONSENSUS_MAX_DEPTH 4
@@ -96,6 +97,7 @@ class GPVis : public QWidget
 
         QGraphicsView *fitnessView;
         Histogram *fitnessScene;
+        int fitnessSelectedSlice;
 
         QGraphicsView *preview;
         QGraphicsScene *scene;

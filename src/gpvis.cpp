@@ -94,6 +94,7 @@ GPVis::GPVis(QWidget *parent)
                                        Style::histogramHeight + 2 * Style::histogramPadding, this);
     fitnessView = new QGraphicsView(fitnessScene);
     fitnessView->setRenderHint(QPainter::Antialiasing);
+    fitnessSelectedSlice = DEFAULT_SLICE;
 
     grid = new QGridLayout(this);
     grid->addWidget(preview, 0, 0, -1, 1);
@@ -440,6 +441,9 @@ void GPVis::showGeneration(int gen)
     int sortedColumn = tableView->horizontalHeader()->sortIndicatorSection();
     Qt::SortOrder sortedOrder = tableView->horizontalHeader()->sortIndicatorOrder();
 
+    /* save histogram */
+    fitnessSelectedSlice = fitnessScene->getSelectedSlice();
+
     /* cleanup last viewed */
     individuals->clear();
     reproductions->clear();
@@ -527,6 +531,8 @@ void GPVis::showGeneration(int gen)
             break;
         case FITNESS:
             showFitView();
+            fitnessScene->selectSlice(fitnessSelectedSlice);
+            fitnessFromHistogram(fitnessScene->getSlice(fitnessSelectedSlice));
             break;
     }
     
@@ -549,7 +555,7 @@ void GPVis::redrawTree()
             reproductionFromTable();
             break;
         case FITNESS:
-            fitnessFromHistogram(fitnessScene->getLastClicked());
+            fitnessFromHistogram(fitnessScene->getSlice(fitnessSelectedSlice));
             break;
     }
 }
@@ -675,8 +681,11 @@ void GPVis::fitnessFromHistogram(QList<int> ids)
 {
     if(ref != NULL) refPos += ref->getPos();
 
+    fitnessSelectedSlice = fitnessScene->getSelectedSlice();
+    // TODO: decide whether clear canvas or not
     scene->clear();
-    renderIndividual(genSpin->value(), ids);
+    if(ids.length() > 0)
+        renderIndividual(genSpin->value(), ids);
 }
 
 void GPVis::showIndTable()
@@ -687,6 +696,7 @@ void GPVis::showIndTable()
     tableView->resizeColumnToContents(0);
     tableView->resizeColumnToContents(1);
     
+    fitnessScene->disconnect(this);
     tableView->selectionModel()->disconnect(this);
     tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
@@ -710,6 +720,7 @@ void GPVis::showRepTable()
     tableView->resizeColumnToContents(2);
     tableView->resizeColumnToContents(0);
 
+    fitnessScene->disconnect(this);
     tableView->selectionModel()->disconnect(this);
     tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),

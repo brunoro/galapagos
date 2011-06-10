@@ -18,6 +18,22 @@ struct idfit
 
 bool fitnessLessThan(const idfit &a, const idfit &b);
 
+class HistogramBar: public QGraphicsRectItem
+{
+    public:
+        HistogramBar(qreal x, qreal y, qreal width, qreal height, QList<int> nids, int nnum);
+        void select();
+        void deselect();
+        QList<int> getIds();
+        int getNum();
+    private:
+        int num;
+        QList<int> ids;
+    protected:
+        void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
+
+};
+
 class Histogram: public QGraphicsScene
 {
     Q_OBJECT
@@ -27,25 +43,16 @@ class Histogram: public QGraphicsScene
         void setSize(int size);
         void setData(Generation *gen);
         void draw();
-        QList<int> getLastClicked();
+        QList<int> getSlice(int slice);
+        void selectSlice(int slice);
+        int getSelectedSlice();
     private:
         int size;
         Generation *data;
-        QList<int> lastClicked;
+        QList<HistogramBar*> bars;
+        int selectedSlice;
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     signals:
         void clickedBar(QList<int> ids);
-};
-
-class HistogramBar: public QGraphicsRectItem
-{
-    public:
-        HistogramBar(qreal x, qreal y, qreal width, qreal height, QList<int> nids);
-        QList<int> getIds();
-    private:
-        QList<int> ids;
-    protected:
-        void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
-
 };

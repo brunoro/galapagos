@@ -54,6 +54,7 @@ namespace Style
     const QPen refboxBorder(Qt::NoPen);
 
     const QBrush histogramBarBrush = QColor("gainsboro");
+    const QBrush histogramSelectedBarBrush = QColor("royalblue");
     const QPen histogramBarPen(Qt::NoPen);
     const QPen histogramAxisColor(QColor("grey"));
 

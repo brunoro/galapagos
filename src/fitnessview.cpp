@@ -57,20 +57,19 @@ void Histogram::draw()
     }
 
     /* draw bars */
+    bars.clear();
     for(int i = 0; i < size; i++)
     {
-        HistogramBar *bar_i = new HistogramBar(Style::histogramPadding,
-                                               (Style::histogramHeight / size) * (size - i - 1),
-                                               Style::histogramWidth * buckets[i].length() / pairs.length(),
-                                               Style::histogramHeight / size, 
-                                               buckets[i]);
-        bar_i->setBrush(Style::histogramBarBrush);
-        bar_i->setPen(Style::histogramBarPen);
+        bars.append(new HistogramBar(Style::histogramPadding,
+                                     Style::histogramHeight/size * (size - i - 1),
+                                     Style::histogramWidth * buckets[i].length() / pairs.length(),
+                                     Style::histogramHeight / size,
+                                     buckets[i], i));
         if(buckets[i].length() <= 1)
-            bar_i->setToolTip(QString::number(buckets[i].length()) + " individual");
+            bars[i]->setToolTip(QString::number(buckets[i].length()) + " individual");
         else
-            bar_i->setToolTip(QString::number(buckets[i].length()) + " individuals");
-        addItem(bar_i);
+            bars[i]->setToolTip(QString::number(buckets[i].length()) + " individuals");
+        addItem(bars[i]);
     }
 
     /* draw axis */
@@ -92,26 +91,64 @@ void Histogram::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     if(item != NULL)
     {
         ids = ((HistogramBar*)item)->getIds();
+        selectedSlice = ((HistogramBar*)item)->getNum();
+
+        foreach(HistogramBar *bar, bars)
+            bar->deselect();
+        bars[selectedSlice]->select();
+
         emit clickedBar(ids);
     }
-    lastClicked = ids;
 }
 
-QList<int> Histogram::getLastClicked()
+void Histogram::selectSlice(int slice)
 {
-    return lastClicked;
+    if(slice >= size)
+        return;
+    selectedSlice = slice;
+    foreach(HistogramBar *bar, bars)
+        bar->deselect();
+    bars[slice]->select();
+}
+
+QList<int> Histogram::getSlice(int slice)
+{
+    return bars[slice]->getIds();
+}
+
+int Histogram::getSelectedSlice()
+{
+    return selectedSlice;
 }
 
 /* Histogram bar class */
-HistogramBar::HistogramBar(qreal x, qreal y, qreal width, qreal height, QList<int> nids)
+HistogramBar::HistogramBar(qreal x, qreal y, qreal width, qreal height, QList<int> nids, int nnum)
     :QGraphicsRectItem(x, y, width, height)
 {
+    num = nnum;
     ids = nids;
+    setBrush(Style::histogramBarBrush);
+    setPen(Style::histogramBarPen);
+}
+
+void HistogramBar::select()
+{
+    setBrush(Style::histogramSelectedBarBrush);
+}
+
+void HistogramBar::deselect()
+{
+    setBrush(Style::histogramBarBrush);
 }
 
 QList<int> HistogramBar::getIds()
 {
     return ids;
+}
+
+int HistogramBar::getNum()
+{
+    return num;
 }
 
 void HistogramBar::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
