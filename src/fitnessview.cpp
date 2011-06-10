@@ -86,13 +86,20 @@ void Histogram::draw()
 
 void Histogram::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
+    QGraphicsScene::mousePressEvent(mouseEvent);
     QGraphicsItem *item = mouseGrabberItem();
-    qDebug() << "clicked!" << item;
+    QList<int> ids;
     if(item != NULL)
     {
-        QList<int> ids = ((HistogramBar*)item)->getIds();
+        ids = ((HistogramBar*)item)->getIds();
         emit clickedBar(ids);
     }
+    lastClicked = ids;
+}
+
+QList<int> Histogram::getLastClicked()
+{
+    return lastClicked;
 }
 
 /* Histogram bar class */
@@ -105,4 +112,9 @@ HistogramBar::HistogramBar(qreal x, qreal y, qreal width, qreal height, QList<in
 QList<int> HistogramBar::getIds()
 {
     return ids;
+}
+
+void HistogramBar::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
+{
+    mouseEvent->setAccepted(true);
 }

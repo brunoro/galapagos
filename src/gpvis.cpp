@@ -549,6 +549,7 @@ void GPVis::redrawTree()
             reproductionFromTable();
             break;
         case FITNESS:
+            fitnessFromHistogram(fitnessScene->getLastClicked());
             break;
     }
 }
@@ -561,6 +562,7 @@ void GPVis::individualFromTable()
     QList<int> inds;
     foreach(QModelIndex rowIndex, rowIndexes)
         inds.append(tableView->model()->index(rowIndex.row(), 0).data().toInt());
+
     scene->clear();
     renderIndividual(genSpin->value(), inds);
 }
@@ -618,6 +620,7 @@ void GPVis::reproductionFromTable()
     // TODO: fix last element of str_par_num getting 0
     for(int i = 0; i < str_par_num.length() - 1; i++)
         par_num << str_par_num[i].toInt();
+
     scene->clear();
     renderReproduction(genSpin->value(), par_num, off_num);
 }

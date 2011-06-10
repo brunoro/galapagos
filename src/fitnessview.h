@@ -27,9 +27,11 @@ class Histogram: public QGraphicsScene
         void setSize(int size);
         void setData(Generation *gen);
         void draw();
+        QList<int> getLastClicked();
     private:
         int size;
         Generation *data;
+        QList<int> lastClicked;
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     signals:
@@ -43,5 +45,7 @@ class HistogramBar: public QGraphicsRectItem
         QList<int> getIds();
     private:
         QList<int> ids;
+    protected:
+        void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
 };
