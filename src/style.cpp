@@ -3,14 +3,17 @@
 QList<QColor> Style::getColorPalette(int len)
 {
     QList<QColor> palette;
-    int h = 0,
-        s = paletteS,
-        v = paletteV;
-    float ratio = 360/len;
-    for(int i = 0; i < len; i++)
+    if(len > 0)
     {
-        palette.append(QColor::fromHsv(h, s, v));
-        h += ratio;
+        int h = 0,
+            s = paletteS,
+            v = paletteV;
+        float ratio = 360/len;
+        for(int i = 0; i < len; i++)
+        {
+            palette.append(QColor::fromHsv(h, s, v));
+            h += ratio;
+        }
     }
     return palette;
 }

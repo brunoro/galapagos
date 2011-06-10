@@ -97,7 +97,7 @@ void Histogram::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             bar->deselect();
         bars[selectedSlice]->select();
 
-        emit clickedBar(ids);
+        emit clickedBar();
     }
 }
 

@@ -54,5 +54,5 @@ class Histogram: public QGraphicsScene
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     signals:
-        void clickedBar(QList<int> ids);
+        void clickedBar();
 };

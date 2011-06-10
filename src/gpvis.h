@@ -128,7 +128,7 @@ class GPVis : public QWidget
         void showGeneration(int gen);
         void individualFromTable();
         void reproductionFromTable();
-        void fitnessFromHistogram(QList<int> ids);
+        void fitnessFromHistogram();
         void redrawTree();
 
         /* change tableView */

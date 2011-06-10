@@ -123,7 +123,7 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*>& trees, QPointF coord,
 
     QList<Node*> sons = Node::recursiveDrawMany(canvas, nodes, coord, coord, step, startLevel, 2 * pi, pi/2, styles, consensusDepth);
 
-    if(!needRoot)
+    if(!needRoot && (sons.length() > 0) )
         merged->setRoot(sons[0]);
     foreach(Node *son, sons)
     {

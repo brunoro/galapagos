@@ -532,7 +532,7 @@ void GPVis::showGeneration(int gen)
         case FITNESS:
             showFitView();
             fitnessScene->selectSlice(fitnessSelectedSlice);
-            fitnessFromHistogram(fitnessScene->getSlice(fitnessSelectedSlice));
+            fitnessFromHistogram();
             break;
     }
     
@@ -555,7 +555,7 @@ void GPVis::redrawTree()
             reproductionFromTable();
             break;
         case FITNESS:
-            fitnessFromHistogram(fitnessScene->getSlice(fitnessSelectedSlice));
+            fitnessFromHistogram();
             break;
     }
 }
@@ -677,15 +677,14 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     ref->draw(scene);
 }
 
-void GPVis::fitnessFromHistogram(QList<int> ids)
+void GPVis::fitnessFromHistogram()
 {
     if(ref != NULL) refPos += ref->getPos();
 
     fitnessSelectedSlice = fitnessScene->getSelectedSlice();
-    // TODO: decide whether clear canvas or not
     scene->clear();
-    if(ids.length() > 0)
-        renderIndividual(genSpin->value(), ids);
+    QList<int> slice = fitnessScene->getSlice(fitnessSelectedSlice);
+    renderIndividual(genSpin->value(), slice);
 }
 
 void GPVis::showIndTable()
@@ -741,8 +740,8 @@ void GPVis::showFitView()
 
     tableView->selectionModel()->disconnect(this);
     tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    connect(fitnessScene, SIGNAL(clickedBar(QList<int>)),
-            this, SLOT(fitnessFromHistogram(QList<int>)));
+    connect(fitnessScene, SIGNAL(clickedBar()),
+            this, SLOT(fitnessFromHistogram()));
 
     tableView->hide();
     fitnessView->show();

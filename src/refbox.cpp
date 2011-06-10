@@ -55,11 +55,24 @@ void Refbox::draw(QGraphicsScene *canvas)
         if(i < lines.length() - 1)
             boxHeight += bbox.height() * 1.5;
         else
+        {
             boxHeight += bbox.height();
+            maxTextLen += Style::refboxPadding;
+        }
+    }
+
+    if(lines.length() == 0)
+    {
+        QGraphicsTextItem *text = new QGraphicsTextItem("No trees drawn");
+        QRectF bbox = text->boundingRect();
+        text->setPos(QPointF(pointPos.x(), pointPos.y()));
+        maxTextLen = bbox.width() - Style::refboxLineLen;
+        boxHeight = bbox.height();
+        elements->addToGroup(text);
     }
 
     bound->setRect(pos.x(), pos.y(), 
-                   maxTextLen + Style::refboxLineLen + Style::refboxPadding * 3,
+                   maxTextLen + Style::refboxLineLen + Style::refboxPadding * 2,
                    boxHeight + Style::refboxPadding * 2);
     elements->setFlags(QGraphicsItem::ItemIsMovable);
     elements->setZValue(Style::refboxZValue);
