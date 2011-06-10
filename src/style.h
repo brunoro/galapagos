@@ -26,6 +26,10 @@ namespace Style
     const int refboxLineLen = 30;
     const int refboxPadding = 10;
 
+    const int histogramPadding = 20;
+    const int histogramWidth = 250;
+    const int histogramHeight = 400;
+
     const int nodeZValue = 1;
     const int edgeZValue = 0;
     const int refboxZValue = 2;
@@ -48,6 +52,10 @@ namespace Style
 
     const QBrush refboxBGColor = QColor("lightgrey");
     const QPen refboxBorder(Qt::NoPen);
+
+    const QBrush histogramBarBrush = QColor("gainsboro");
+    const QPen histogramBarPen(Qt::NoPen);
+    const QPen histogramAxisColor(QColor("grey"));
 
     /* palette functions */
     QList<QColor> getColorPalette(int len);

@@ -3,10 +3,20 @@
 #include <QList>
 #include <QObject>
 
+#include <cmath>
+
 #include "style.h"
 #include "generation.h"
 
 #define DEFAULT_HISTOGRAM_SIZE 10
+
+struct idfit
+{
+    int id;
+    float fit;
+};
+
+bool fitnessLessThan(const idfit &a, const idfit &b);
 
 class Histogram: public QGraphicsScene
 {

@@ -2,6 +2,7 @@
 #define GPVIS_H
 
 #include "tree.h"
+#include "style.h"
 #include "refbox.h"
 #include "generation.h"
 #include "fitnessview.h"

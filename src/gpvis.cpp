@@ -90,7 +90,8 @@ GPVis::GPVis(QWidget *parent)
     viewLine->addWidget(viewRep);   
     viewLine->addWidget(viewFit);
 
-    fitnessScene = new Histogram(0, 0, WIDTH - SCENE_WIDTH, HEIGHT - SCENE_HEIGHT, this);
+    fitnessScene = new Histogram(0, 0, Style::histogramWidth + 2 * Style::histogramPadding, 
+                                       Style::histogramHeight + 2 * Style::histogramPadding, this);
     fitnessView = new QGraphicsView(fitnessScene);
     fitnessView->setRenderHint(QPainter::Antialiasing);
 
@@ -102,8 +103,6 @@ GPVis::GPVis(QWidget *parent)
     grid->addLayout(genLine, 3, 1);
     grid->addLayout(viewLine, 4, 1);
     grid->addWidget(tableView, 5, 1);
-    grid->addWidget(fitnessView, 5, 2);
-    fitnessView->hide();
  
     setLayout(grid);
     
@@ -682,8 +681,10 @@ void GPVis::showIndTable()
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(individualFromTable()));
 
-    tableView->show();
     fitnessView->hide();
+    tableView->show();
+    grid->removeWidget(fitnessView);
+    grid->addWidget(tableView, 5, 1);
 
     genSlider->setMaximum(generations.length() - 1);
     genSpin->setMaximum(generations.length() - 1);
@@ -703,8 +704,10 @@ void GPVis::showRepTable()
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(reproductionFromTable()));
 
-    tableView->show();
     fitnessView->hide();
+    tableView->show();
+    grid->removeWidget(fitnessView);
+    grid->addWidget(tableView, 5, 1);
 
     genSlider->setMaximum(generations.length() - 2);
     genSpin->setMaximum(generations.length() - 2);
@@ -715,6 +718,7 @@ void GPVis::showFitView()
     selectedView = FITNESS;
     tableView->hide();
     fitnessView->show();
+    grid->addWidget(fitnessView, 5, 1);
 }
 
 void GPVis::openFileDialog()
