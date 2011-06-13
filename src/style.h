@@ -26,9 +26,11 @@ namespace Style
     const int refboxLineLen = 30;
     const int refboxPadding = 10;
 
-    const int histogramPadding = 20;
+    const int histogramPadding = 0;
     const int histogramWidth = 250;
     const int histogramHeight = 400;
+
+    const int textDistance = 6;
 
     const int nodeZValue = 1;
     const int edgeZValue = 0;

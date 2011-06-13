@@ -31,7 +31,6 @@ class HistogramBar: public QGraphicsRectItem
         QList<int> ids;
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
-
 };
 
 class Histogram: public QGraphicsScene

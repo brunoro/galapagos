@@ -40,9 +40,12 @@ void Histogram::draw()
     
     /* normalize and divide data 
      * normalizing = (fit - smallest) / biggest */
-    // TODO: get full fitness space to normalize
-    float smallest = pairs.first().fit,
-          bigger = pairs.last().fit;
+    /* assuming minimum fitness 0 and maximum 100
+     * TODO: move this to definition file */
+    //float smallest = pairs.first().fit,
+    //      bigger = pairs.last().fit;
+    float smallest = 0.0,
+          bigger = 100.0;
     
     float bucketSize = 1.0 / size;
     QVector< QList<int> > buckets(size);
@@ -52,7 +55,8 @@ void Histogram::draw()
     {
         pairs[i].fit = ((pairs[i].fit - smallest) / bigger);
         if(pairs[i].fit > bucketCount * bucketSize)
-            bucketCount++;
+            if(bucketCount < size - 1)
+                bucketCount++;
         buckets[bucketCount].append(pairs[i].id);
     }
 
@@ -65,6 +69,13 @@ void Histogram::draw()
                                      Style::histogramWidth * buckets[i].length() / pairs.length(),
                                      Style::histogramHeight / size,
                                      buckets[i], i));
+        /* labels on fitness axis */
+        QGraphicsSimpleTextItem *ylabel = new QGraphicsSimpleTextItem(QString::number(i * bigger / size));
+        ylabel->setPos(Style::histogramPadding - ylabel->boundingRect().width() - Style::textDistance,
+                       Style::histogramHeight / size * (size - i) - ylabel->boundingRect().height() / 2);
+        addItem(ylabel);
+
+        /* tooltips on bars */
         if(buckets[i].length() <= 1)
             bars[i]->setToolTip(QString::number(buckets[i].length()) + " individual");
         else
@@ -75,12 +86,30 @@ void Histogram::draw()
     /* draw axis */
     QGraphicsLineItem *xaxis = new QGraphicsLineItem(Style::histogramPadding, Style::histogramHeight,
                                                      Style::histogramWidth, Style::histogramHeight);
-    QGraphicsLineItem *yaxis = new QGraphicsLineItem(Style::histogramPadding, Style::histogramPadding,
+    QGraphicsLineItem *yaxis = new QGraphicsLineItem(Style::histogramPadding, 0,
                                                      Style::histogramPadding, Style::histogramHeight);
+
     xaxis->setPen(Style::histogramAxisColor);
     yaxis->setPen(Style::histogramAxisColor);
     addItem(xaxis);
     addItem(yaxis);
+    
+    /* max y label */
+    QGraphicsSimpleTextItem *ylabel = new QGraphicsSimpleTextItem(QString::number(bigger));
+    ylabel->setPos(Style::histogramPadding - ylabel->boundingRect().width() - Style::textDistance,
+                   - ylabel->boundingRect().height() / 2 );
+    addItem(ylabel);
+
+    /* x labels */
+    //TODO: adjust based on numbers that appear */
+    int numXLabels = 5;
+    for(int i = 0; i < numXLabels + 1; i++)
+    {
+        QGraphicsSimpleTextItem *xlabel = new QGraphicsSimpleTextItem(QString::number(i * pairs.length() / numXLabels));
+        xlabel->setPos(Style::histogramPadding + i * Style::histogramWidth / numXLabels - xlabel->boundingRect().width() / 2,
+                       Style::histogramHeight + Style::textDistance);
+        addItem(xlabel);
+    }
 }
 
 void Histogram::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
