@@ -57,8 +57,9 @@ namespace Style
 
     const QBrush histogramBarBrush = QColor("gainsboro");
     const QBrush histogramSelectedBarBrush = QColor("royalblue");
-    const QPen histogramBarPen(Qt::NoPen);
-    const QPen histogramAxisColor(QColor("grey"));
+    //const QPen histogramBarPen(Qt::NoPen);
+    const QPen histogramBarPen(QColor("darkgrey"), 0.5);
+    const QPen histogramAxisColor(QColor("black"), 0.5);
 
     /* palette functions */
     QList<QColor> getColorPalette(int len);

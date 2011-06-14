@@ -4,11 +4,13 @@
 #include <QObject>
 
 #include <cmath>
+#include <climits>
 
 #include "style.h"
 #include "generation.h"
 
 #define DEFAULT_HISTOGRAM_SIZE 10
+#define NO_SLICE INT_MAX
 
 struct idfit
 {

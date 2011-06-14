@@ -6,6 +6,7 @@ Histogram::Histogram(qreal x, qreal y, qreal width, qreal height, QWidget *paren
 {
     size = DEFAULT_HISTOGRAM_SIZE;
     data = NULL;
+    selectedSlice = NO_SLICE;
 }
 
 void Histogram::setSize(int nsize)
@@ -65,7 +66,7 @@ void Histogram::draw()
     for(int i = 0; i < size; i++)
     {
         bars.append(new HistogramBar(Style::histogramPadding,
-                                     Style::histogramHeight/size * (size - i - 1),
+                                     Style::histogramHeight/size * i,
                                      Style::histogramWidth * buckets[i].length() / pairs.length(),
                                      Style::histogramHeight / size,
                                      buckets[i], i));
@@ -142,7 +143,10 @@ void Histogram::selectSlice(int slice)
 
 QList<int> Histogram::getSlice(int slice)
 {
-    return bars[slice]->getIds();
+    if(slice < size)
+        return bars[slice]->getIds();
+    else
+        return QList<int>();
 }
 
 int Histogram::getSelectedSlice()
