@@ -78,7 +78,8 @@ GPVis::GPVis(QWidget *parent)
 
     conLine = new QBoxLayout(QBoxLayout::LeftToRight);
     conLine->addWidget(consensusUse);
-    //conLine->addWidget(consensusDepth);
+    conLine->addWidget(consensusDepth);
+    consensusDepth->hide();
     conLine->addWidget(collisionUse);
 
     genLine = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -154,7 +155,7 @@ GPVis::GPVis(QWidget *parent)
     fileSelect->setToolTip("Choose another file to analyse");
 
     collisionUse->setToolTip("Collision treatment could be used to improve individual visualization");
-    consensusUse->setToolTip("Consensus is a good tool to compare individuals");
+    consensusUse->setToolTip("Using non-terminals with fixed positions on space can help comparing individuals");
 
     consensusDepth->setToolTip("Maximum level to use consensus");
 }
@@ -487,11 +488,13 @@ void GPVis::showGeneration(int gen)
         for(int i = 0; i < actual->reproductions.length(); i++)
         {
             QString parents;
+            QList<int> parents_sorted = actual->reproductions[i].parents;
+            qSort(parents_sorted);
             float par_fit,
                   max_fit = FLT_MIN;
             for(int j = 0; j < actual->reproductions[i].parents.length(); j++)
             {
-                parents += QString::number(actual->reproductions[i].parents[j]) + " ";
+                parents += QString::number(parents_sorted[j]) + " ";
                 par_fit = actual->population[actual->reproductions[i].parents[j]].fit;
                 if(par_fit > max_fit)
                     max_fit = par_fit;
@@ -508,7 +511,10 @@ void GPVis::showGeneration(int gen)
             tree_id->setData(QString::number(actual->reproductions[i].offspring), Qt::DisplayRole);
             reproductions->setItem(i, 1, tree_id);
 
-            reproductions->setItem(i, 2, new QStandardItem(parents));
+            QStandardItem *tree_parents= new QStandardItem();
+            tree_parents->setData(parents_sorted[0], Qt::UserRole);
+            tree_parents->setData(parents, Qt::DisplayRole);
+            reproductions->setItem(i, 2, tree_parents);;
 
         }
         /* set radios */

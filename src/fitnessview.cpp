@@ -100,6 +100,12 @@ void Histogram::draw()
     ylabel->setPos(Style::histogramPadding - ylabel->boundingRect().width() - Style::textDistance,
                    - ylabel->boundingRect().height() / 2 );
     addItem(ylabel);
+    
+    /* y axis title */
+    QGraphicsSimpleTextItem *ytitle = new QGraphicsSimpleTextItem("Fitness");
+    ytitle->setPos(Style::histogramPadding - ytitle->boundingRect().width() - Style::textDistance,
+                   - 2 * ytitle->boundingRect().height());
+    addItem(ytitle);
 
     /* x labels */
     //TODO: adjust based on numbers that appear */
@@ -111,6 +117,12 @@ void Histogram::draw()
                        Style::histogramHeight + Style::textDistance);
         addItem(xlabel);
     }
+
+    /* x title */
+    QGraphicsSimpleTextItem *xtitle = new QGraphicsSimpleTextItem("Number of individuals");
+    xtitle->setPos(Style::histogramPadding + Style::histogramWidth - xtitle->boundingRect().width(),
+                   Style::histogramHeight + Style::textDistance + xtitle->boundingRect().height());
+    addItem(xtitle);
 }
 
 void Histogram::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
