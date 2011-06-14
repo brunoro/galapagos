@@ -76,5 +76,6 @@ void Refbox::draw(QGraphicsScene *canvas)
                    boxHeight + Style::refboxPadding * 2);
     elements->setFlags(QGraphicsItem::ItemIsMovable);
     elements->setZValue(Style::refboxZValue);
+    elements->setToolTip("Click to drag");
     canvas->addItem(elements);
 }

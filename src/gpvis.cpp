@@ -47,16 +47,16 @@ GPVis::GPVis(QWidget *parent)
     genSlider->setOrientation(Qt::Horizontal);
     genSlider->setTickPosition(QSlider::TicksBelow);
 
-    viewInd = new QRadioButton("Individuals", this);
+    viewInd = new QRadioButton("Population", this);
     viewInd->setEnabled(false);
-    viewRep = new QRadioButton("Reproductions", this);
+    viewRep = new QRadioButton("Breeding", this);
     viewRep->setEnabled(false);
     viewFit = new QRadioButton("Fitness space", this);
     viewFit->setEnabled(false);
 
-    consensusUse = new QCheckBox("Use consensus with depth: ", this);
+    consensusUse = new QCheckBox("Non-terminals with fixed positions", this);
     consensusUse->setChecked(true);
-    collisionUse = new QCheckBox("Treat collisions ", this);
+    collisionUse = new QCheckBox("Address collisions", this);
     collisionUse->setChecked(true);
     consensusDepth = new QSpinBox(this);
     consensusDepth->setValue(CONSENSUS_INITIAL_DEPTH);
@@ -78,7 +78,7 @@ GPVis::GPVis(QWidget *parent)
 
     conLine = new QBoxLayout(QBoxLayout::LeftToRight);
     conLine->addWidget(consensusUse);
-    conLine->addWidget(consensusDepth);
+    //conLine->addWidget(consensusDepth);
     conLine->addWidget(collisionUse);
 
     genLine = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -139,9 +139,9 @@ GPVis::GPVis(QWidget *parent)
     
     /* table headers*/
     individualsHeader = QStringList();
-    individualsHeader << "id" << "fitness" << "tree";
+    individualsHeader << "Id" << "Fitness" << "Tree";
     reproductionsHeader = QStringList();
-    reproductionsHeader << "fitness gain" << "offspring" << "parent" ;
+    reproductionsHeader << "Fitness gain" << "Offspring" << "Parent" ;
 
     /* Setting tool tips */
     genSlider->setToolTip("Choose generation");
@@ -600,7 +600,7 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
     /* append other trees */
     for(int i = 0; i < ind.length(); i++)
     {
-        refBoxLabel.append("individual (gen " + QString::number(gen) + ", id " + QString::number(ind[i]) + ")");
+        refBoxLabel.append("Individual (gen " + QString::number(gen) + ", id " + QString::number(ind[i]) + ")");
         trees.append(generations[gen]->getIndividual(ind[i]));
         trees[j]->setId(j);
         idTable.append(ind[i]);
@@ -648,7 +648,7 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
 
     QStringList refBoxLabel;
     /* offspring */
-    refBoxLabel.append("offspring (gen " + QString::number(gen + 1) + ", id " + QString::number(offspring) + ")");
+    refBoxLabel.append("Offspring (gen " + QString::number(gen + 1) + ", id " + QString::number(offspring) + ")");
     trees.append(generations[gen + 1]->getIndividual(offspring));
     trees[j]->setId(j);
     QVector<int> pair(2);
@@ -660,7 +660,7 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     /* parents */
     for(int i = 0; i < parents.length(); i++)
     {
-        refBoxLabel.append("parent (gen " + QString::number(gen) + ", id " + QString::number(parents[i]) + ")");
+        refBoxLabel.append("Parent (gen " + QString::number(gen) + ", id " + QString::number(parents[i]) + ")");
         trees.append(generations[gen]->getIndividual(parents[i]));
         trees[j]->setId(j);
         QVector<int> pair(2);
@@ -758,8 +758,8 @@ void GPVis::openFileDialog()
 
 void GPVis::test()
 {
-    fileField->setText("test/palotti_big.log");
-    QTest::mouseClick(fileOpen, Qt::LeftButton);
+    //fileField->setText("test/palotti_big.log");
+    //QTest::mouseClick(fileOpen, Qt::LeftButton);
 
     //Tree::test(scene);
     /*
