@@ -73,7 +73,7 @@ void Histogram::draw()
         /* labels on fitness axis */
         QGraphicsSimpleTextItem *ylabel = new QGraphicsSimpleTextItem(QString::number(i * bigger / size));
         ylabel->setPos(Style::histogramPadding - ylabel->boundingRect().width() - Style::textDistance,
-                       Style::histogramHeight / size * (size - i) - ylabel->boundingRect().height() / 2);
+                       Style::histogramHeight / size * i - ylabel->boundingRect().height() / 2);
         addItem(ylabel);
 
         /* tooltips on bars */
