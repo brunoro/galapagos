@@ -759,7 +759,7 @@ void GPVis::openFileDialog()
     fileField->setText(QFileDialog::getOpenFileName(this,
                                                     tr("Open log"),
                                                     QDir::currentPath(),
-                                                    tr("All files (*.*)")));
+                                                    tr("All files (*)")));
 }
 
 void GPVis::test()
