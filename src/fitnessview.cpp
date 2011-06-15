@@ -55,9 +55,10 @@ void Histogram::draw()
     for(int i = 0; i < pairs.length(); i++)
     {
         pairs[i].fit = ((pairs[i].fit - smallest) / bigger);
-        if(pairs[i].fit > bucketCount * bucketSize)
+        while( ! (pairs[i].fit > bucketCount * bucketSize && pairs[i].fit < (bucketCount+1) * bucketSize))
             if(bucketCount < size - 1)
                 bucketCount++;
+        
         buckets[bucketCount].append(pairs[i].id);
     }
 
