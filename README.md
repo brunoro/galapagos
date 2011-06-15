@@ -1,4 +1,4 @@
-Galapagos is a simple, cross-plataform tool to visualize evolution in genetic programming.
+Galapagos is a simple, cross-plataform tool to visualize evolution in genetic programming, developed on [DCC/UFMG](http://dcc.ufmg.br), Brazil. It's free software released under GPLv3 license.
 
 Input file
 ----------
