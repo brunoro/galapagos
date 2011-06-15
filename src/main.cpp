@@ -6,7 +6,7 @@ int main(int argc, char **argv)
 
     GPVis window;
 
-    window.setWindowTitle("GPVis");
+    window.setWindowTitle("Galapagos");
     window.show();
 
     window.test();

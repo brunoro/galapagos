@@ -471,7 +471,10 @@ void GPVis::showGeneration(int gen)
         tree_fit->setData(QString::number(actual->population[i].fit), Qt::DisplayRole);
         individuals->setItem(i, 1, tree_fit);
 
-        individuals->setItem(i, 2, new QStandardItem(actual->population[i].str));
+        QStandardItem *tree_str = new QStandardItem();
+        tree_str->setData(actual->population[i].str, Qt::UserRole);
+        tree_str->setData(actual->population[i].str, Qt::DisplayRole);
+        individuals->setItem(i, 2, tree_str);
     }
 
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
