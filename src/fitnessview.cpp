@@ -67,12 +67,12 @@ void Histogram::draw()
     for(int i = 0; i < size; i++)
     {
         bars.append(new HistogramBar(Style::histogramPadding,
-                                     Style::histogramHeight/size * i,
+                                     Style::histogramHeight/size * (size - i - 1),
                                      Style::histogramWidth * buckets[i].length() / pairs.length(),
                                      Style::histogramHeight / size,
                                      buckets[i], i));
         /* labels on fitness axis */
-        QGraphicsSimpleTextItem *ylabel = new QGraphicsSimpleTextItem(QString::number(i * bigger / size));
+        QGraphicsSimpleTextItem *ylabel = new QGraphicsSimpleTextItem(QString::number((size - i) * bigger / size));
         ylabel->setPos(Style::histogramPadding - ylabel->boundingRect().width() - Style::textDistance,
                        Style::histogramHeight / size * i - ylabel->boundingRect().height() / 2);
         addItem(ylabel);
