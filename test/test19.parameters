@@ -1,0 +1,9 @@
+PopulationSize                  = 100
+NumberOfGenerations             = 100
+CrossoverProbability            = 90
+CreationProbability             = 5
+MaximumDepthForCreation         = 3
+MaximumDepthForCrossover        = 6
+TournamentSize                  = 5
+SwapMutationProbability         = 15
+AddBestToNewPopulation          = 1
