@@ -1,7 +1,7 @@
 definition:
 	ops: (+,2) (-,2) (*,2) (%,2) (Log,2) (Pow,2) 
 	terms: MaxTFICF MaxTFIDF MaxCTD MaxOR MaxCC MaxGSS MaxCHI MaxAM MaxIG MaxDom sumDF DF sumTF TF TFIDF TFICF IDF CTD OR CE CC GSS CHI IG DOM GINI P' P AM
-generation 0:
+generation:
 	ind:	93.2329	* MaxOR AM
 	ind:	29.6386	+ + MaxAM MaxCC - IG GSS
 	ind:	34.1767	- DF CC
@@ -98,7 +98,7 @@ generation 0:
 	rep: 9 11  -> 47
 	rep: 9 11  -> 48
 	rep: 12 32  -> 49
-generation 1:
+generation:
 	ind:	73.6345	Log CC MaxCC
 	ind:	29.7791	* CE MaxCTD
 	ind:	73.6345	- Log TFICF TFICF Pow IG TFICF
@@ -197,7 +197,7 @@ generation 1:
 	rep: 28 10  -> 47
 	rep: 28 10  -> 48
 	rep: 19 40  -> 49
-generation 2:
+generation:
 	ind:	36.3855	% MaxOR MaxTFICF
 	ind:	61.004	Pow GSS sumTF
 	ind:	43.1928	- TF IDF
@@ -295,7 +295,7 @@ generation 2:
 	rep: 1 8  -> 47
 	rep: 2 41  -> 48
 	rep: 2 41  -> 49
-generation 3:
+generation:
 	ind:	49.1165	% MaxIG CHI
 	ind:	73.6345	- - Log TFICF TFICF - MaxCHI DF Pow GINI DOM
 	ind:	73.6345	Log CC MaxCC
@@ -393,7 +393,7 @@ generation 3:
 	rep: 24 30  -> 47
 	rep: 24 30  -> 48
 	rep: 31 4  -> 49
-generation 4:
+generation:
 	ind:	83.7149	% * MaxAM MaxAM - CTD MaxTFICF
 	ind:	73.6345	Log TFICF TFICF
 	ind:	73.6345	- - MaxCTD sumDF Pow IG TFICF
@@ -490,7 +490,7 @@ generation 4:
 	rep: 7 37  -> 47
 	rep: 7 37  -> 48
 	rep: 14 36  -> 49
-generation 5:
+generation:
 	ind:	73.6345	Log MaxCHI DOM
 	ind:	73.6345	Log MaxCTD sumDF
 	ind:	36.3855	% MaxOR MaxTFICF
@@ -585,7 +585,7 @@ generation 5:
 	rep: 24 13  -> 47
 	rep: 24 13  -> 48
 	rep: 26 34  -> 49
-generation 6:
+generation:
 	ind:	96.506	* OR CTD
 	ind:	29.7189	Pow MaxOR MaxTFICF
 	ind:	33.4538	- Pow Pow MaxOR P Log MaxAM MaxAM * MaxCHI TF
@@ -682,7 +682,7 @@ generation 6:
 	rep: 43 25  -> 47
 	rep: 43 25  -> 48
 	rep: 11 7  -> 49
-generation 7:
+generation:
 	ind:	33.7751	* MaxCHI TF
 	ind:	33.4538	- Pow * OR Pow MaxAM GSS Log MaxAM MaxAM * MaxCHI TF
 	ind:	51.1044	% MaxOR P
@@ -780,7 +780,7 @@ generation 7:
 	rep: 14 33  -> 47
 	rep: 21 27  -> 48
 	rep: 21 27  -> 49
-generation 8:
+generation:
 	ind:	29.6185	- Pow - MaxCTD DOM Log MaxIG MaxAM - MaxCTD sumDF
 	ind:	93.1325	% TFICF AM
 	ind:	51.1044	% MaxOR P
@@ -878,7 +878,7 @@ generation 8:
 	rep: 31 2  -> 47
 	rep: 19 17  -> 48
 	rep: 19 17  -> 49
-generation 9:
+generation:
 	ind:	33.4538	- Pow + P MaxGSS Log MaxIG MaxAM * MaxCHI TF
 	ind:	73.6345	Log MaxCTD sumDF
 	ind:	51.0643	- MaxIG MaxAM
@@ -977,7 +977,7 @@ generation 9:
 	rep: 38 35  -> 47
 	rep: 38 35  -> 48
 	rep: 7 32  -> 49
-generation 10:
+generation:
 	ind:	51.1044	% MaxOR P
 	ind:	43.5944	- Pow - MaxCTD DOM % Pow MaxOR MaxTFICF * MaxCHI TF % MaxGSS sumTF
 	ind:	73.6345	Log MaxCTD sumDF
