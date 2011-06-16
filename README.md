@@ -5,6 +5,7 @@ Installation and usage
 If are not on the mood for some compilation, binary versions are available on the `bin/` folder.
 
 Otherwise, to compile:
+
 1. Download Qt SDK on http://qt.nokia.com/downloads
 2. Run qmake on the base folder
 3. Compile using GNU Make (on Linux), XCode (on Mac OS X) or Visual Studio (on Windows)
