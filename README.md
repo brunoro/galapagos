@@ -1,5 +1,17 @@
 Galapagos is a simple, cross-plataform tool to visualize evolution in genetic programming, developed on [DCC/UFMG](http://dcc.ufmg.br), Brazil. It's free software released under GPLv3 license.
 
+Installation and usage
+----------------------
+If are not on the mood for some compilation, binary versions are available on the `bin/` folder.
+
+Otherwise, to compile:
+1. Download Qt SDK on http://qt.nokia.com/downloads
+2. Run qmake on the base folder
+3. Compile using GNU Make (on Linux), XCode (on Mac OS X) or Visual Studio (on Windows)
+4. Run
+
+To load an input file, first click on "Select file" to choose an input file, then on "Read file" to use it.
+
 Input file
 ----------
 The input file must obey this format:
