@@ -28,7 +28,7 @@
 #include "style.h"
 #include "generation.h"
 
-#define DEFAULT_HISTOGRAM_SIZE 10
+#define DEFAULT_HISTOGRAM_SIZE 20
 #define NO_SLICE INT_MAX
 
 struct idfit
