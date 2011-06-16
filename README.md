@@ -2,7 +2,7 @@ Galapagos is a simple, cross-plataform tool to visualize evolution in genetic pr
 
 Installation and usage
 ----------------------
-If are not on the mood for some compilation, binary versions are available on the `bin/` folder.
+If are not on the mood for some compiling, binary versions are available on the `bin/` folder.
 
 Otherwise, to compile:
 
