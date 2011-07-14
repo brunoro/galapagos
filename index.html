@@ -68,6 +68,19 @@
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
   </style>
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-24548322-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
 </head>
 
 <body>
@@ -79,7 +92,7 @@
     </div>
 
     <h1><a href="http://github.com/brunoro/galapagos">galapagos</a>
-        <img src="img/birdle.jpg" alt="Birdle" text="Birdle"></h2>
+        <img src="img/birdle.jpg" alt="Birdle" text="Birdle" height=300px></h2>
         <div class="description">
           A simple and cross-plataform graphical tool to visualize evolution on genetic programming algorithms
         </div>
@@ -97,7 +110,8 @@
       </div>
       <div id="column">
         <img border="0" height="90" src="img/windows.png">
-        <p><a href="https://github.com/brunoro/galapagos/raw/master/bin/galapagos-win32.exe">Windows</a></p>
+        <p><a href="https://github.com/brunoro/galapagos/raw/master/bin/galapagos-win32.exe">Windows</a><br>
+           with <a href="https://github.com/brunoro/galapagos/raw/master/bin/libgcc_s_dw2-1.dll>this DLL</a> on system32 folder</p>
       </div>
     </div>
 
@@ -137,7 +151,7 @@
 
     <div id="column_container">
       <h2>Screenshots</h2>
-        <p>Comparing selected individuals from population</p>
+        <p>Comparing selected individuals from the population</p>
         <img src="img/population.png" width=700px>
         <p>Breeding process</p>
         <img src="img/breeding.png" width=700px>
