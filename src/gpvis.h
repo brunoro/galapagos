@@ -25,6 +25,7 @@
 #include "refbox.h"
 #include "generation.h"
 #include "fitnessview.h"
+#include "viewport.h"
 
 #include <cfloat>
 
@@ -114,11 +115,11 @@ class GPVis : public QWidget
 
         QTableView *tableView;
 
-        QGraphicsView *fitnessView;
+        Viewport *fitnessView;
         Histogram *fitnessScene;
         int fitnessSelectedSlice;
 
-        QGraphicsView *preview;
+        QGraphicsView *viewport;
         QGraphicsScene *scene;
         QPointF *sceneCenter;
         

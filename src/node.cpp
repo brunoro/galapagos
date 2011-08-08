@@ -25,7 +25,7 @@ Node::Node(NodeType nodetype, QString nodeinfo): tamToEllipse(4)
     info = nodeinfo;
 
     bound = new QGraphicsEllipseItem();
-    if(nodeinfo.size()<=tamToEllipse)
+    if(nodeinfo.size() <= tamToEllipse)
         text = new QGraphicsSimpleTextItem(info);
     else
         text = new QGraphicsSimpleTextItem(nodeinfo.replace(tamToEllipse, nodeinfo.size()-tamToEllipse,".."));

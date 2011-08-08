@@ -42,16 +42,17 @@ GPVis::GPVis(QWidget *parent)
     /* setting scene up */
     int WIDTH = 1024;
     int HEIGHT = 800;
-    int SCENE_WIDTH = 600;
-    int SCENE_HEIGHT = 500;
+    int SCENE_WIDTH = WIDTH;
+    int SCENE_HEIGHT = HEIGHT;
 
     resize(WIDTH, HEIGHT);
     //center(this, WIDTH, HEIGHT);
 
     scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGHT, this);
     sceneCenter = new QPointF(SCENE_WIDTH/2, SCENE_HEIGHT/2);
-    preview = new QGraphicsView(scene);
-    preview->setRenderHint(QPainter::Antialiasing);
+    viewport = new Viewport(scene);
+    viewport->setRenderHint(QPainter::Antialiasing);
+    viewport->setDragMode(QGraphicsView::ScrollHandDrag);
 
     /* UI */
     fileField = new QLineEdit(this);
@@ -112,12 +113,12 @@ GPVis::GPVis(QWidget *parent)
 
     fitnessScene = new Histogram(0, 0, Style::histogramWidth + 2 * Style::histogramPadding, 
                                        Style::histogramHeight + 2 * Style::histogramPadding, this);
-    fitnessView = new QGraphicsView(fitnessScene);
+    fitnessView = new Viewport(fitnessScene);
     fitnessView->setRenderHint(QPainter::Antialiasing);
     fitnessSelectedSlice = DEFAULT_SLICE;
 
     grid = new QGridLayout(this);
-    grid->addWidget(preview, 0, 0, -1, 1);
+    grid->addWidget(viewport, 0, 0, -1, 1);
     grid->addLayout(fileLine, 0, 1);
     grid->addLayout(conLine, 1, 1);
     grid->addWidget(genLabel, 2, 1);
@@ -128,7 +129,7 @@ GPVis::GPVis(QWidget *parent)
     setLayout(grid);
     
     /* initial point for refBox */
-    refPos = QPointF(0, 0);
+    refPos = *sceneCenter - QPointF(WIDTH/4, HEIGHT/4);
     ref = NULL;
 
     /* connections */
@@ -229,8 +230,8 @@ GPVis::~GPVis(){
     if(tableView){
         delete tableView; tableView = NULL;
     }
-    if(preview){
-        delete preview; preview = NULL;
+    if(viewport){
+        delete viewport; viewport = NULL;
     } 
     if(scene){
         delete scene; scene = NULL;
@@ -334,7 +335,7 @@ void GPVis::readLogFile()
             /* end of definition */
             if(fileBuffer.contains(QRegExp("generation*.")))
             {
-                //we must have the operators and terms already defined.
+                /* we must have the operators and terms already defined. */
                 consensusTree = Tree::opsConsensusTree(CONSENSUS_MAX_DEPTH);
 
                 //qDebug() << "GPVis::reading generation ";

@@ -19,6 +19,28 @@
 
 #include "refbox.h"
 
+QGraphicsRoundRectItem::QGraphicsRoundRectItem(qreal x, qreal y,
+                                               qreal width, qreal height,
+                                               QGraphicsItem * parent = 0 )
+    :QGraphicsRectItem::QGraphicsRectItem (x, y, width, height, parent)
+{
+    radius = 0;
+}
+
+void QGraphicsRoundRectItem::setRadius(int rad)
+{
+    radius = rad;
+}
+
+void QGraphicsRoundRectItem::paint(QPainter *painter,
+                                   const QStyleOptionGraphicsItem *option,
+                                   QWidget *widget)
+{
+    painter->setPen(pen());
+    painter->setBrush(brush());
+    painter->drawRoundedRect(rect(), radius, radius);
+}
+
 Refbox::Refbox(QList<QColor> box_lines, QStringList box_labels, QPointF box_pos)
 {
     lines = box_lines;
@@ -45,7 +67,8 @@ void Refbox::draw(QGraphicsScene *canvas)
     QPointF pointPos = pos;
 
     elements = new QGraphicsItemGroup();
-    QGraphicsRectItem *bound = new QGraphicsRectItem(pointPos.x(), pointPos.y(), 2, 2);
+    QGraphicsRoundRectItem *bound = new QGraphicsRoundRectItem(pointPos.x(), pointPos.y(), 2, 2);
+    bound->setRadius(Style::refboxBorderRadius);
     bound->setBrush(Style::refboxBGColor);
     bound->setPen(Style::refboxBorder);
     elements->addToGroup(bound);
@@ -80,6 +103,7 @@ void Refbox::draw(QGraphicsScene *canvas)
         }
     }
 
+    /* case where no trees are drawn */
     if(lines.length() == 0)
     {
         QGraphicsTextItem *text = new QGraphicsTextItem("No trees drawn");
@@ -96,5 +120,6 @@ void Refbox::draw(QGraphicsScene *canvas)
     elements->setFlags(QGraphicsItem::ItemIsMovable);
     elements->setZValue(Style::refboxZValue);
     elements->setToolTip("Click to drag");
+    elements->setCursor(Qt::SizeAllCursor);
     canvas->addItem(elements);
 }

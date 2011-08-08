@@ -20,7 +20,8 @@ HEADERS += src/def.h \
     src/generation.h \
     src/reproduction.h \
     src/refbox.h \
-    src/style.h
+    src/style.h \
+    src/viewport.h
 SOURCES += src/def.cpp \
     src/edge.cpp \
     src/gpvis.cpp \
@@ -31,4 +32,5 @@ SOURCES += src/def.cpp \
     src/refbox.cpp \
     src/style.cpp \
     src/generation.cpp \
-    src/reproduction.cpp
+    src/reproduction.cpp \
+    src/viewport.cpp

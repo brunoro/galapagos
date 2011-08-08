@@ -44,6 +44,7 @@ namespace Style
 
     const int refboxLineLen = 30;
     const int refboxPadding = 10;
+    const int refboxBorderRadius = 5;
 
     const int histogramPadding = 0;
     const int histogramWidth = 250;
