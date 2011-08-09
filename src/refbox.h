@@ -23,27 +23,12 @@
 #include <QGraphicsScene>
 #include <QList>
 #include <QStringList>
-#include <QPainter>
 #include <QPen>
 
 #include <cfloat>
 
 #include "style.h"
-
-class QGraphicsRoundRectItem: public QGraphicsRectItem
-{
-    public:
-        QGraphicsRoundRectItem(qreal x, qreal y,
-                               qreal width, qreal height,
-                               QGraphicsItem * parent);
-        void setRadius(int rad);
-        void paint(QPainter *painter,
-                   const QStyleOptionGraphicsItem *option,
-                   QWidget *widget);
-
-    private:
-        int radius;
-};
+#include "roundrect.h"
 
 class Refbox
 {

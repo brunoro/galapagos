@@ -51,7 +51,8 @@ GPVis::GPVis(QWidget *parent)
     scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGHT, this);
     sceneCenter = new QPointF(SCENE_WIDTH/2, SCENE_HEIGHT/2);
     viewport = new Viewport(scene);
-    viewport->setRenderHint(QPainter::Antialiasing);
+    viewport->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    viewport->setCenter(*sceneCenter);
     viewport->setDragMode(QGraphicsView::ScrollHandDrag);
 
     /* UI */

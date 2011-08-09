@@ -30,5 +30,13 @@ class Viewport : public QGraphicsView
 {
     public:
         Viewport(QGraphicsScene *scene);
-//      ~Viewport();
+        void setCenter(QPointF centerPoint);
+        QPointF getCenter();
+
+    protected:
+        QPointF currentCenterPoint;
+        QPoint lastPanPoint;
+
+        virtual void wheelEvent(QWheelEvent* event);
+        virtual void resizeEvent(QResizeEvent* event);
 };

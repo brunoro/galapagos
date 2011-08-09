@@ -19,28 +19,6 @@
 
 #include "refbox.h"
 
-QGraphicsRoundRectItem::QGraphicsRoundRectItem(qreal x, qreal y,
-                                               qreal width, qreal height,
-                                               QGraphicsItem * parent = 0 )
-    :QGraphicsRectItem::QGraphicsRectItem (x, y, width, height, parent)
-{
-    radius = 0;
-}
-
-void QGraphicsRoundRectItem::setRadius(int rad)
-{
-    radius = rad;
-}
-
-void QGraphicsRoundRectItem::paint(QPainter *painter,
-                                   const QStyleOptionGraphicsItem *option,
-                                   QWidget *widget)
-{
-    painter->setPen(pen());
-    painter->setBrush(brush());
-    painter->drawRoundedRect(rect(), radius, radius);
-}
-
 Refbox::Refbox(QList<QColor> box_lines, QStringList box_labels, QPointF box_pos)
 {
     lines = box_lines;

@@ -19,6 +19,7 @@ HEADERS += src/def.h \
     src/fitnessview.h \
     src/generation.h \
     src/reproduction.h \
+    src/roundrect.h \
     src/refbox.h \
     src/style.h \
     src/viewport.h
@@ -29,6 +30,7 @@ SOURCES += src/def.cpp \
     src/node.cpp \
     src/tree.cpp \
     src/fitnessview.cpp \
+    src/roundrect.cpp \
     src/refbox.cpp \
     src/style.cpp \
     src/generation.cpp \

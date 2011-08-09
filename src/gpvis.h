@@ -115,11 +115,11 @@ class GPVis : public QWidget
 
         QTableView *tableView;
 
-        Viewport *fitnessView;
+        QGraphicsView *fitnessView;
         Histogram *fitnessScene;
         int fitnessSelectedSlice;
 
-        QGraphicsView *viewport;
+        Viewport *viewport;
         QGraphicsScene *scene;
         QPointF *sceneCenter;
         
