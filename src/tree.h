@@ -68,6 +68,8 @@ class Tree
         static void drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step);
         static void test(QGraphicsScene *canvas, int consensusDepth);
 
+        void scale(qreal factor);
+
         static Def* definition;
         
     private:

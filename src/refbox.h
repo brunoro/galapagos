@@ -38,6 +38,7 @@ class Refbox
         void setPos(QPointF npos);
         QPointF getPos();
         void draw(QGraphicsScene *canvas);
+        void scale(qreal factor);
 
     private:
         QPointF pos;

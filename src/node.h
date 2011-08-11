@@ -90,6 +90,8 @@ class Node
         void recursiveSetTreeId(QSet<int> id);
         void addTreeId(QSet<int> ids);
 
+        void scale(qreal factor);
+
         inline bool operator==(const Node &other) const
         {
             return (other.type == type) && (other.info == info);

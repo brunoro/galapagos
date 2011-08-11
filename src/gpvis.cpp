@@ -19,40 +19,17 @@
 
 #include "gpvis.h"
 
-void center(QWidget *widget, int w, int h)
-{
-    int x, y;
-    int screenWidth;
-    int screenHeight;
-
-    QDesktopWidget *desktop = QApplication::desktop();
-
-    screenWidth = desktop->width();
-    screenHeight = desktop->height();
-
-    x = (screenWidth - w) / 2;
-    y = (screenHeight - h) / 2;
-
-    widget->move(x, y);
-}
-
 GPVis::GPVis(QWidget *parent)
     : QWidget(parent), fileFile(NULL), fileStream(NULL), consensusDepthValue(CONSENSUS_INITIAL_DEPTH), drawnTree(NULL)
 {
     /* setting scene up */
-    int WIDTH = 1024;
-    int HEIGHT = 800;
-    int SCENE_WIDTH = WIDTH;
-    int SCENE_HEIGHT = HEIGHT;
+    resize(Style::windowWidth, Style::windowHeight);
 
-    resize(WIDTH, HEIGHT);
-    //center(this, WIDTH, HEIGHT);
-
-    scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGHT, this);
-    sceneCenter = new QPointF(SCENE_WIDTH/2, SCENE_HEIGHT/2);
-    viewport = new Viewport(scene);
+    scene = new QGraphicsScene(0, 0, Style::sceneWidth, Style::sceneHeight, this);
+    sceneCenter = new QPointF(Style::sceneWidth/2, Style::sceneHeight/2);
+    viewport = new Viewport(scene, this);
     viewport->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    viewport->setCenter(*sceneCenter);
+    //viewport->setCenter(*sceneCenter); // TODO: remove this
     viewport->setDragMode(QGraphicsView::ScrollHandDrag);
 
     /* UI */
@@ -114,7 +91,7 @@ GPVis::GPVis(QWidget *parent)
 
     fitnessScene = new Histogram(0, 0, Style::histogramWidth + 2 * Style::histogramPadding, 
                                        Style::histogramHeight + 2 * Style::histogramPadding, this);
-    fitnessView = new Viewport(fitnessScene);
+    fitnessView = new QGraphicsView(fitnessScene);
     fitnessView->setRenderHint(QPainter::Antialiasing);
     fitnessSelectedSlice = DEFAULT_SLICE;
 
@@ -130,7 +107,7 @@ GPVis::GPVis(QWidget *parent)
     setLayout(grid);
     
     /* initial point for refBox */
-    refPos = *sceneCenter - QPointF(WIDTH/4, HEIGHT/4);
+    refPos = *sceneCenter - QPointF(Style::windowWidth/4, Style::windowHeight/4);
     ref = NULL;
 
     /* connections */
@@ -154,6 +131,9 @@ GPVis::GPVis(QWidget *parent)
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
     connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
     connect(viewFit, SIGNAL(toggled(bool)), this, SLOT(showFitView()));
+
+    /* change nodes and edges size when zooming viewport */
+    connect(viewport, SIGNAL(scaleView(qreal)), this, SLOT(scaleView(qreal)));
 
     /* models */
     individuals = new QStandardItemModel(this);
@@ -590,6 +570,18 @@ void GPVis::redrawTree()
     }
 }
 
+
+/* change the scale of nodes, edges and refbox */
+void GPVis::scaleView(qreal factor)
+{
+    if(drawnTree)
+    {
+        drawnTree->scale(factor);
+        ref->scale(factor);
+    }
+    
+}
+
 void GPVis::individualFromTable()
 {
     if(ref != NULL) refPos += ref->getPos();
@@ -642,7 +634,7 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
     // TODO: delete old refbox
     ref = new Refbox(Style::getColorPalette(ind.length()), refBoxLabel, refPos);
     ref->draw(scene);
-    //drawnTree = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
+    drawnTree = drawn;
 }
 
 void GPVis::reproductionFromTable()
@@ -705,6 +697,7 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     // TODO: delete old ref
     ref = new Refbox(Style::getColorPalette(parents.length() + 1), refBoxLabel, refPos);
     ref->draw(scene);
+    drawnTree = drawn;
 }
 
 void GPVis::fitnessFromHistogram()
@@ -788,8 +781,8 @@ void GPVis::openFileDialog()
 
 void GPVis::test()
 {
-    //fileField->setText("test/palotti_big.log");
-    //QTest::mouseClick(fileOpen, Qt::LeftButton);
+    fileField->setText("test/test1.gpvis");
+    QTest::mouseClick(fileOpen, Qt::LeftButton);
 
     //Tree::test(scene);
     /*

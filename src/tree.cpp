@@ -221,12 +221,17 @@ void Tree::drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step)
                                                                  coord.y() - radius,
                                                                  radius * 2,
                                                                  radius * 2);
-        ellipse->setPen(QPen(Qt::gray)); // TODO: change this
+        ellipse->setPen(Style::ringColor); // TODO: change this
         ellipse->setZValue(0);
         canvas->addItem(ellipse);
     }
 }
 
+void Tree::scale(qreal factor)
+{
+    /* iterates on all nodes and edges reducing their sizes */ 
+    root->scale(factor);
+}
 
 void Tree::addParent(Tree *parent)
 {

@@ -35,6 +35,12 @@ namespace Style
     const float pi = 3.14159265;
 
     /* sizes and distances */
+    const int windowWidth = 1024;
+    const int windowHeight= 800;
+
+    const int sceneWidth = 1500;
+    const int sceneHeight= 1500;
+
     const QSizeF nodeSize = QSizeF(40, 40);
     const int edgeDistance = 5;
     const int edgeWeight = 2;
@@ -44,7 +50,7 @@ namespace Style
 
     const int refboxLineLen = 30;
     const int refboxPadding = 10;
-    const int refboxBorderRadius = 2;
+    const int refboxBorderRadius = 5;
 
     const int histogramPadding = 0;
     const int histogramWidth = 250;
@@ -71,6 +77,8 @@ namespace Style
     const QColor nodePenColor(0, 0, 0, 0);
     const QColor nodeTextColor("grey");
     const QColor edgeColor("royalblue");
+
+    const QColor ringColor(Qt::gray);
 
     const QBrush refboxBGColor = QColor("lightgrey");
     const QPen refboxBorder(Qt::NoPen);

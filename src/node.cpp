@@ -400,3 +400,12 @@ void Node::recursiveSetTreeId(QSet<int> ids)
     for(int i = 0; i < sons.length(); i++)
         sons[i]->recursiveSetTreeId(ids);
 }
+
+void Node::scale(qreal factor)
+{
+    /* set transform origin on center */
+    bound->setTransformOriginPoint(bound->boundingRect().center());
+    bound->scale(factor, factor);
+    text->setTransformOriginPoint(bound->boundingRect().center());
+    text->scale(factor, factor);
+}

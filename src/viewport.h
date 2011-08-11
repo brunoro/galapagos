@@ -17,6 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef VIEWPORT_H
+#define VIEWPORT_H
+
 #include <QDebug>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -28,10 +31,10 @@
 
 class Viewport : public QGraphicsView
 {
+    Q_OBJECT
+
     public:
-        Viewport(QGraphicsScene *scene);
-        void setCenter(QPointF centerPoint);
-        QPointF getCenter();
+        Viewport(QGraphicsScene *scene, QWidget *parent);
 
     protected:
         QPointF currentCenterPoint;
@@ -39,4 +42,9 @@ class Viewport : public QGraphicsView
 
         virtual void wheelEvent(QWheelEvent* event);
         virtual void resizeEvent(QResizeEvent* event);
+
+    signals:
+        void scaleView(qreal factor);
 };
+
+#endif

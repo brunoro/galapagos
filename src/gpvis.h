@@ -150,6 +150,9 @@ class GPVis : public QWidget
         void reproductionFromTable();
         void fitnessFromHistogram();
         void redrawTree();
+        
+        /* modify views */
+        void scaleView(qreal factor);
 
         /* change tableView */
         void showIndTable();

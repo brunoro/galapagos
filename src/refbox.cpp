@@ -101,3 +101,13 @@ void Refbox::draw(QGraphicsScene *canvas)
     elements->setCursor(Qt::SizeAllCursor);
     canvas->addItem(elements);
 }
+
+void Refbox::scale(qreal factor)
+{
+    //elements->setTransformOriginPoint(elements->boundingRect().center());
+    QPointF originBefore = elements->pos();
+    elements->scale(factor, factor);
+
+    /* correct origin */
+    elements->setPos(originBefore);
+}
