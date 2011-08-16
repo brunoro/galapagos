@@ -90,13 +90,13 @@ int Node::recursiveDraw(QGraphicsScene *canvas,
         sonAngle += hstep;
         
         /* connect son */
-        addEdge(sons[i], QPen(Style::edgeColor, Style::edgeWeight));
+        addEdge(sons[i], QPen(Style::edgeColor, Style::edgeWeight))->draw(canvas);
 
         /* get max depth */
         if(sonLevel > maxLevel)
             maxLevel = sonLevel;
     }
-    updateEdges(canvas);
+    updateEdges();
 
     return maxLevel + 1;
 }
@@ -223,10 +223,10 @@ QList<Node*> Node::recursiveDrawMany(QGraphicsScene *canvas, QList<Node*> nodes,
                 {
                     if(id == CONSENSUS_ID)
                         continue;
-                    merged[i]->addEdge(son, styles.value(id));
+                    merged[i]->addEdge(son, styles.value(id))->draw(canvas);
                 }
             }
-            merged[i]->updateEdges(canvas);
+            merged[i]->updateEdges();
             if(level >= consensusDepth)
             {
                 sonAngle += hstep;
@@ -266,7 +266,7 @@ void Node::opsConsensus(int depth, Def* definition)
     }
 }
 
-void Node::updateEdges(QGraphicsScene *canvas)
+void Node::updateEdges()
 {
     foreach(QList<Edge*> sonEdges, edges)
     {
@@ -282,18 +282,18 @@ void Node::updateEdges(QGraphicsScene *canvas)
         float offset = - (sonEdges.length() - 1) * edgeDistance / 2;
         for(int i = 0; i < sonEdges.length(); i++)
         {
+            sonEdges[i]->update();
             sonEdges[i]->setOffset(offset);
-            sonEdges[i]->draw(canvas);
             offset += edgeDistance;
         }
     }
 }
 
-void Node::recursiveUpdateEdges(QGraphicsScene *canvas)
+void Node::recursiveUpdateEdges()
 {
-    updateEdges(canvas);
+    updateEdges();
     foreach(Node *son, sons)
-        son->recursiveUpdateEdges(canvas);
+        son->recursiveUpdateEdges();
 }
 
 void Node::draw(QGraphicsScene *canvas, QPointF coord)
@@ -307,6 +307,7 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
     QRectF bbox = text->boundingRect();
     QSizeF size = Style::nodeSize;
 
+    /* draw bound */
     ((QGraphicsEllipseItem*)bound)->setRect(QRectF(bbox.topLeft(), size));
     bound->setPos(coord - QPointF(size.width()/2, size.height()/2));
     bound->setZValue(Style::nodeZValue);
@@ -314,6 +315,7 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
         bound->setToolTip(info);
     canvas->addItem(bound);
 
+    /* draw text */
     text->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));
     text->setZValue(Style::nodeZValue);
     canvas->addItem(text);
@@ -336,11 +338,13 @@ void Node::update(QPointF coord)
     pos = coord;
 }
 
-void Node::addEdge(Node *son, QPen style)
+Edge* Node::addEdge(Node *son, QPen style)
 {
     /* connect son */
     Edge *edge = new Edge(this, son, style);
     edges[*son].append(edge);
+
+    return edge;
 }
 
 QList<Node*> Node::getSons()
@@ -414,7 +418,15 @@ void Node::scale(qreal factor)
     QPointF newTextCenter = text->mapToScene(text->boundingRect().center());
     text->setPos(text->pos() - (newTextCenter - oldTextCenter));
 
-    /* call for sons */
+    foreach(QList<Edge*> sonEdges, edges)
+    {
+        for(int i = 0; i < sonEdges.length(); i++)
+            sonEdges[i]->scale(factor);
+    }
+
+    /* call for sons and edges*/
     for(int i = 0; i < sons.length(); i++)
+    {
         sons[i]->scale(factor);
+    }
 }

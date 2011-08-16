@@ -41,17 +41,20 @@ float Edge::getOffset()
 
 void Edge::draw(QGraphicsScene *canvas)
 {
+    /* set the correct points */
     update();
-
-    /* translates edge based on its normal vector */
+    
+    /* translate edge based on its normal vector */
     QLineF translated = line->line();
     float angleRad = translated.angle() * Style::pi / 180;
     translated.translate(offset * sinf(angleRad), offset * cosf(angleRad));
     line->setLine(translated);
 
+    /* set style */
     line->setPen(style);
     line->setZValue(Style::edgeZValue);
     
+    /* add it to scene */
     canvas->addItem(line);
 }
 
@@ -63,5 +66,8 @@ void Edge::update()
 
 void Edge::scale(qreal factor)
 {
+    QPen scaledPen = style;
+    scaledPen.setWidthF(style.width() * factor);
+    line->setPen(scaledPen);
     return;
 }

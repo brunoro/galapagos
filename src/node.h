@@ -57,10 +57,10 @@ class Node
         virtual ~Node();
 
         void addSon(Node *son);
-        void addEdge(Node *son, QPen style);
+        Edge* addEdge(Node *son, QPen style);
         void draw(QGraphicsScene *canvas, QPointF coord);
-        void updateEdges(QGraphicsScene *canvas);
-        void recursiveUpdateEdges(QGraphicsScene *canvas);
+        void updateEdges();
+        void recursiveUpdateEdges();
         bool collidesWith(Node *other);
         void adjustPosition(QPointF origin, Node *other, int level, int step);
         void update(QPointF coord);

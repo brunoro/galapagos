@@ -133,17 +133,17 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*>& trees, QPointF coord,
             /* avoid drawing edge to consensus */
             if(id == CONSENSUS_ID)
                 continue;
-            merged->getRoot()->addEdge(son, styles.value(id));
+            merged->getRoot()->addEdge(son, styles.value(id))->draw(canvas);
             //qDebug() << "Tree::drawMany " << styles.value(id) << id;
         }
     }
     if(treatCollisions)
     {
-        merged->correctCollisions(canvas, coord, step);
-        merged->getRoot()->recursiveUpdateEdges(canvas);
+        merged->correctCollisions(coord, step);
+        merged->getRoot()->recursiveUpdateEdges();
     }
     else
-        merged->getRoot()->updateEdges(canvas);
+        merged->getRoot()->updateEdges();
 
     Tree::drawRings(canvas, coord, MAX_DEPTH, step);
     
@@ -179,7 +179,7 @@ Tree *Tree::opsConsensusTree(int consensusDepth)
     return opCon;
 }
 
-void Tree::correctCollisions(QGraphicsScene *canvas, QPointF origin, int step)
+void Tree::correctCollisions(QPointF origin, int step)
 {
     /* use BFS to get nodes */
     QList<Node*> thisLevel = root->getSons();
@@ -221,7 +221,7 @@ void Tree::drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step)
                                                                  coord.y() - radius,
                                                                  radius * 2,
                                                                  radius * 2);
-        ellipse->setPen(Style::ringColor); // TODO: change this
+        ellipse->setPen(Style::ringColor);
         ellipse->setZValue(0);
         canvas->addItem(ellipse);
     }
