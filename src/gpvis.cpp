@@ -574,23 +574,27 @@ void GPVis::redrawTree()
 /* change the scale of nodes, edges and refbox */
 void GPVis::scaleView(qreal factor)
 {
+    /* scale tree, if drawn */
     if(drawnTree)
-    {
         drawnTree->scale(factor);
-        ref->scale(factor);
-    }
+
+    /* scale e adjust position of refbox */
+    ref->scale(factor);
     
 }
 
 void GPVis::individualFromTable()
 {
+    /* preserve refBox position */
     if(ref != NULL) refPos += ref->getPos();
 
+    /* preserve table selection */
     QList<QModelIndex> rowIndexes = tableView->selectionModel()->selectedRows();
     QList<int> inds;
     foreach(QModelIndex rowIndex, rowIndexes)
         inds.append(tableView->model()->index(rowIndex.row(), 0).data().toInt());
 
+    /* draw individual */
     scene->clear();
     renderIndividual(genSpin->value(), inds);
 }
@@ -639,8 +643,10 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
 
 void GPVis::reproductionFromTable()
 {
+    /* preserve refBox position */
     if(ref != NULL) refPos += ref->getPos();
 
+    /* preserve table selection */
     int row = tableView->selectionModel()->currentIndex().row();
     int off_num = tableView->model()->index(row, 1).data().toInt();
     QStringList str_par_num = tableView->model()->index(row, 2).data().toString().split(QRegExp("\\s+"));
@@ -649,6 +655,7 @@ void GPVis::reproductionFromTable()
     for(int i = 0; i < str_par_num.length() - 1; i++)
         par_num << str_par_num[i].toInt();
 
+    /* draw invidual */
     scene->clear();
     renderReproduction(genSpin->value(), par_num, off_num);
 }
@@ -702,9 +709,13 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
 
 void GPVis::fitnessFromHistogram()
 {
+    /* preserver refbox position */
     if(ref != NULL) refPos += ref->getPos();
 
+    /* get inviduals */
     fitnessSelectedSlice = fitnessScene->getSelectedSlice();
+    
+    /* draw individuals */
     scene->clear();
     QList<int> slice = fitnessScene->getSlice(fitnessSelectedSlice);
     renderIndividual(genSpin->value(), slice);

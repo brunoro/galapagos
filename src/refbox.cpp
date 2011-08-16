@@ -105,9 +105,9 @@ void Refbox::draw(QGraphicsScene *canvas)
 void Refbox::scale(qreal factor)
 {
     //elements->setTransformOriginPoint(elements->boundingRect().center());
-    QPointF originBefore = elements->pos();
+    //elements->setTransform(QTransform::fromScale(factor, factor));
+    QPointF old_center = elements->mapToScene(elements->boundingRect().center());
     elements->scale(factor, factor);
-
-    /* correct origin */
-    elements->setPos(originBefore);
+    QPointF new_center = elements->mapToScene(elements->boundingRect().center());
+    elements->setPos(elements->pos() - (new_center - old_center));
 }

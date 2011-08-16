@@ -26,17 +26,20 @@ Edge::Edge(Node *from, Node *to, QPen edge_style)
     dir = to;
     line = new QGraphicsLineItem();
     line->setLine(QLineF(dest->getCoord(), dir->getCoord()));
+    offset = 0;
+}
+
+void Edge::setOffset(float newOffset)
+{
+    offset = newOffset;
+}
+
+float Edge::getOffset()
+{
+    return offset;
 }
 
 void Edge::draw(QGraphicsScene *canvas)
-{
-    update();
-    line->setPen(style);
-    line->setZValue(Style::edgeZValue);
-    canvas->addItem(line);
-}
-
-void Edge::drawOffset(QGraphicsScene *canvas, float offset)
 {
     update();
 
@@ -48,6 +51,7 @@ void Edge::drawOffset(QGraphicsScene *canvas, float offset)
 
     line->setPen(style);
     line->setZValue(Style::edgeZValue);
+    
     canvas->addItem(line);
 }
 
@@ -55,4 +59,9 @@ void Edge::update()
 {
     line->setLine(QLineF(dest->getCoord(), dir->getCoord()));
     //qDebug() << "Edge::update" << QLineF(dest->getCoord(), dir->getCoord());
+}
+
+void Edge::scale(qreal factor)
+{
+    return;
 }

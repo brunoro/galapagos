@@ -268,13 +268,11 @@ void Node::opsConsensus(int depth, Def* definition)
 
 void Node::updateEdges(QGraphicsScene *canvas)
 {
-    // TODO: get offset based on edges from same nodes
     foreach(QList<Edge*> sonEdges, edges)
     {
         if(sonEdges.length() == 0)
               continue;
 
-        // TODO: use distance from style
         /* avoid edges passing nodes bound */
         float edgeDistance;
         if(sonEdges.length() * Style::edgeDistance < Style::nodeSize.width())
@@ -284,7 +282,8 @@ void Node::updateEdges(QGraphicsScene *canvas)
         float offset = - (sonEdges.length() - 1) * edgeDistance / 2;
         for(int i = 0; i < sonEdges.length(); i++)
         {
-            sonEdges[i]->drawOffset(canvas, offset);
+            sonEdges[i]->setOffset(offset);
+            sonEdges[i]->draw(canvas);
             offset += edgeDistance;
         }
     }
@@ -403,9 +402,19 @@ void Node::recursiveSetTreeId(QSet<int> ids)
 
 void Node::scale(qreal factor)
 {
-    /* set transform origin on center */
-    bound->setTransformOriginPoint(bound->boundingRect().center());
+    /* scale and re-center bound */
+    QPointF oldBoundCenter = bound->mapToScene(bound->boundingRect().center());
     bound->scale(factor, factor);
-    text->setTransformOriginPoint(bound->boundingRect().center());
+    QPointF newBoundCenter = bound->mapToScene(bound->boundingRect().center());
+    bound->setPos(bound->pos() - (newBoundCenter - oldBoundCenter));
+
+    /* scale and re-center text */
+    QPointF oldTextCenter = text->mapToScene(text->boundingRect().center());
     text->scale(factor, factor);
+    QPointF newTextCenter = text->mapToScene(text->boundingRect().center());
+    text->setPos(text->pos() - (newTextCenter - oldTextCenter));
+
+    /* call for sons */
+    for(int i = 0; i < sons.length(); i++)
+        sons[i]->scale(factor);
 }
