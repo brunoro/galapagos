@@ -418,11 +418,13 @@ void Node::scale(qreal factor)
     QPointF newTextCenter = text->mapToScene(text->boundingRect().center());
     text->setPos(text->pos() - (newTextCenter - oldTextCenter));
 
+    // TODO: implement changing edge width correctly 
+    /*
     foreach(QList<Edge*> sonEdges, edges)
     {
         for(int i = 0; i < sonEdges.length(); i++)
             sonEdges[i]->scale(factor);
-    }
+    }*/
 
     /* call for sons and edges*/
     for(int i = 0; i < sons.length(); i++)

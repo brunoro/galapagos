@@ -29,8 +29,8 @@ GPVis::GPVis(QWidget *parent)
     sceneCenter = new QPointF(Style::sceneWidth/2, Style::sceneHeight/2);
     viewport = new Viewport(scene, this);
     viewport->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    //viewport->setCenter(*sceneCenter); // TODO: remove this
     viewport->setDragMode(QGraphicsView::ScrollHandDrag);
+    scaleFactor = 1.0;
 
     /* UI */
     fileField = new QLineEdit(this);
@@ -574,13 +574,26 @@ void GPVis::redrawTree()
 /* change the scale of nodes, edges and refbox */
 void GPVis::scaleView(qreal factor)
 {
+    /* store the factor */
+    scaleFactor *= factor;
+
     /* scale tree, if drawn */
     if(drawnTree)
         drawnTree->scale(factor);
 
     /* scale e adjust position of refbox */
     ref->scale(factor);
-    
+}
+
+/* restore the scaled view */
+void GPVis::restoreScale()
+{
+    /* scale tree, if drawn */
+    if(drawnTree)
+        drawnTree->scale(scaleFactor);
+
+    /* scale e adjust position of refbox */
+    ref->scale(scaleFactor);
 }
 
 void GPVis::individualFromTable()
@@ -639,6 +652,9 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
     ref = new Refbox(Style::getColorPalette(ind.length()), refBoxLabel, refPos);
     ref->draw(scene);
     drawnTree = drawn;
+    
+    /* restore scale */ 
+    restoreScale();
 }
 
 void GPVis::reproductionFromTable()
@@ -705,6 +721,9 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
     ref = new Refbox(Style::getColorPalette(parents.length() + 1), refBoxLabel, refPos);
     ref->draw(scene);
     drawnTree = drawn;
+    
+    /* restore scale */ 
+    restoreScale();
 }
 
 void GPVis::fitnessFromHistogram()

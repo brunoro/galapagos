@@ -143,6 +143,10 @@ class GPVis : public QWidget
 
         Tree* drawnTree;
 
+        /* preserve scale */
+        qreal scaleFactor;
+        void restoreScale();
+
     private slots:
         /* show data */
         void showGeneration(int gen);
