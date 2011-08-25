@@ -88,7 +88,7 @@ class GPVis : public QWidget
                     reproductionsHeader;
         Tree *consensusTree;
         Refbox *ref;
-        QPointF refPos;
+        QPoint refPos;
 
         /* ui */
         QGridLayout *grid;

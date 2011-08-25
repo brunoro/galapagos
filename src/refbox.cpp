@@ -30,6 +30,8 @@ Refbox::Refbox(QList<QColor> box_lines, QStringList box_labels, QPointF box_pos)
 void Refbox::setPos(QPointF npos)
 {
     pos = npos;
+    if(elements != NULL)
+        elements->setPos(pos);
 }
 
 QPointF Refbox::getPos()
@@ -40,9 +42,24 @@ QPointF Refbox::getPos()
         return pos;
 }
 
+QPointF Refbox::scenePos()
+{
+    return elements->pos();
+}
+
+QPointF Refbox::mapToScene(QPointF point)
+{
+    return elements->mapToScene(point);
+}
+
+QPointF Refbox::mapFromScene(QPointF point)
+{
+    return elements->mapFromScene(point);
+}
+
 void Refbox::draw(QGraphicsScene *canvas)
 {
-    QPointF pointPos = pos;
+    QPointF pointPos = QPointF(0, 0);
 
     elements = new QGraphicsItemGroup();
     QGraphicsRoundRectItem *bound = new QGraphicsRoundRectItem(pointPos.x(), pointPos.y(), 2, 2);
@@ -92,7 +109,7 @@ void Refbox::draw(QGraphicsScene *canvas)
         elements->addToGroup(text);
     }
 
-    bound->setRect(pos.x(), pos.y(), 
+    bound->setRect(0, 0, 
                    maxTextLen + Style::refboxLineLen + Style::refboxPadding * 2,
                    boxHeight + Style::refboxPadding * 2);
     elements->setFlags(QGraphicsItem::ItemIsMovable);
@@ -100,10 +117,13 @@ void Refbox::draw(QGraphicsScene *canvas)
     elements->setToolTip("Click to drag");
     elements->setCursor(Qt::SizeAllCursor);
     canvas->addItem(elements);
+
+    elements->setPos(pos);
 }
 
 void Refbox::scale(qreal factor)
 {
+    /* store position relative to Viewport */
     QPointF old_pos = elements->mapToScene(elements->boundingRect().center());
     elements->scale(factor, factor);
     QPointF new_pos = elements->mapToScene(elements->boundingRect().center());
