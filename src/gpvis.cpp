@@ -60,7 +60,7 @@ GPVis::GPVis(QWidget *parent)
     consensusUse = new QCheckBox("Non-terminals with fixed positions", this);
     consensusUse->setChecked(true);
     collisionUse = new QCheckBox("Address collisions", this);
-    collisionUse->setChecked(true);
+    collisionUse->setChecked(false);
     consensusDepth = new QSpinBox(this);
     consensusDepth->setValue(CONSENSUS_INITIAL_DEPTH);
     consensusDepth->setRange(CONSENSUS_MIN_DEPTH, CONSENSUS_MAX_DEPTH);
