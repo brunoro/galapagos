@@ -19,14 +19,19 @@
 
 #include "gpvis.h"
 
+Style *style;
+
 GPVis::GPVis(QWidget *parent)
     : QWidget(parent), fileFile(NULL), fileStream(NULL), consensusDepthValue(CONSENSUS_INITIAL_DEPTH), drawnTree(NULL)
 {
-    /* setting scene up */
-    resize(Style::windowWidth, Style::windowHeight);
+    /* initializing ::style */
+    ::style = new Style();
 
-    scene = new QGraphicsScene(0, 0, Style::sceneWidth, Style::sceneHeight, this);
-    sceneCenter = new QPointF(Style::sceneWidth/2, Style::sceneHeight/2);
+    /* setting scene up */
+    resize(::style->windowWidth, ::style->windowHeight);
+
+    scene = new QGraphicsScene(0, 0, ::style->sceneWidth, ::style->sceneHeight, this);
+    sceneCenter = new QPointF(::style->sceneWidth/2, ::style->sceneHeight/2);
     viewport = new Viewport(scene, this);
     viewport->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     viewport->setDragMode(QGraphicsView::ScrollHandDrag);
@@ -89,8 +94,8 @@ GPVis::GPVis(QWidget *parent)
     viewLine->addWidget(viewRep);   
     viewLine->addWidget(viewFit);
 
-    fitnessScene = new Histogram(0, 0, Style::histogramWidth + 2 * Style::histogramPadding, 
-                                       Style::histogramHeight + 2 * Style::histogramPadding, this);
+    fitnessScene = new Histogram(0, 0, ::style->histogramWidth + 2 * ::style->histogramPadding, 
+                                       ::style->histogramHeight + 2 * ::style->histogramPadding, this);
     fitnessView = new QGraphicsView(fitnessScene);
     fitnessView->setRenderHint(QPainter::Antialiasing);
     fitnessSelectedSlice = DEFAULT_SLICE;
@@ -622,7 +627,7 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
     {
         Tree *tree;
         tree = generations[gen]->getIndividual(ind[0]);
-        tree->draw(scene, *sceneCenter, Style::defaultStep);
+        tree->draw(scene, *sceneCenter, ::style->defaultStep);
         return;
     }
 
@@ -650,11 +655,11 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
         j++;
     }
 
-    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
+    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, ::style->defaultStep, collisionUse->isChecked(), consensusDepth->value());
     
     // TODO: delete old refbox
     //qDebug() << "DRAW: viewPos\t" << refPos << "\t" << viewport->mapToScene(refPos);
-    ref = new Refbox(Style::getColorPalette(ind.length()), refBoxLabel, viewport->mapToScene(refPos));
+    ref = new Refbox(::style->getColorPalette(ind.length()), refBoxLabel, viewport->mapToScene(refPos));
     ref->draw(scene);
     drawnTree = drawn;
     
@@ -721,10 +726,10 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
         j++;
     }
 
-    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
+    Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, ::style->defaultStep, collisionUse->isChecked(), consensusDepth->value());
 
     // TODO: delete old ref
-    ref = new Refbox(Style::getColorPalette(parents.length() + 1), refBoxLabel, viewport->mapToScene(refPos));
+    ref = new Refbox(::style->getColorPalette(parents.length() + 1), refBoxLabel, viewport->mapToScene(refPos));
     ref->draw(scene);
     drawnTree = drawn;
     

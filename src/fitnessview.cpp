@@ -19,6 +19,8 @@
 
 #include "fitnessview.h"
 
+extern Style* style;
+
 /* Histogram */
 Histogram::Histogram(qreal x, qreal y, qreal width, qreal height, QWidget *parent)
     :QGraphicsScene(x, y, width, height, (QObject*)parent)
@@ -85,15 +87,15 @@ void Histogram::draw()
     bars.clear();
     for(int i = 0; i < size; i++)
     {
-        bars.append(new HistogramBar(Style::histogramPadding,
-                                     Style::histogramHeight/size * (size - i - 1),
-                                     Style::histogramWidth * buckets[i].length() / pairs.length(),
-                                     Style::histogramHeight / size,
+        bars.append(new HistogramBar(::style->histogramPadding,
+                                     ::style->histogramHeight/size * (size - i - 1),
+                                     ::style->histogramWidth * buckets[i].length() / pairs.length(),
+                                     ::style->histogramHeight / size,
                                      buckets[i], i));
         /* labels on fitness axis */
         QGraphicsSimpleTextItem *ylabel = new QGraphicsSimpleTextItem(QString::number((size - i) * bigger / size));
-        ylabel->setPos(Style::histogramPadding - ylabel->boundingRect().width() - Style::textDistance,
-                       Style::histogramHeight / size * i - ylabel->boundingRect().height() / 2);
+        ylabel->setPos(::style->histogramPadding - ylabel->boundingRect().width() - ::style->textDistance,
+                       ::style->histogramHeight / size * i - ylabel->boundingRect().height() / 2);
         addItem(ylabel);
 
         /* tooltips on bars */
@@ -105,25 +107,25 @@ void Histogram::draw()
     }
 
     /* draw axis */
-    QGraphicsLineItem *xaxis = new QGraphicsLineItem(Style::histogramPadding, Style::histogramHeight,
-                                                     Style::histogramWidth, Style::histogramHeight);
-    QGraphicsLineItem *yaxis = new QGraphicsLineItem(Style::histogramPadding, 0,
-                                                     Style::histogramPadding, Style::histogramHeight);
+    QGraphicsLineItem *xaxis = new QGraphicsLineItem(::style->histogramPadding, ::style->histogramHeight,
+                                                     ::style->histogramWidth, ::style->histogramHeight);
+    QGraphicsLineItem *yaxis = new QGraphicsLineItem(::style->histogramPadding, 0,
+                                                     ::style->histogramPadding, ::style->histogramHeight);
 
-    xaxis->setPen(Style::histogramAxisColor);
-    yaxis->setPen(Style::histogramAxisColor);
+    xaxis->setPen(::style->histogramAxisColor);
+    yaxis->setPen(::style->histogramAxisColor);
     addItem(xaxis);
     addItem(yaxis);
     
     /* max y label */
     QGraphicsSimpleTextItem *ylabel = new QGraphicsSimpleTextItem(QString::number(bigger));
-    ylabel->setPos(Style::histogramPadding - ylabel->boundingRect().width() - Style::textDistance,
+    ylabel->setPos(::style->histogramPadding - ylabel->boundingRect().width() - ::style->textDistance,
                    - ylabel->boundingRect().height() / 2 );
     addItem(ylabel);
     
     /* y axis title */
     QGraphicsSimpleTextItem *ytitle = new QGraphicsSimpleTextItem("Fitness");
-    ytitle->setPos(Style::histogramPadding - ytitle->boundingRect().width() - Style::textDistance,
+    ytitle->setPos(::style->histogramPadding - ytitle->boundingRect().width() - ::style->textDistance,
                    - 2 * ytitle->boundingRect().height());
     addItem(ytitle);
 
@@ -133,15 +135,15 @@ void Histogram::draw()
     for(int i = 0; i < numXLabels + 1; i++)
     {
         QGraphicsSimpleTextItem *xlabel = new QGraphicsSimpleTextItem(QString::number(i * pairs.length() / numXLabels));
-        xlabel->setPos(Style::histogramPadding + i * Style::histogramWidth / numXLabels - xlabel->boundingRect().width() / 2,
-                       Style::histogramHeight + Style::textDistance);
+        xlabel->setPos(::style->histogramPadding + i * ::style->histogramWidth / numXLabels - xlabel->boundingRect().width() / 2,
+                       ::style->histogramHeight + ::style->textDistance);
         addItem(xlabel);
     }
 
     /* x title */
     QGraphicsSimpleTextItem *xtitle = new QGraphicsSimpleTextItem("Number of individuals");
-    xtitle->setPos(Style::histogramPadding + Style::histogramWidth - xtitle->boundingRect().width(),
-                   Style::histogramHeight + Style::textDistance + xtitle->boundingRect().height());
+    xtitle->setPos(::style->histogramPadding + ::style->histogramWidth - xtitle->boundingRect().width(),
+                   ::style->histogramHeight + ::style->textDistance + xtitle->boundingRect().height());
     addItem(xtitle);
 }
 
@@ -192,18 +194,18 @@ HistogramBar::HistogramBar(qreal x, qreal y, qreal width, qreal height, QList<in
 {
     num = nnum;
     ids = nids;
-    setBrush(Style::histogramBarBrush);
-    setPen(Style::histogramBarPen);
+    setBrush(::style->histogramBarBrush);
+    setPen(::style->histogramBarPen);
 }
 
 void HistogramBar::select()
 {
-    setBrush(Style::histogramSelectedBarBrush);
+    setBrush(::style->histogramSelectedBarBrush);
 }
 
 void HistogramBar::deselect()
 {
-    setBrush(Style::histogramBarBrush);
+    setBrush(::style->histogramBarBrush);
 }
 
 QList<int> HistogramBar::getIds()

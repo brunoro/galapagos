@@ -29,69 +29,63 @@
 #include <QPalette>
 #include <QPen>
 
-namespace Style
+class Style
 {
-    /* vars */
-    const float pi = 3.14159265;
+    public:
+        Style();
 
-    /* sizes and distances */
-    const int windowWidth = 1024;
-    const int windowHeight= 800;
+        /* vars */
+        static const float pi = 3.14159265;
 
-    const int sceneWidth = 1500;
-    const int sceneHeight= 1500;
+        /* sizes and distances */
+        int windowWidth;
+        int windowHeight;
 
-    const QSizeF nodeSize = QSizeF(40, 40);
-    const int edgeDistance = 5;
-    const int edgeWeight = 2;
-    const int defaultStep = 50;
-    const int paletteS = 200,
-              paletteV = 200;
+        int sceneWidth;
+        int sceneHeight;
 
-    const int refboxLineLen = 30;
-    const int refboxPadding = 10;
-    const int refboxBorderRadius = 5;
+        QSizeF nodeSize;
+        int edgeDistance;
+        int edgeWeight;
+        int defaultStep;
+        int paletteS;
+        int paletteV;
+        int paletteStart;
+        int paletteRange;
 
-    const int histogramPadding = 0;
-    const int histogramWidth = 250;
-    const int histogramHeight = 400;
+        int refboxLineLen;
+        int refboxPadding;
+        int refboxBorderRadius;
 
-    const int textDistance = 6;
+        int histogramPadding;
+        int histogramWidth;
+        int histogramHeight;
 
-    const int nodeZValue = 1;
-    const int edgeZValue = 0;
-    const int refboxZValue = 2;
-    /* colors */
-    /*const QColor nodeBrushColor[4] = { QColor("dodgerblue"),
-                                       QColor("lightseagreen"),
-                                       QColor("orange"),
-                                       QColor("darkgrey") };*/
+        int textDistance;
 
-    const QPalette systemColors = QApplication::palette();
+        int nodeZValue;
+        int edgeZValue;
+        int refboxZValue;
 
-    const QColor defaultNodeColor = QColor("gainsboro");
-    const QColor nodeBrushColor[4] = { QColor(defaultNodeColor),
-                                       QColor(defaultNodeColor),
-                                       QColor(defaultNodeColor),
-                                       QColor(defaultNodeColor) };
-    const QColor nodePenColor(0, 0, 0, 0);
-    const QColor nodeTextColor("grey");
-    const QColor edgeColor("royalblue");
+        /* colors */
+        QColor defaultNodeColor;
+        QColor nodePenColor;
+        QColor nodeTextColor;
+        QColor edgeColor;
 
-    const QColor ringColor(Qt::gray);
+        QColor ringColor;
 
-    const QBrush refboxBGColor = QColor("lightgrey");
-    const QPen refboxBorder(Qt::NoPen);
+        QBrush refboxBGColor;
+        QPen refboxBorder;
 
-    const QBrush histogramBarBrush = QColor("gainsboro");
-    const QBrush histogramSelectedBarBrush = QColor("royalblue");
-    //const QPen histogramBarPen(Qt::NoPen);
-    const QPen histogramBarPen(QColor("darkgrey"), 0.5);
-    const QPen histogramAxisColor(QColor("black"), 0.5);
+        QBrush histogramBarBrush;
+        QBrush histogramSelectedBarBrush;
+        QPen histogramBarPen;
+        QPen histogramAxisColor;
 
-    /* palette functions */
-    QList<QColor> getColorPalette(int len);
-    QList<Qt::PenStyle> getPenStylePalette(int len);
-}
+        /* palette functions */
+        QList<QColor> getColorPalette(int len);
+        QList<Qt::PenStyle> getPenStylePalette(int len);
+};
 
 #endif // STYLE_H

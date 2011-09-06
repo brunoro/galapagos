@@ -19,9 +19,11 @@
 
 #include "edge.h"
 
-Edge::Edge(Node *from, Node *to, QPen edge_style)
+extern Style* style;
+
+Edge::Edge(Node *from, Node *to, QPen lineStyle)
 {
-    style = edge_style;
+    edgeStyle = lineStyle;
     dest = from;
     dir = to;
     line = new QGraphicsLineItem();
@@ -50,10 +52,10 @@ void Edge::draw(QGraphicsScene *canvas)
     translated.translate(offset * sinf(angleRad), offset * cosf(angleRad));
     line->setLine(translated);
 
-    /* set style */
-    style.setCapStyle(Qt::RoundCap);
-    line->setPen(style);
-    line->setZValue(Style::edgeZValue);
+    /* set edgeStyle */
+    edgeStyle.setCapStyle(Qt::RoundCap);
+    line->setPen(edgeStyle);
+    line->setZValue(style->edgeZValue);
     
     /* add it to scene */
     canvas->addItem(line);

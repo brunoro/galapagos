@@ -1,5 +1,7 @@
 #include "tree.h"
 
+extern Style* style;
+
 Def* Tree::definition = NULL;
 
 Tree::Tree(QString line, int tree_id, float tree_fitness)
@@ -102,9 +104,9 @@ Tree* Tree::drawMany(QGraphicsScene *canvas, QList<Tree*>& trees, QPointF coord,
 
     /* set styles adjusting ids to be unique */
     QHash<int, QPen> styles;
-    QList<QColor> colors = Style::getColorPalette(ids.length());
+    QList<QColor> colors = style->getColorPalette(ids.length());
     for(int i = 0; i < ids.length(); i++)
-        styles[ids[i]] = QPen(QBrush(colors[i]), Style::edgeWeight);
+        styles[ids[i]] = QPen(QBrush(colors[i]), style->edgeWeight);
 
     /* make new tree */
     Tree *merged = new Tree(GENERATED_TREE_ID, GENERATED_TREE_FITNESS);
@@ -221,7 +223,7 @@ void Tree::drawRings(QGraphicsScene *canvas, QPointF coord, int depth, int step)
                                                                  coord.y() - radius,
                                                                  radius * 2,
                                                                  radius * 2);
-        ellipse->setPen(Style::ringColor);
+        ellipse->setPen(style->ringColor);
         ellipse->setZValue(0);
         canvas->addItem(ellipse);
     }

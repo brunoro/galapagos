@@ -19,6 +19,8 @@
 
 #include "refbox.h"
 
+extern Style* style;
+
 Refbox::Refbox(QList<QColor> box_lines, QStringList box_labels, QPointF box_pos)
 {
     lines = box_lines;
@@ -63,12 +65,12 @@ void Refbox::draw(QGraphicsScene *canvas)
 
     elements = new QGraphicsItemGroup();
     QGraphicsRoundRectItem *bound = new QGraphicsRoundRectItem(pointPos.x(), pointPos.y(), 2, 2);
-    bound->setRadius(Style::refboxBorderRadius);
-    bound->setBrush(Style::refboxBGColor);
-    bound->setPen(Style::refboxBorder);
+    bound->setRadius(style->refboxBorderRadius);
+    bound->setBrush(style->refboxBGColor);
+    bound->setPen(style->refboxBorder);
     elements->addToGroup(bound);
 
-    pointPos += QPointF(Style::refboxPadding, Style::refboxPadding);
+    pointPos += QPointF(style->refboxPadding, style->refboxPadding);
 
     float maxTextLen = FLT_MIN;
     float boxHeight = 0;
@@ -78,10 +80,10 @@ void Refbox::draw(QGraphicsScene *canvas)
         QRectF bbox = text->boundingRect();
         QGraphicsLineItem *line = new QGraphicsLineItem(pointPos.x(),
                                                         pointPos.y() + bbox.height()/2,
-                                                        pointPos.x() + Style::refboxLineLen,
+                                                        pointPos.x() + style->refboxLineLen,
                                                         pointPos.y() + bbox.height()/2);
-        line->setPen(QPen(lines[i], Style::edgeWeight));
-        text->setPos(QPointF(pointPos.x() + Style::refboxLineLen + Style::refboxPadding, pointPos.y()));
+        line->setPen(QPen(lines[i], style->edgeWeight));
+        text->setPos(QPointF(pointPos.x() + style->refboxLineLen + style->refboxPadding, pointPos.y()));
         if(bbox.width() > maxTextLen)
             maxTextLen = bbox.width();
 
@@ -94,7 +96,7 @@ void Refbox::draw(QGraphicsScene *canvas)
         else
         {
             boxHeight += bbox.height();
-            maxTextLen += Style::refboxPadding;
+            maxTextLen += style->refboxPadding;
         }
     }
 
@@ -104,16 +106,16 @@ void Refbox::draw(QGraphicsScene *canvas)
         QGraphicsTextItem *text = new QGraphicsTextItem("No trees drawn");
         QRectF bbox = text->boundingRect();
         text->setPos(QPointF(pointPos.x(), pointPos.y()));
-        maxTextLen = bbox.width() - Style::refboxLineLen;
+        maxTextLen = bbox.width() - style->refboxLineLen;
         boxHeight = bbox.height();
         elements->addToGroup(text);
     }
 
     bound->setRect(0, 0, 
-                   maxTextLen + Style::refboxLineLen + Style::refboxPadding * 2,
-                   boxHeight + Style::refboxPadding * 2);
+                   maxTextLen + style->refboxLineLen + style->refboxPadding * 2,
+                   boxHeight + style->refboxPadding * 2);
     elements->setFlags(QGraphicsItem::ItemIsMovable);
-    elements->setZValue(Style::refboxZValue);
+    elements->setZValue(style->refboxZValue);
     elements->setToolTip("Click to drag");
     elements->setCursor(Qt::SizeAllCursor);
     canvas->addItem(elements);

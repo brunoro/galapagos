@@ -19,15 +19,69 @@
 
 #include "style.h"
 
+/* default constructor */
+Style::Style()
+{
+    /* sizes and distances */
+    windowWidth = 1024;
+    windowHeight= 800;
+
+    sceneWidth = 1500;
+    sceneHeight= 1500;
+
+    nodeSize = QSizeF(40, 40);
+    edgeDistance = 5;
+    edgeWeight = 2;
+    defaultStep = 50;
+    
+    refboxLineLen = 30;
+    refboxPadding = 10;
+    refboxBorderRadius = 5;
+
+    histogramPadding = 0;
+    histogramWidth = 250;
+    histogramHeight = 400;
+
+    textDistance = 6;
+
+    nodeZValue = 1;
+    edgeZValue = 0;
+    refboxZValue = 2;
+
+    /* hue and saturation for palette */
+    paletteS = 200;
+    paletteV = 200;
+
+    /* angles for palette */
+    paletteRange = 360;
+    paletteStart = 0;
+
+    /* colors */
+    defaultNodeColor = QColor("gainsboro");
+    nodePenColor = QColor(0, 0, 0, 0);
+    nodeTextColor = QColor("grey");
+    edgeColor = QColor("royalblue");
+
+    ringColor = QColor(Qt::gray);
+
+    refboxBGColor = QBrush(QColor("lightgrey"));
+    refboxBorder = QPen(Qt::NoPen);
+
+    histogramBarBrush = QBrush(QColor("gainsboro"));
+    histogramSelectedBarBrush = QBrush(QColor("royalblue"));
+    histogramBarPen = QPen(QColor("darkgrey"), 0.5);
+    histogramAxisColor = QPen(QColor("black"), 0.5);
+}
+
 QList<QColor> Style::getColorPalette(int len)
 {
     QList<QColor> palette;
     if(len > 0)
     {
-        int h = 0,
+        int h = paletteStart,
             s = paletteS,
             v = paletteV;
-        float ratio = 360/len;
+        float ratio = paletteRange / len;
         for(int i = 0; i < len; i++)
         {
             palette.append(QColor::fromHsv(h, s, v));

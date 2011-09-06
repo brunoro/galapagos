@@ -33,7 +33,7 @@ class Node;
 class Edge
 {
     public:
-        Edge(Node *from, Node *to, QPen style);
+        Edge(Node *from, Node *to, QPen lineStyle);
         void setOffset(float offset);
         float getOffset();
         void draw(QGraphicsScene *canvas);
@@ -41,7 +41,7 @@ class Edge
         void scale(qreal factor);
 
     private:
-        QPen style;
+        QPen edgeStyle;
         QGraphicsLineItem *line;
         Node *dest, *dir;
         float offset;

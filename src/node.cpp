@@ -19,6 +19,8 @@
 
 #include "node.h"
 
+extern Style* style;
+
 Node::Node(NodeType nodetype, QString nodeinfo): tamToEllipse(4)
 {
     type = nodetype;
@@ -93,7 +95,7 @@ int Node::recursiveDraw(QGraphicsScene *canvas,
         sonAngle += hstep;
         
         /* connect son */
-        addEdge(sons[i], QPen(Style::edgeColor, Style::edgeWeight))->draw(canvas);
+        addEdge(sons[i], QPen(style->edgeColor, style->edgeWeight))->draw(canvas);
 
         /* get max depth */
         if(sonLevel > maxLevel)
@@ -109,7 +111,7 @@ bool Node::collidesWith(Node *other)
     QPointF from = getCoord(),
             to = other->getCoord();
     float dist = sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
-    return (dist <= Style::nodeSize.width());
+    return (dist <= style->nodeSize.width());
 }
 
 void Node::adjustPosition(QPointF origin, Node *other, int level, int step)
@@ -118,7 +120,7 @@ void Node::adjustPosition(QPointF origin, Node *other, int level, int step)
     QPointF from = getCoord(),
             to = other->getCoord();
     float dist = sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
-    float diff = Style::nodeSize.width() - dist;
+    float diff = style->nodeSize.width() - dist;
 
     /* get new ideal angle */
     float angleDelta = TO_DEGREES(acosf(1 - powf(diff, 2) / (2 * powf(step * level, 2))));
@@ -278,10 +280,10 @@ void Node::updateEdges()
 
         /* avoid edges passing nodes bound */
         float edgeDistance;
-        if(sonEdges.length() * Style::edgeDistance < Style::nodeSize.width())
-            edgeDistance = Style::edgeDistance;
+        if(sonEdges.length() * style->edgeDistance < style->nodeSize.width())
+            edgeDistance = style->edgeDistance;
         else
-            edgeDistance = Style::nodeSize.width() / sonEdges.length();
+            edgeDistance = style->nodeSize.width() / sonEdges.length();
         float offset = - (sonEdges.length() - 1) * edgeDistance / 2;
         for(int i = 0; i < sonEdges.length(); i++)
         {
@@ -302,25 +304,25 @@ void Node::recursiveUpdateEdges()
 void Node::draw(QGraphicsScene *canvas, QPointF coord)
 {
     /* set colors */
-    ((QGraphicsEllipseItem*)bound)->setBrush(QBrush(QColor(Style::defaultNodeColor)));
-    ((QGraphicsEllipseItem*)bound)->setPen(QPen(QColor(Style::nodePenColor)));
-    ((QGraphicsSimpleTextItem*)text)->setBrush(QBrush(QColor(Style::nodeTextColor)));
+    ((QGraphicsEllipseItem*)bound)->setBrush(QBrush(QColor(style->defaultNodeColor)));
+    ((QGraphicsEllipseItem*)bound)->setPen(QPen(QColor(style->nodePenColor)));
+    ((QGraphicsSimpleTextItem*)text)->setBrush(QBrush(QColor(style->nodeTextColor)));
 
     /* set position */
     QRectF bbox = text->boundingRect();
-    QSizeF size = Style::nodeSize;
+    QSizeF size = style->nodeSize;
 
     /* draw bound */
     ((QGraphicsEllipseItem*)bound)->setRect(QRectF(bbox.topLeft(), size));
     bound->setPos(coord - QPointF(size.width()/2, size.height()/2));
-    bound->setZValue(Style::nodeZValue);
+    bound->setZValue(style->nodeZValue);
     if(info.size() > tamToEllipse)
         bound->setToolTip(info);
     canvas->addItem(bound);
 
     /* draw text */
     text->setPos(coord - QPointF(bbox.width()/2, bbox.height()/2));
-    text->setZValue(Style::nodeZValue);
+    text->setZValue(style->nodeZValue);
     canvas->addItem(text);
 
     pos = coord;
@@ -330,7 +332,7 @@ void Node::draw(QGraphicsScene *canvas, QPointF coord)
 void Node::update(QPointF coord)
 {   
     QRectF bbox = text->boundingRect();
-    QSizeF size = Style::nodeSize;
+    QSizeF size = style->nodeSize;
 
     /* centering */
     ((QGraphicsEllipseItem*)bound)->setRect(QRectF(bbox.topLeft(), size));
