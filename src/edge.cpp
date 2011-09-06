@@ -51,6 +51,7 @@ void Edge::draw(QGraphicsScene *canvas)
     line->setLine(translated);
 
     /* set style */
+    style.setCapStyle(Qt::RoundCap);
     line->setPen(style);
     line->setZValue(Style::edgeZValue);
     
@@ -61,13 +62,15 @@ void Edge::draw(QGraphicsScene *canvas)
 void Edge::update()
 {
     line->setLine(QLineF(dest->getCoord(), dir->getCoord()));
-    //qDebug() << "Edge::update" << QLineF(dest->getCoord(), dir->getCoord());
 }
 
 void Edge::scale(qreal factor)
 {
-    QPen scaledPen = style;
-    scaledPen.setWidthF(style.width() * factor);
-    line->setPen(scaledPen);
+    QPointF oldLineCenter = line->mapToScene(line->boundingRect().center());
+    line->scale(factor, factor);
+    QTransform lineScale = QTransform::fromScale(1/factor, 1/factor);
+    line->setLine(line->line() * lineScale);
+    QPointF newLineCenter = line->mapToScene(line->boundingRect().center());
+    line->setPos(line->pos() - (newLineCenter - oldLineCenter));
     return;
 }

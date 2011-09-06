@@ -598,12 +598,12 @@ void GPVis::restoreScale()
 
 void GPVis::individualFromTable()
 {
-    /* preserve refBox position relative to the viewport */
-    //if(ref != NULL)
-    //{
-    //    qDebug() << "SAVE: viewPos\t" << viewport->mapFromScene(ref->scenePos()) << "\t" << ref->scenePos();
-    //    refPos = viewport->mapFromScene(ref->scenePos());
-    //}
+    /* preserve rounded refBox position relative to the viewport */
+    if(ref != NULL)
+    {
+        //qDebug() << "SAVE: viewPos\t" << viewport->mapFromScene(ref->scenePos()) << "\t" << ref->scenePos();
+        refPos = viewport->mapFromScene(ref->scenePos());
+    }
 
     /* preserve table selection */
     QList<QModelIndex> rowIndexes = tableView->selectionModel()->selectedRows();
@@ -653,7 +653,7 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
     Tree *drawn = Tree::drawMany(scene, trees, *sceneCenter, Style::defaultStep, collisionUse->isChecked(), consensusDepth->value());
     
     // TODO: delete old refbox
-    qDebug() << "DRAW: viewPos\t" << refPos << "\t" << viewport->mapToScene(refPos);
+    //qDebug() << "DRAW: viewPos\t" << refPos << "\t" << viewport->mapToScene(refPos);
     ref = new Refbox(Style::getColorPalette(ind.length()), refBoxLabel, viewport->mapToScene(refPos));
     ref->draw(scene);
     drawnTree = drawn;
@@ -735,11 +735,7 @@ void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
 void GPVis::fitnessFromHistogram()
 {
     /* preserve refbox position */
-    if(ref != NULL)
-    {
-        refPos = viewport->mapFromScene(ref->mapToScene(QPointF(0, 0)));
-        qDebug() << refPos;
-    }
+    if(ref != NULL) refPos = viewport->mapFromScene(ref->mapToScene(ref->getPos()));
 
     /* get inviduals */
     fitnessSelectedSlice = fitnessScene->getSelectedSlice();

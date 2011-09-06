@@ -38,6 +38,7 @@ Node::Node(NodeType nodetype, QString nodeinfo): tamToEllipse(4)
 
 Node::~Node()
 {
+    /*
     foreach(Node* son, sons){
         delete son;
         son = NULL;
@@ -57,6 +58,8 @@ Node::~Node()
 
     delete bound;
     bound = NULL;
+    */
+    return;
 }
 
 void Node::addSon(Node *son)
@@ -419,12 +422,11 @@ void Node::scale(qreal factor)
     text->setPos(text->pos() - (newTextCenter - oldTextCenter));
 
     // TODO: implement changing edge width correctly 
-    /*
     foreach(QList<Edge*> sonEdges, edges)
     {
         for(int i = 0; i < sonEdges.length(); i++)
             sonEdges[i]->scale(factor);
-    }*/
+    }
 
     /* call for sons and edges*/
     for(int i = 0; i < sons.length(); i++)
