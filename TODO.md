@@ -1,7 +1,9 @@
 TODO 
 ====
+- Preserve refbox viewport position when panning and zooming
+- Rewrite input file parser
+- Write a stylesheet parser
 - Make a proper normalization on histogram data
-- Draw labels on histogram axis
 - Get system colors to make styles
 - Put a button to hide and reset refbox
 - Change radio boxes to tabs
@@ -9,11 +11,11 @@ TODO
 - Link parents to offspring to parents to offspring to parents to parents to offspring to parents
 - Keep multiple selection upon generation changes
 - Fix collision detection without consensus tree
-- Fix "item has already been added to this scene" problem on edges
-- New name ?
 - Fitness space visualization __2/3 DONE__
 - Fix memory usage __1/2 DONE__
+- Draw labels on histogram axis __DONE__
 - Fix font size inside nodes __DONE__
+- Fix "item has already been added to this scene" problem on edges __DONE__
 - Tooltips on gui elements __DONE__
 - Reference box for edge colors __DONE__
 - Add possibility to select multiple individuals on table view __DONE__
