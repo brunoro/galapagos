@@ -26,23 +26,22 @@
 #include <QRegExp>
 #include <QStringList>
 
+#define NOT_A_NODE -1
+
 class Def
 {
     public:
         Def();
         virtual ~Def(){}
 
-        void addOperators(QString opstr);
-        void addTerms(QString terms);
-
-        int isOp(QString str);
-        bool isTerm(QString str);
+        void addNodes(QString opstr);
+        int nodeDegree(QString str);
 
         QHashIterator<QString, int> getOpIterator();
 
     private:
+        QHash<QString, int> nodes;
         QHash<QString, int> ops;
-        QStringList terms;
 };
 
 #endif

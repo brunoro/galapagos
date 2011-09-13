@@ -253,7 +253,14 @@ void Node::opsConsensus(int depth, Def* definition)
     if(depth == 0)
         return;
     
-    int degree = (type == ROOT) ? 1 : definition->isOp(info);
+    int degree = (type == ROOT) ? 1 : definition->nodeDegree(info);
+    /* TODO: raised exception */
+    if(degree == NOT_A_NODE)
+    {
+        qDebug() << "Node::opsConsensus NOT_A_NODE " << info;
+        exit(1);
+    }
+
     /* insert as many times as the degree */
     for(int d = 0; d < degree; d++)
     {

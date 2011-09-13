@@ -300,22 +300,13 @@ void GPVis::readLogFile()
         {
             fileBuffer = fileStream->readLine();
 
-            /* ops */
-            if(fileBuffer.contains(QRegExp("\\s*ops:*.")))
+            /* nodes */
+            if(fileBuffer.contains(QRegExp("\\s*nodes:*.")))
             {
-                ops = fileBuffer.remove(QRegExp("\\s*ops:\\s*"));
+                ops = fileBuffer.remove(QRegExp("\\s*nodes:\\s*"));
                 //qDebug() << "GPVis::readLogFile found ops " << ops;
 
-                Tree::definition->addOperators(ops);
-                continue;
-            }
-            /* terms */
-            if(fileBuffer.contains(QRegExp("\\s*terms:*.")))
-            {
-                terms = fileBuffer.remove(QRegExp("\\s*terms:\\s*"));
-                //qDebug() << "GPVis::readLogFile found terms" << terms;
-
-                Tree::definition->addTerms(terms);
+                Tree::definition->addNodes(ops);
                 continue;
             }
             /* end of definition */
@@ -380,10 +371,10 @@ void GPVis::readGeneration()
             gen->addIndividual(tokens[1], tokens[0].toFloat());
         }
         /* reproduction */
-        if(fileBuffer.contains(QRegExp("rep:*.")))
+        if(fileBuffer.contains(QRegExp("breed:*.")))
         {
             reproduction = fileBuffer;
-            reproduction.remove(QRegExp("\\s*rep:\\s*"));
+            reproduction.remove(QRegExp("\\s*breed:\\s*"));
             //qDebug() << "GPVis::readLogFile found reproduction" << reproduction;
             tokens = reproduction.split(QRegExp("\\s+"));
 

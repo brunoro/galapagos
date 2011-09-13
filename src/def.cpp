@@ -24,49 +24,31 @@ Def::Def()
     //qDebug() << "Def::Def constructor" ;
 }
 
-void Def::addOperators(QString opstr){
+void Def::addNodes(QString opstr){
     
     //qDebug() << "Def::addOperators opstr" ;
 
     /* iterates on operations on the form "(name,degree) (name2,degree2)" */
-    QStringList oplist = opstr.split(QRegExp("\\s+")).filter(""),
-                opturn; 
+    QStringList nodelist = opstr.split(QRegExp("\\s+")).filter(""),
+                nodeturn; 
 
-    foreach(QString opiter, oplist)
+    foreach(QString nodeiter, nodelist)
     {
-        if(opiter == "") break;
-        opturn = opiter.remove(QRegExp("\\(|\\)")).split(",");
-        //qDebug() << "Def::Def adding op" << opturn;
-        ops[opturn[0]] = opturn[1].toInt();
+        if(nodeiter == "") break;
+        nodeturn = nodeiter.remove(QRegExp("\\(|\\)")).split(",");
+        //qDebug() << "Def::Def adding node" << nodeturn;
+        int degree = nodeturn[1].toInt();
+        nodes[nodeturn[0]] = degree;
+        if(degree > 0)
+            ops[nodeturn[0]] = degree;
     }
 }
 
-void Def::addTerms(QString termstr){
-
-    //qDebug() << "Def::addTerms - terms " << termstr;
-    
-    /* iterates on terminals on the form "term1 term2 term3" */
-    QStringList termlist = termstr.split(QRegExp("\\s+"));
-
-    foreach(const QString &termiter, termlist)
-    {
-        if(termiter == "") break;
-        ////qDebug() << "Def::Def adding term" << termiter;
-        terms << termiter;
-    }
-}
-
-/* returns the degree of an operation if it exists, otherwise returns 0 */
-int Def::isOp(QString str)
+/* returns the degree of an operation if it exists, otherwise returns NOT_A_NODE */
+int Def::nodeDegree(QString str)
 {
-    //qDebug() << "Def::isOp" << str << ops.value(str);
-    return ops.contains(str) ? ops.value(str) : 0;
-}
-
-bool Def::isTerm(QString str)
-{
-    //qDebug() << "Def::isTerm" << str << terms.indexOf(str);
-    return (terms.indexOf(str) >= 0) ? true : false;
+    //qDebug() << "Def::isNode" << str << ops.value(str);
+    return nodes.contains(str) ? ops.value(str) : NOT_A_NODE;
 }
 
 QHashIterator<QString, int> Def::getOpIterator()

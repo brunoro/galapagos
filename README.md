@@ -18,13 +18,20 @@ Input file
 The input file must obey this format:
 
     definition:
-    	ops: (<operator>,<operator degree>)
-    	terms: <terminal1> <terminal2> <terminal3>
+    	ops: (<node string>,<node degree>)
     generation:
     	ind:	<fitness> <tree in stack notation>
-    	rep:    <parent1 id> <parent2 id> -> <offspring id>
+    	breed:    <parent1 id> <parent2 id> -> <offspring id>
 
-Where `ops` are operator nodes, `terms` are terminal nodes, `ind` is an individual and `rep` is a reproduction.
-Individual ids are assigned by order of appearance in the generation, starting from 0. All lines except the ones containing `definition` and `generation` should be preceded by a `\t` char.
+Where `nodes` are nodes, `terms` are terminal nodes, `ind` is an individual and `breed` is a breeding.
+Individual ids and generation numbers are assigned by order of appearance, starting from 0. 
 
-Some example files are in `test/` folder.
+A little example, showing the input file for simple arithmetic with `<TAB>` as `\t` and `<SPACE>` as a single whitespace:
+
+    definition:
+    <TAB>nodes:<SPACE>(+,2)<SPACE>(-,2)<SPACE>(*,2)<SPACE>(/,2)<SPACE>(sqrt,1)<SPACE>(x,0)<SPACE>(y,0)
+    generation:
+        ind:<TAB>0.1245<TAB>+<SPACE>1<SPACE>2
+        ind:<TAB>0.2513<TAB>sqrt<SPACE>2<SPACE>+<SPACE>7<SPACE>10
+
+Some more examples in the `test/` folder.

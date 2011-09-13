@@ -42,15 +42,17 @@ Node *Tree::parseTree(QStringList nodes, int *pos, int id)
 {
     Node *turn = NULL;
 
-    int degree = definition->isOp(nodes[*pos]);
-    if (degree)
+    int degree = definition->nodeDegree(nodes[*pos]);
+    /* operator */
+    if (degree > 0)
     {
         turn = new Node(OP, nodes[*pos]);
         *pos += 1;
         for(int i = 0; i < degree; i++)
             turn->addSon(parseTree(nodes, pos, id));
     }
-    else if (definition->isTerm(nodes[*pos]))
+    /* terminal */
+    else if (degree == 0)
     {
         turn = new Node(TERM, nodes[*pos]);
         *pos += 1;
@@ -59,7 +61,7 @@ Node *Tree::parseTree(QStringList nodes, int *pos, int id)
     /* TODO: raise exception */
     else
     {
-        //qDebug() << "Tree::parseTree invalid node" << nodes[pos];
+        //qDebug() << "Tree::parseTree invalid node" << nodes[*pos] << degree;
         exit(1);
     }
 

@@ -1,6 +1,5 @@
 definition:
-	ops: (+,2) (-,2) (*,2) (%,2) (Log,2) (Pow,2) 
-	terms: MaxTFICF MaxTFIDF MaxCTD MaxOR MaxCC MaxGSS MaxCHI MaxAM MaxIG MaxDom sumDF DF sumTF TF TFIDF TFICF IDF CTD OR CE CC GSS CHI IG DOM GINI P' P AM
+	nodes: (+,2) (-,2) (*,2) (%,2) (Log,2) (Pow,2) (MaxTFICF,0) (MaxTFIDF,0) (MaxCTD,0) (MaxOR,0) (MaxCC,0) (MaxGSS,0) (MaxCHI,0) (MaxAM,0) (MaxIG,0) (MaxDom,0) (sumDF,0) (DF,0) (sumTF,0) (TF,0) (TFIDF,0) (TFICF,0) (IDF,0) (CTD,0) (OR,0) (CE,0) (CC,0) (GSS,0) (CHI,0) (IG,0) (DOM,0) (GINI,0) (P',0) (P,0) (AM,0)
 generation:
 	ind:	93.2329	* MaxOR AM
 	ind:	29.6386	+ + MaxAM MaxCC - IG GSS
@@ -52,52 +51,52 @@ generation:
 	ind:	35.4418	- * MaxOR TF Pow GINI DOM
 	ind:	93.4538	* CTD P'
 	ind:	91.4859	- % MaxGSS TFICF % TFIDF MaxCTD
-	rep: 20  -> 20
-	rep: 22 10  -> 0
-	rep: 22 10  -> 1
-	rep: 7 26  -> 2
-	rep: 7 26  -> 3
-	rep: 28 35  -> 4
-	rep: 28 35  -> 5
-	rep: 4  -> 6
-	rep: 37  -> 7
-	rep: 12 8  -> 9
-	rep: 12 8  -> 10
-	rep: 34 49  -> 12
-	rep: 34 49  -> 13
-	rep: 26  -> 14
-	rep: 16 25  -> 15
-	rep: 16 25  -> 16
-	rep: 42 8  -> 17
-	rep: 42 8  -> 18
-	rep: 43 45  -> 19
-	rep: 43 45  -> 21
-	rep: 3  -> 22
-	rep: 41 17  -> 23
-	rep: 41 17  -> 24
-	rep: 42 10  -> 25
-	rep: 42 10  -> 26
-	rep: 27  -> 27
-	rep: 40 4  -> 28
-	rep: 40 4  -> 29
-	rep: 41  -> 30
-	rep: 16 6  -> 31
-	rep: 16 6  -> 32
-	rep: 27 10  -> 33
-	rep: 27 10  -> 34
-	rep: 29 44  -> 35
-	rep: 29 44  -> 36
-	rep: 4 26  -> 38
-	rep: 4 26  -> 39
-	rep: 43 47  -> 40
-	rep: 43 47  -> 41
-	rep: 25 21  -> 43
-	rep: 25 21  -> 44
-	rep: 29 11  -> 45
-	rep: 29 11  -> 46
-	rep: 9 11  -> 47
-	rep: 9 11  -> 48
-	rep: 12 32  -> 49
+	breed: 20  -> 20
+	breed: 22 10  -> 0
+	breed: 22 10  -> 1
+	breed: 7 26  -> 2
+	breed: 7 26  -> 3
+	breed: 28 35  -> 4
+	breed: 28 35  -> 5
+	breed: 4  -> 6
+	breed: 37  -> 7
+	breed: 12 8  -> 9
+	breed: 12 8  -> 10
+	breed: 34 49  -> 12
+	breed: 34 49  -> 13
+	breed: 26  -> 14
+	breed: 16 25  -> 15
+	breed: 16 25  -> 16
+	breed: 42 8  -> 17
+	breed: 42 8  -> 18
+	breed: 43 45  -> 19
+	breed: 43 45  -> 21
+	breed: 3  -> 22
+	breed: 41 17  -> 23
+	breed: 41 17  -> 24
+	breed: 42 10  -> 25
+	breed: 42 10  -> 26
+	breed: 27  -> 27
+	breed: 40 4  -> 28
+	breed: 40 4  -> 29
+	breed: 41  -> 30
+	breed: 16 6  -> 31
+	breed: 16 6  -> 32
+	breed: 27 10  -> 33
+	breed: 27 10  -> 34
+	breed: 29 44  -> 35
+	breed: 29 44  -> 36
+	breed: 4 26  -> 38
+	breed: 4 26  -> 39
+	breed: 43 47  -> 40
+	breed: 43 47  -> 41
+	breed: 25 21  -> 43
+	breed: 25 21  -> 44
+	breed: 29 11  -> 45
+	breed: 29 11  -> 46
+	breed: 9 11  -> 47
+	breed: 9 11  -> 48
+	breed: 12 32  -> 49
 generation:
 	ind:	73.6345	Log CC MaxCC
 	ind:	29.7791	* CE MaxCTD
@@ -149,54 +148,54 @@ generation:
 	ind:	42.9719	- DF IDF
 	ind:	85.4217	% % MaxGSS DOM + + GSS CE + MaxCHI sumDF
 	ind:	73.6345	Log IG TFIDF
-	rep: 20  -> 20
-	rep: 6  -> 0
-	rep: 3  -> 2
-	rep: 29 39  -> 3
-	rep: 29 39  -> 4
-	rep: 2 31  -> 5
-	rep: 2 31  -> 6
-	rep: 23  -> 7
-	rep: 36 5  -> 8
-	rep: 36 5  -> 9
-	rep: 42 2  -> 10
-	rep: 42 2  -> 11
-	rep: 19 41  -> 12
-	rep: 19 41  -> 13
-	rep: 30  -> 14
-	rep: 42 41  -> 15
-	rep: 42 41  -> 16
-	rep: 1  -> 17
-	rep: 30 15  -> 18
-	rep: 30 15  -> 19
-	rep: 42 25  -> 21
-	rep: 42 25  -> 22
-	rep: 38 33  -> 23
-	rep: 38 33  -> 24
-	rep: 34 25  -> 25
-	rep: 34 25  -> 26
-	rep: 16  -> 28
-	rep: 37 40  -> 29
-	rep: 37 40  -> 30
-	rep: 40  -> 31
-	rep: 15 2  -> 32
-	rep: 15 2  -> 33
-	rep: 14 9  -> 34
-	rep: 14 9  -> 35
-	rep: 26  -> 36
-	rep: 20 38  -> 37
-	rep: 20 38  -> 38
-	rep: 20 46  -> 39
-	rep: 20 46  -> 40
-	rep: 39 9  -> 41
-	rep: 39 9  -> 42
-	rep: 44 32  -> 43
-	rep: 44 32  -> 44
-	rep: 49 15  -> 45
-	rep: 49 15  -> 46
-	rep: 28 10  -> 47
-	rep: 28 10  -> 48
-	rep: 19 40  -> 49
+	breed: 20  -> 20
+	breed: 6  -> 0
+	breed: 3  -> 2
+	breed: 29 39  -> 3
+	breed: 29 39  -> 4
+	breed: 2 31  -> 5
+	breed: 2 31  -> 6
+	breed: 23  -> 7
+	breed: 36 5  -> 8
+	breed: 36 5  -> 9
+	breed: 42 2  -> 10
+	breed: 42 2  -> 11
+	breed: 19 41  -> 12
+	breed: 19 41  -> 13
+	breed: 30  -> 14
+	breed: 42 41  -> 15
+	breed: 42 41  -> 16
+	breed: 1  -> 17
+	breed: 30 15  -> 18
+	breed: 30 15  -> 19
+	breed: 42 25  -> 21
+	breed: 42 25  -> 22
+	breed: 38 33  -> 23
+	breed: 38 33  -> 24
+	breed: 34 25  -> 25
+	breed: 34 25  -> 26
+	breed: 16  -> 28
+	breed: 37 40  -> 29
+	breed: 37 40  -> 30
+	breed: 40  -> 31
+	breed: 15 2  -> 32
+	breed: 15 2  -> 33
+	breed: 14 9  -> 34
+	breed: 14 9  -> 35
+	breed: 26  -> 36
+	breed: 20 38  -> 37
+	breed: 20 38  -> 38
+	breed: 20 46  -> 39
+	breed: 20 46  -> 40
+	breed: 39 9  -> 41
+	breed: 39 9  -> 42
+	breed: 44 32  -> 43
+	breed: 44 32  -> 44
+	breed: 49 15  -> 45
+	breed: 49 15  -> 46
+	breed: 28 10  -> 47
+	breed: 28 10  -> 48
+	breed: 19 40  -> 49
 generation:
 	ind:	36.3855	% MaxOR MaxTFICF
 	ind:	61.004	Pow GSS sumTF
@@ -248,53 +247,53 @@ generation:
 	ind:	73.6345	Log GINI MaxCC
 	ind:	36.3855	% MaxOR MaxTFICF
 	ind:	51.506	Pow Pow MaxAM GSS * MaxOR TF
-	rep: 20  -> 20
-	rep: 33 12  -> 0
-	rep: 33 12  -> 1
-	rep: 28 25  -> 2
-	rep: 28 25  -> 3
-	rep: 43 6  -> 4
-	rep: 43 6  -> 5
-	rep: 38 22  -> 6
-	rep: 38 22  -> 7
-	rep: 7 10  -> 9
-	rep: 7 10  -> 10
-	rep: 8 12  -> 11
-	rep: 8 12  -> 12
-	rep: 9  -> 13
-	rep: 31 10  -> 15
-	rep: 31 10  -> 16
-	rep: 9 29  -> 17
-	rep: 9 29  -> 18
-	rep: 8 34  -> 19
-	rep: 8 34  -> 21
-	rep: 42  -> 22
-	rep: 20 45  -> 23
-	rep: 20 45  -> 24
-	rep: 38  -> 25
-	rep: 20  -> 26
-	rep: 20 44  -> 27
-	rep: 20 44  -> 28
-	rep: 19 27  -> 29
-	rep: 19 27  -> 30
-	rep: 8 8  -> 31
-	rep: 8 8  -> 32
-	rep: 29 18  -> 33
-	rep: 29 18  -> 34
-	rep: 42 23  -> 35
-	rep: 42 23  -> 36
-	rep: 45 10  -> 37
-	rep: 45 10  -> 38
-	rep: 24 37  -> 39
-	rep: 24 37  -> 40
-	rep: 28  -> 41
-	rep: 17  -> 42
-	rep: 13 45  -> 43
-	rep: 13 45  -> 44
-	rep: 1 8  -> 46
-	rep: 1 8  -> 47
-	rep: 2 41  -> 48
-	rep: 2 41  -> 49
+	breed: 20  -> 20
+	breed: 33 12  -> 0
+	breed: 33 12  -> 1
+	breed: 28 25  -> 2
+	breed: 28 25  -> 3
+	breed: 43 6  -> 4
+	breed: 43 6  -> 5
+	breed: 38 22  -> 6
+	breed: 38 22  -> 7
+	breed: 7 10  -> 9
+	breed: 7 10  -> 10
+	breed: 8 12  -> 11
+	breed: 8 12  -> 12
+	breed: 9  -> 13
+	breed: 31 10  -> 15
+	breed: 31 10  -> 16
+	breed: 9 29  -> 17
+	breed: 9 29  -> 18
+	breed: 8 34  -> 19
+	breed: 8 34  -> 21
+	breed: 42  -> 22
+	breed: 20 45  -> 23
+	breed: 20 45  -> 24
+	breed: 38  -> 25
+	breed: 20  -> 26
+	breed: 20 44  -> 27
+	breed: 20 44  -> 28
+	breed: 19 27  -> 29
+	breed: 19 27  -> 30
+	breed: 8 8  -> 31
+	breed: 8 8  -> 32
+	breed: 29 18  -> 33
+	breed: 29 18  -> 34
+	breed: 42 23  -> 35
+	breed: 42 23  -> 36
+	breed: 45 10  -> 37
+	breed: 45 10  -> 38
+	breed: 24 37  -> 39
+	breed: 24 37  -> 40
+	breed: 28  -> 41
+	breed: 17  -> 42
+	breed: 13 45  -> 43
+	breed: 13 45  -> 44
+	breed: 1 8  -> 46
+	breed: 1 8  -> 47
+	breed: 2 41  -> 48
+	breed: 2 41  -> 49
 generation:
 	ind:	49.1165	% MaxIG CHI
 	ind:	73.6345	- - Log TFICF TFICF - MaxCHI DF Pow GINI DOM
@@ -346,53 +345,53 @@ generation:
 	ind:	61.004	Pow GSS sumTF
 	ind:	88.6145	* P TFIDF
 	ind:	43.1928	- TF IDF
-	rep: 7  -> 7
-	rep: 31 4  -> 1
-	rep: 31 4  -> 2
-	rep: 15  -> 3
-	rep: 6 31  -> 4
-	rep: 6 31  -> 5
-	rep: 22 22  -> 6
-	rep: 22 22  -> 8
-	rep: 16  -> 9
-	rep: 44  -> 10
-	rep: 25 33  -> 11
-	rep: 25 33  -> 12
-	rep: 35 38  -> 13
-	rep: 35 38  -> 14
-	rep: 5 13  -> 15
-	rep: 5 13  -> 16
-	rep: 20  -> 17
-	rep: 17 40  -> 18
-	rep: 17 40  -> 19
-	rep: 16 12  -> 20
-	rep: 16 12  -> 21
-	rep: 32 27  -> 22
-	rep: 32 27  -> 23
-	rep: 22 49  -> 24
-	rep: 22 49  -> 25
-	rep: 36 2  -> 26
-	rep: 36 2  -> 27
-	rep: 10 26  -> 29
-	rep: 10 26  -> 30
-	rep: 43  -> 31
-	rep: 20 46  -> 32
-	rep: 20 46  -> 33
-	rep: 16  -> 34
-	rep: 45  -> 35
-	rep: 37  -> 36
-	rep: 7 16  -> 37
-	rep: 7 16  -> 38
-	rep: 26  -> 39
-	rep: 44  -> 40
-	rep: 27  -> 41
-	rep: 17 10  -> 43
-	rep: 17 10  -> 44
-	rep: 35 48  -> 45
-	rep: 35 48  -> 46
-	rep: 24 30  -> 47
-	rep: 24 30  -> 48
-	rep: 31 4  -> 49
+	breed: 7  -> 7
+	breed: 31 4  -> 1
+	breed: 31 4  -> 2
+	breed: 15  -> 3
+	breed: 6 31  -> 4
+	breed: 6 31  -> 5
+	breed: 22 22  -> 6
+	breed: 22 22  -> 8
+	breed: 16  -> 9
+	breed: 44  -> 10
+	breed: 25 33  -> 11
+	breed: 25 33  -> 12
+	breed: 35 38  -> 13
+	breed: 35 38  -> 14
+	breed: 5 13  -> 15
+	breed: 5 13  -> 16
+	breed: 20  -> 17
+	breed: 17 40  -> 18
+	breed: 17 40  -> 19
+	breed: 16 12  -> 20
+	breed: 16 12  -> 21
+	breed: 32 27  -> 22
+	breed: 32 27  -> 23
+	breed: 22 49  -> 24
+	breed: 22 49  -> 25
+	breed: 36 2  -> 26
+	breed: 36 2  -> 27
+	breed: 10 26  -> 29
+	breed: 10 26  -> 30
+	breed: 43  -> 31
+	breed: 20 46  -> 32
+	breed: 20 46  -> 33
+	breed: 16  -> 34
+	breed: 45  -> 35
+	breed: 37  -> 36
+	breed: 7 16  -> 37
+	breed: 7 16  -> 38
+	breed: 26  -> 39
+	breed: 44  -> 40
+	breed: 27  -> 41
+	breed: 17 10  -> 43
+	breed: 17 10  -> 44
+	breed: 35 48  -> 45
+	breed: 35 48  -> 46
+	breed: 24 30  -> 47
+	breed: 24 30  -> 48
+	breed: 31 4  -> 49
 generation:
 	ind:	83.7149	% * MaxAM MaxAM - CTD MaxTFICF
 	ind:	73.6345	Log TFICF TFICF
@@ -444,52 +443,52 @@ generation:
 	ind:	27.5703	* TF P
 	ind:	27.1486	+ P MaxGSS
 	ind:	29.1767	Pow IG TFICF
-	rep: 7  -> 7
-	rep: 25 23  -> 1
-	rep: 25 23  -> 2
-	rep: 44  -> 3
-	rep: 38  -> 5
-	rep: 40 2  -> 6
-	rep: 40 2  -> 8
-	rep: 24 27  -> 9
-	rep: 24 27  -> 10
-	rep: 31 40  -> 11
-	rep: 31 40  -> 12
-	rep: 30 27  -> 13
-	rep: 30 27  -> 14
-	rep: 44 23  -> 15
-	rep: 44 23  -> 16
-	rep: 32 27  -> 17
-	rep: 32 27  -> 18
-	rep: 22 42  -> 19
-	rep: 22 42  -> 20
-	rep: 10 24  -> 23
-	rep: 10 24  -> 24
-	rep: 47 19  -> 25
-	rep: 47 19  -> 26
-	rep: 3 42  -> 27
-	rep: 3 42  -> 28
-	rep: 33  -> 29
-	rep: 3  -> 30
-	rep: 10 14  -> 31
-	rep: 10 14  -> 32
-	rep: 22  -> 33
-	rep: 47 9  -> 34
-	rep: 47 9  -> 35
-	rep: 30 42  -> 36
-	rep: 30 42  -> 37
-	rep: 8  -> 38
-	rep: 3  -> 39
-	rep: 43  -> 40
-	rep: 24 23  -> 41
-	rep: 24 23  -> 42
-	rep: 37 0  -> 43
-	rep: 37 0  -> 44
-	rep: 47 29  -> 45
-	rep: 47 29  -> 46
-	rep: 7 37  -> 47
-	rep: 7 37  -> 48
-	rep: 14 36  -> 49
+	breed: 7  -> 7
+	breed: 25 23  -> 1
+	breed: 25 23  -> 2
+	breed: 44  -> 3
+	breed: 38  -> 5
+	breed: 40 2  -> 6
+	breed: 40 2  -> 8
+	breed: 24 27  -> 9
+	breed: 24 27  -> 10
+	breed: 31 40  -> 11
+	breed: 31 40  -> 12
+	breed: 30 27  -> 13
+	breed: 30 27  -> 14
+	breed: 44 23  -> 15
+	breed: 44 23  -> 16
+	breed: 32 27  -> 17
+	breed: 32 27  -> 18
+	breed: 22 42  -> 19
+	breed: 22 42  -> 20
+	breed: 10 24  -> 23
+	breed: 10 24  -> 24
+	breed: 47 19  -> 25
+	breed: 47 19  -> 26
+	breed: 3 42  -> 27
+	breed: 3 42  -> 28
+	breed: 33  -> 29
+	breed: 3  -> 30
+	breed: 10 14  -> 31
+	breed: 10 14  -> 32
+	breed: 22  -> 33
+	breed: 47 9  -> 34
+	breed: 47 9  -> 35
+	breed: 30 42  -> 36
+	breed: 30 42  -> 37
+	breed: 8  -> 38
+	breed: 3  -> 39
+	breed: 43  -> 40
+	breed: 24 23  -> 41
+	breed: 24 23  -> 42
+	breed: 37 0  -> 43
+	breed: 37 0  -> 44
+	breed: 47 29  -> 45
+	breed: 47 29  -> 46
+	breed: 7 37  -> 47
+	breed: 7 37  -> 48
+	breed: 14 36  -> 49
 generation:
 	ind:	73.6345	Log MaxCHI DOM
 	ind:	73.6345	Log MaxCTD sumDF
@@ -541,50 +540,50 @@ generation:
 	ind:	33.0723	* MaxOR TF
 	ind:	27.1486	+ P MaxGSS
 	ind:	94.1968	+ TFICF TFICF
-	rep: 5  -> 5
-	rep: 20 13  -> 1
-	rep: 20 13  -> 2
-	rep: 9  -> 3
-	rep: 20 12  -> 4
-	rep: 20 12  -> 6
-	rep: 20 10  -> 7
-	rep: 20 10  -> 8
-	rep: 3  -> 9
-	rep: 3  -> 11
-	rep: 13  -> 12
-	rep: 5  -> 13
-	rep: 17  -> 15
-	rep: 1 4  -> 16
-	rep: 1 4  -> 17
-	rep: 15  -> 18
-	rep: 13 37  -> 19
-	rep: 13 37  -> 20
-	rep: 8 8  -> 22
-	rep: 8 8  -> 23
-	rep: 27 32  -> 24
-	rep: 27 32  -> 25
-	rep: 8 47  -> 26
-	rep: 8 47  -> 27
-	rep: 28 45  -> 29
-	rep: 28 45  -> 30
-	rep: 48 33  -> 31
-	rep: 48 33  -> 32
-	rep: 47  -> 33
-	rep: 27  -> 34
-	rep: 44 6  -> 35
-	rep: 44 6  -> 36
-	rep: 3  -> 37
-	rep: 40 24  -> 38
-	rep: 40 24  -> 39
-	rep: 20 1  -> 40
-	rep: 20 1  -> 41
-	rep: 3 4  -> 42
-	rep: 3 4  -> 43
-	rep: 35 13  -> 45
-	rep: 35 13  -> 46
-	rep: 24 13  -> 47
-	rep: 24 13  -> 48
-	rep: 26 34  -> 49
+	breed: 5  -> 5
+	breed: 20 13  -> 1
+	breed: 20 13  -> 2
+	breed: 9  -> 3
+	breed: 20 12  -> 4
+	breed: 20 12  -> 6
+	breed: 20 10  -> 7
+	breed: 20 10  -> 8
+	breed: 3  -> 9
+	breed: 3  -> 11
+	breed: 13  -> 12
+	breed: 5  -> 13
+	breed: 17  -> 15
+	breed: 1 4  -> 16
+	breed: 1 4  -> 17
+	breed: 15  -> 18
+	breed: 13 37  -> 19
+	breed: 13 37  -> 20
+	breed: 8 8  -> 22
+	breed: 8 8  -> 23
+	breed: 27 32  -> 24
+	breed: 27 32  -> 25
+	breed: 8 47  -> 26
+	breed: 8 47  -> 27
+	breed: 28 45  -> 29
+	breed: 28 45  -> 30
+	breed: 48 33  -> 31
+	breed: 48 33  -> 32
+	breed: 47  -> 33
+	breed: 27  -> 34
+	breed: 44 6  -> 35
+	breed: 44 6  -> 36
+	breed: 3  -> 37
+	breed: 40 24  -> 38
+	breed: 40 24  -> 39
+	breed: 20 1  -> 40
+	breed: 20 1  -> 41
+	breed: 3 4  -> 42
+	breed: 3 4  -> 43
+	breed: 35 13  -> 45
+	breed: 35 13  -> 46
+	breed: 24 13  -> 47
+	breed: 24 13  -> 48
+	breed: 26 34  -> 49
 generation:
 	ind:	96.506	* OR CTD
 	ind:	29.7189	Pow MaxOR MaxTFICF
@@ -636,52 +635,52 @@ generation:
 	ind:	29.9197	* MaxOR MaxTFICF
 	ind:	33.4538	- Pow Pow MaxAM GSS Log MaxAM MaxAM * MaxCHI TF
 	ind:	73.6345	- MaxOR TF
-	rep: 5  -> 5
-	rep: 27 19  -> 0
-	rep: 27 19  -> 1
-	rep: 41  -> 2
-	rep: 8 38  -> 3
-	rep: 8 38  -> 4
-	rep: 8 15  -> 6
-	rep: 8 15  -> 7
-	rep: 13 18  -> 8
-	rep: 13 18  -> 9
-	rep: 13 45  -> 10
-	rep: 13 45  -> 11
-	rep: 5 2  -> 12
-	rep: 5 2  -> 13
-	rep: 13 11  -> 14
-	rep: 13 11  -> 15
-	rep: 38  -> 16
-	rep: 18 8  -> 19
-	rep: 18 8  -> 20
-	rep: 1 40  -> 21
-	rep: 1 40  -> 22
-	rep: 40 49  -> 23
-	rep: 40 49  -> 24
-	rep: 1 42  -> 25
-	rep: 1 42  -> 26
-	rep: 49 16  -> 27
-	rep: 49 16  -> 28
-	rep: 44 14  -> 29
-	rep: 44 14  -> 30
-	rep: 2 14  -> 31
-	rep: 2 14  -> 32
-	rep: 23 35  -> 34
-	rep: 23 35  -> 35
-	rep: 39 0  -> 36
-	rep: 39 0  -> 37
-	rep: 1 38  -> 39
-	rep: 1 38  -> 40
-	rep: 31 11  -> 41
-	rep: 31 11  -> 42
-	rep: 39 1  -> 43
-	rep: 39 1  -> 44
-	rep: 2 2  -> 45
-	rep: 2 2  -> 46
-	rep: 43 25  -> 47
-	rep: 43 25  -> 48
-	rep: 11 7  -> 49
+	breed: 5  -> 5
+	breed: 27 19  -> 0
+	breed: 27 19  -> 1
+	breed: 41  -> 2
+	breed: 8 38  -> 3
+	breed: 8 38  -> 4
+	breed: 8 15  -> 6
+	breed: 8 15  -> 7
+	breed: 13 18  -> 8
+	breed: 13 18  -> 9
+	breed: 13 45  -> 10
+	breed: 13 45  -> 11
+	breed: 5 2  -> 12
+	breed: 5 2  -> 13
+	breed: 13 11  -> 14
+	breed: 13 11  -> 15
+	breed: 38  -> 16
+	breed: 18 8  -> 19
+	breed: 18 8  -> 20
+	breed: 1 40  -> 21
+	breed: 1 40  -> 22
+	breed: 40 49  -> 23
+	breed: 40 49  -> 24
+	breed: 1 42  -> 25
+	breed: 1 42  -> 26
+	breed: 49 16  -> 27
+	breed: 49 16  -> 28
+	breed: 44 14  -> 29
+	breed: 44 14  -> 30
+	breed: 2 14  -> 31
+	breed: 2 14  -> 32
+	breed: 23 35  -> 34
+	breed: 23 35  -> 35
+	breed: 39 0  -> 36
+	breed: 39 0  -> 37
+	breed: 1 38  -> 39
+	breed: 1 38  -> 40
+	breed: 31 11  -> 41
+	breed: 31 11  -> 42
+	breed: 39 1  -> 43
+	breed: 39 1  -> 44
+	breed: 2 2  -> 45
+	breed: 2 2  -> 46
+	breed: 43 25  -> 47
+	breed: 43 25  -> 48
+	breed: 11 7  -> 49
 generation:
 	ind:	33.7751	* MaxCHI TF
 	ind:	33.4538	- Pow * OR Pow MaxAM GSS Log MaxAM MaxAM * MaxCHI TF
@@ -733,53 +732,53 @@ generation:
 	ind:	42.3896	- - MaxCTD DOM % DOM MaxDom
 	ind:	73.6345	Log MaxIG MaxAM
 	ind:	33.4538	- Pow - TF IDF Log MaxIG MaxAM * MaxCHI TF
-	rep: 19  -> 19
-	rep: 8  -> 0
-	rep: 2 27  -> 1
-	rep: 2 27  -> 2
-	rep: 8 38  -> 3
-	rep: 8 38  -> 4
-	rep: 15 31  -> 5
-	rep: 15 31  -> 6
-	rep: 43 4  -> 8
-	rep: 43 4  -> 9
-	rep: 3 25  -> 10
-	rep: 3 25  -> 11
-	rep: 12 20  -> 12
-	rep: 12 20  -> 13
-	rep: 33 35  -> 14
-	rep: 33 35  -> 15
-	rep: 32 24  -> 16
-	rep: 32 24  -> 17
-	rep: 19 26  -> 18
-	rep: 19 26  -> 20
-	rep: 8  -> 21
-	rep: 1  -> 22
-	rep: 28 10  -> 23
-	rep: 28 10  -> 24
-	rep: 32 41  -> 26
-	rep: 32 41  -> 27
-	rep: 34 21  -> 28
-	rep: 34 21  -> 29
-	rep: 18 30  -> 30
-	rep: 18 30  -> 31
-	rep: 16 7  -> 32
-	rep: 16 7  -> 33
-	rep: 28 7  -> 34
-	rep: 28 7  -> 35
-	rep: 6 9  -> 36
-	rep: 6 9  -> 37
-	rep: 19 16  -> 39
-	rep: 19 16  -> 40
-	rep: 6 10  -> 41
-	rep: 6 10  -> 42
-	rep: 18 41  -> 43
-	rep: 18 41  -> 44
-	rep: 36  -> 45
-	rep: 14 33  -> 46
-	rep: 14 33  -> 47
-	rep: 21 27  -> 48
-	rep: 21 27  -> 49
+	breed: 19  -> 19
+	breed: 8  -> 0
+	breed: 2 27  -> 1
+	breed: 2 27  -> 2
+	breed: 8 38  -> 3
+	breed: 8 38  -> 4
+	breed: 15 31  -> 5
+	breed: 15 31  -> 6
+	breed: 43 4  -> 8
+	breed: 43 4  -> 9
+	breed: 3 25  -> 10
+	breed: 3 25  -> 11
+	breed: 12 20  -> 12
+	breed: 12 20  -> 13
+	breed: 33 35  -> 14
+	breed: 33 35  -> 15
+	breed: 32 24  -> 16
+	breed: 32 24  -> 17
+	breed: 19 26  -> 18
+	breed: 19 26  -> 20
+	breed: 8  -> 21
+	breed: 1  -> 22
+	breed: 28 10  -> 23
+	breed: 28 10  -> 24
+	breed: 32 41  -> 26
+	breed: 32 41  -> 27
+	breed: 34 21  -> 28
+	breed: 34 21  -> 29
+	breed: 18 30  -> 30
+	breed: 18 30  -> 31
+	breed: 16 7  -> 32
+	breed: 16 7  -> 33
+	breed: 28 7  -> 34
+	breed: 28 7  -> 35
+	breed: 6 9  -> 36
+	breed: 6 9  -> 37
+	breed: 19 16  -> 39
+	breed: 19 16  -> 40
+	breed: 6 10  -> 41
+	breed: 6 10  -> 42
+	breed: 18 41  -> 43
+	breed: 18 41  -> 44
+	breed: 36  -> 45
+	breed: 14 33  -> 46
+	breed: 14 33  -> 47
+	breed: 21 27  -> 48
+	breed: 21 27  -> 49
 generation:
 	ind:	29.6185	- Pow - MaxCTD DOM Log MaxIG MaxAM - MaxCTD sumDF
 	ind:	93.1325	% TFICF AM
@@ -831,53 +830,53 @@ generation:
 	ind:	26.2048	- MaxCTD DOM
 	ind:	93.1325	% TFICF AM
 	ind:	73.6345	Log MaxCTD sumDF
-	rep: 19  -> 19
-	rep: 6  -> 0
-	rep: 12 16  -> 1
-	rep: 12 16  -> 2
-	rep: 20  -> 3
-	rep: 18 2  -> 4
-	rep: 18 2  -> 5
-	rep: 13  -> 6
-	rep: 14 14  -> 7
-	rep: 14 14  -> 8
-	rep: 16 33  -> 9
-	rep: 16 33  -> 10
-	rep: 47 15  -> 11
-	rep: 47 15  -> 12
-	rep: 6 49  -> 14
-	rep: 6 49  -> 15
-	rep: 26 49  -> 17
-	rep: 26 49  -> 18
-	rep: 24 41  -> 20
-	rep: 24 41  -> 21
-	rep: 12  -> 22
-	rep: 21  -> 23
-	rep: 19 35  -> 25
-	rep: 19 35  -> 26
-	rep: 25 37  -> 27
-	rep: 25 37  -> 28
-	rep: 36 3  -> 29
-	rep: 36 3  -> 30
-	rep: 0  -> 31
-	rep: 15  -> 32
-	rep: 46  -> 33
-	rep: 13 30  -> 34
-	rep: 13 30  -> 35
-	rep: 47 48  -> 36
-	rep: 47 48  -> 37
-	rep: 35 12  -> 38
-	rep: 35 12  -> 39
-	rep: 43  -> 40
-	rep: 35 15  -> 41
-	rep: 35 15  -> 42
-	rep: 42 1  -> 43
-	rep: 42 1  -> 44
-	rep: 0  -> 45
-	rep: 31 2  -> 46
-	rep: 31 2  -> 47
-	rep: 19 17  -> 48
-	rep: 19 17  -> 49
+	breed: 19  -> 19
+	breed: 6  -> 0
+	breed: 12 16  -> 1
+	breed: 12 16  -> 2
+	breed: 20  -> 3
+	breed: 18 2  -> 4
+	breed: 18 2  -> 5
+	breed: 13  -> 6
+	breed: 14 14  -> 7
+	breed: 14 14  -> 8
+	breed: 16 33  -> 9
+	breed: 16 33  -> 10
+	breed: 47 15  -> 11
+	breed: 47 15  -> 12
+	breed: 6 49  -> 14
+	breed: 6 49  -> 15
+	breed: 26 49  -> 17
+	breed: 26 49  -> 18
+	breed: 24 41  -> 20
+	breed: 24 41  -> 21
+	breed: 12  -> 22
+	breed: 21  -> 23
+	breed: 19 35  -> 25
+	breed: 19 35  -> 26
+	breed: 25 37  -> 27
+	breed: 25 37  -> 28
+	breed: 36 3  -> 29
+	breed: 36 3  -> 30
+	breed: 0  -> 31
+	breed: 15  -> 32
+	breed: 46  -> 33
+	breed: 13 30  -> 34
+	breed: 13 30  -> 35
+	breed: 47 48  -> 36
+	breed: 47 48  -> 37
+	breed: 35 12  -> 38
+	breed: 35 12  -> 39
+	breed: 43  -> 40
+	breed: 35 15  -> 41
+	breed: 35 15  -> 42
+	breed: 42 1  -> 43
+	breed: 42 1  -> 44
+	breed: 0  -> 45
+	breed: 31 2  -> 46
+	breed: 31 2  -> 47
+	breed: 19 17  -> 48
+	breed: 19 17  -> 49
 generation:
 	ind:	33.4538	- Pow + P MaxGSS Log MaxIG MaxAM * MaxCHI TF
 	ind:	73.6345	Log MaxCTD sumDF
@@ -929,54 +928,54 @@ generation:
 	ind:	32.49	+ sumTF MaxDom
 	ind:	26.1647	- Pow - MaxCTD DOM Pow MaxOR P - MaxCTD sumDF
 	ind:	29.9799	Pow MaxOR P
-	rep: 19  -> 19
-	rep: 33 4  -> 0
-	rep: 33 4  -> 1
-	rep: 47 1  -> 2
-	rep: 47 1  -> 3
-	rep: 16  -> 5
-	rep: 31 43  -> 6
-	rep: 31 43  -> 7
-	rep: 10 15  -> 8
-	rep: 10 15  -> 9
-	rep: 45 49  -> 10
-	rep: 45 49  -> 11
-	rep: 7 39  -> 13
-	rep: 7 39  -> 14
-	rep: 12  -> 15
-	rep: 23 49  -> 16
-	rep: 23 49  -> 17
-	rep: 39 13  -> 18
-	rep: 39 13  -> 20
-	rep: 11  -> 21
-	rep: 28 0  -> 22
-	rep: 28 0  -> 23
-	rep: 49  -> 24
-	rep: 23 1  -> 25
-	rep: 23 1  -> 26
-	rep: 38 46  -> 27
-	rep: 38 46  -> 28
-	rep: 7 41  -> 29
-	rep: 7 41  -> 30
-	rep: 9 10  -> 31
-	rep: 9 10  -> 32
-	rep: 33  -> 33
-	rep: 7 30  -> 34
-	rep: 7 30  -> 35
-	rep: 37 49  -> 36
-	rep: 37 49  -> 37
-	rep: 16  -> 38
-	rep: 25  -> 39
-	rep: 27 4  -> 40
-	rep: 27 4  -> 41
-	rep: 29 44  -> 42
-	rep: 29 44  -> 43
-	rep: 9  -> 44
-	rep: 12 1  -> 45
-	rep: 12 1  -> 46
-	rep: 38 35  -> 47
-	rep: 38 35  -> 48
-	rep: 7 32  -> 49
+	breed: 19  -> 19
+	breed: 33 4  -> 0
+	breed: 33 4  -> 1
+	breed: 47 1  -> 2
+	breed: 47 1  -> 3
+	breed: 16  -> 5
+	breed: 31 43  -> 6
+	breed: 31 43  -> 7
+	breed: 10 15  -> 8
+	breed: 10 15  -> 9
+	breed: 45 49  -> 10
+	breed: 45 49  -> 11
+	breed: 7 39  -> 13
+	breed: 7 39  -> 14
+	breed: 12  -> 15
+	breed: 23 49  -> 16
+	breed: 23 49  -> 17
+	breed: 39 13  -> 18
+	breed: 39 13  -> 20
+	breed: 11  -> 21
+	breed: 28 0  -> 22
+	breed: 28 0  -> 23
+	breed: 49  -> 24
+	breed: 23 1  -> 25
+	breed: 23 1  -> 26
+	breed: 38 46  -> 27
+	breed: 38 46  -> 28
+	breed: 7 41  -> 29
+	breed: 7 41  -> 30
+	breed: 9 10  -> 31
+	breed: 9 10  -> 32
+	breed: 33  -> 33
+	breed: 7 30  -> 34
+	breed: 7 30  -> 35
+	breed: 37 49  -> 36
+	breed: 37 49  -> 37
+	breed: 16  -> 38
+	breed: 25  -> 39
+	breed: 27 4  -> 40
+	breed: 27 4  -> 41
+	breed: 29 44  -> 42
+	breed: 29 44  -> 43
+	breed: 9  -> 44
+	breed: 12 1  -> 45
+	breed: 12 1  -> 46
+	breed: 38 35  -> 47
+	breed: 38 35  -> 48
+	breed: 7 32  -> 49
 generation:
 	ind:	51.1044	% MaxOR P
 	ind:	43.5944	- Pow - MaxCTD DOM % Pow MaxOR MaxTFICF * MaxCHI TF % MaxGSS sumTF
