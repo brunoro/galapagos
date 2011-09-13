@@ -83,9 +83,9 @@ class GPVis : public QWidget
         /* data */
         QList<Generation*> generations;
         QStandardItemModel *individuals,
-                           *reproductions;
+                           *breedings;
         QStringList individualsHeader,
-                    reproductionsHeader;
+                    breedingsHeader;
         Tree *consensusTree;
         Refbox *ref;
         QPoint refPos;
@@ -105,7 +105,7 @@ class GPVis : public QWidget
         
         QBoxLayout *viewLine;
         QRadioButton *viewInd,
-                     *viewRep,
+                     *viewBreed,
                      *viewFit;
 
         QBoxLayout *conLine;
@@ -135,7 +135,7 @@ class GPVis : public QWidget
 
         /* render stuff on canvas */
         void renderIndividual(int gen, QList<int> ind);
-        void renderReproduction(int gen, QList<int> parent, int offspring);
+        void renderBreeding(int gen, QList<int> parent, int offspring);
 
         /* functions to turn UI on and off */
         void turnEverythingOn();
@@ -151,7 +151,7 @@ class GPVis : public QWidget
         /* show data */
         void showGeneration(int gen);
         void individualFromTable();
-        void reproductionFromTable();
+        void breedingFromTable();
         void fitnessFromHistogram();
         void redrawTree();
         
@@ -160,7 +160,7 @@ class GPVis : public QWidget
 
         /* change tableView */
         void showIndTable();
-        void showRepTable();
+        void showBreedTable();
         void showFitView();
 
         /* file reading */

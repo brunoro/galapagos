@@ -294,8 +294,8 @@ void Node::updateEdges()
         float offset = - (sonEdges.length() - 1) * edgeDistance / 2;
         for(int i = 0; i < sonEdges.length(); i++)
         {
-            sonEdges[i]->update();
             sonEdges[i]->setOffset(offset);
+            sonEdges[i]->update();
             offset += edgeDistance;
         }
     }

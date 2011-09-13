@@ -63,7 +63,13 @@ void Edge::draw(QGraphicsScene *canvas)
 
 void Edge::update()
 {
+    /* translate edge based on its normal vector */
     line->setLine(QLineF(dest->getCoord(), dir->getCoord()));
+
+    QLineF translated = line->line();
+    float angleRad = translated.angle() * Style::pi / 180;
+    translated.translate(offset * sinf(angleRad), offset * cosf(angleRad));
+    line->setLine(translated);
 }
 
 void Edge::scale(qreal factor)

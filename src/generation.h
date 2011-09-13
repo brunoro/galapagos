@@ -21,7 +21,7 @@
 #define GENERATION_H
 
 #include "tree.h"
-#include "reproduction.h"
+#include "breeding.h"
 
 #include <QList>
 #include <QSet>
@@ -40,12 +40,12 @@ class Generation
         virtual ~Generation(){}
 
         void addIndividual(QString individual, float fitness);
-        void addReproduction(Reproduction rep);
+        void addBreeding(Breeding breed);
 
         Tree* getIndividual(int id);
 
         QList<struct ind> population;
-        QList<Reproduction> reproductions;
+        QList<Breeding> breedings;
 };
 
 #endif // GENERATION_H

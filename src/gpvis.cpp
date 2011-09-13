@@ -52,8 +52,8 @@ GPVis::GPVis(QWidget *parent)
 
     viewInd = new QRadioButton("Population", this);
     viewInd->setEnabled(false);
-    viewRep = new QRadioButton("Breeding", this);
-    viewRep->setEnabled(false);
+    viewBreed = new QRadioButton("Breeding", this);
+    viewBreed->setEnabled(false);
     viewFit = new QRadioButton("Fitness space", this);
     viewFit->setEnabled(false);
 
@@ -91,7 +91,7 @@ GPVis::GPVis(QWidget *parent)
 
     viewLine = new QBoxLayout(QBoxLayout::LeftToRight);
     viewLine->addWidget(viewInd);
-    viewLine->addWidget(viewRep);   
+    viewLine->addWidget(viewBreed);   
     viewLine->addWidget(viewFit);
 
     fitnessScene = new Histogram(0, 0, ::style->histogramWidth + 2 * ::style->histogramPadding, 
@@ -134,7 +134,7 @@ GPVis::GPVis(QWidget *parent)
     connect(collisionUse, SIGNAL(toggled(bool)), this, SLOT(redrawTree()));
 
     connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
-    connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
+    connect(viewBreed, SIGNAL(toggled(bool)), this, SLOT(showBreedTable()));
     connect(viewFit, SIGNAL(toggled(bool)), this, SLOT(showFitView()));
 
     /* change nodes and edges size when zooming viewport */
@@ -142,20 +142,20 @@ GPVis::GPVis(QWidget *parent)
 
     /* models */
     individuals = new QStandardItemModel(this);
-    reproductions = new QStandardItemModel(this);
+    breedings = new QStandardItemModel(this);
     
     /* table headers*/
     individualsHeader = QStringList();
     individualsHeader << "Id" << "Fitness" << "Tree";
-    reproductionsHeader = QStringList();
-    reproductionsHeader << "Fitness gain" << "Offspring" << "Parent" ;
+    breedingsHeader = QStringList();
+    breedingsHeader << "Fitness gain" << "Offspring" << "Parent" ;
 
     /* Setting tool tips */
     genSlider->setToolTip("Choose generation");
     genSpin->setToolTip("Navigate through the generations");
 
     viewInd->setToolTip("View individuals from the chosen generation");
-    viewRep->setToolTip("View reproduction from the chosen generation");  
+    viewBreed->setToolTip("View breeding from the chosen generation");  
 
     fileOpen->setToolTip("Read chosen file");
     fileSelect->setToolTip("Choose another file to analyse");
@@ -174,8 +174,8 @@ GPVis::~GPVis(){
     if(individuals){
         delete individuals; individuals = NULL;
     }
-    if(reproductions){
-        delete reproductions; reproductions = NULL;
+    if(breedings){
+        delete breedings; breedings = NULL;
     }
     if(consensusTree){
         delete consensusTree; consensusTree = NULL;
@@ -201,8 +201,8 @@ GPVis::~GPVis(){
     if(viewInd){
         delete viewInd; viewInd = NULL;
     }
-    if(viewRep){
-        delete viewRep; viewRep = NULL;
+    if(viewBreed){
+        delete viewBreed; viewBreed = NULL;
     }
     if(consensusUse){
         delete consensusUse; consensusUse = NULL;
@@ -354,7 +354,7 @@ void GPVis::readGeneration()
     Generation *gen = new Generation();
     QString fileBuffer,
             individual,
-            reproduction;
+            breeding;
     QStringList tokens;
 
     do
@@ -370,13 +370,13 @@ void GPVis::readGeneration()
             //qDebug() << "GPVis::readLogFile found individual" << tokens;
             gen->addIndividual(tokens[1], tokens[0].toFloat());
         }
-        /* reproduction */
+        /* breeding */
         if(fileBuffer.contains(QRegExp("breed:*.")))
         {
-            reproduction = fileBuffer;
-            reproduction.remove(QRegExp("\\s*breed:\\s*"));
-            //qDebug() << "GPVis::readLogFile found reproduction" << reproduction;
-            tokens = reproduction.split(QRegExp("\\s+"));
+            breeding = fileBuffer;
+            breeding.remove(QRegExp("\\s*breed:\\s*"));
+            //qDebug() << "GPVis::readLogFile found breeding" << breeding;
+            tokens = breeding.split(QRegExp("\\s+"));
 
             QList<int> parents;
             int i = 0;
@@ -386,7 +386,7 @@ void GPVis::readGeneration()
                     break;
                 parents.append(tokens[i].toInt());
             }
-            gen->addReproduction(Reproduction(parents,
+            gen->addBreeding(Breeding(parents,
                                               tokens[++i].toInt()));
         }
     } while(fileBuffer[0] == ('\t') && !(fileStream->atEnd()));
@@ -406,7 +406,7 @@ void GPVis::turnEverythingOn(){
     tableView->setEnabled(true);
     tableView->setSortingEnabled(true);
     viewInd->setEnabled(true);
-    viewRep->setEnabled(true);
+    viewBreed->setEnabled(true);
     viewFit->setEnabled(true);
     consensusUse->setEnabled(true);
     collisionUse->setEnabled(true);
@@ -420,7 +420,7 @@ void GPVis::turnEverythingOff(){
     tableView->setEnabled(false);
     tableView->setSortingEnabled(false);
     viewInd->setEnabled(false);
-    viewRep->setEnabled(false);
+    viewBreed->setEnabled(false);
     viewFit->setEnabled(false);
     consensusUse->setEnabled(false);
     collisionUse->setEnabled(false);
@@ -444,7 +444,7 @@ void GPVis::showGeneration(int gen)
 
     /* cleanup last viewed */
     individuals->clear();
-    reproductions->clear();
+    breedings->clear();
 
     //qDebug() << "GPVis::showGeneration " << gen;
     Generation *actual = generations[gen];
@@ -474,56 +474,56 @@ void GPVis::showGeneration(int gen)
         individuals->setItem(i, 2, tree_str);
     }
 
-    connect(viewRep, SIGNAL(toggled(bool)), this, SLOT(showRepTable()));
+    connect(viewBreed, SIGNAL(toggled(bool)), this, SLOT(showBreedTable()));
 
-    /* reproductions */
-    reproductions->setHorizontalHeaderLabels(reproductionsHeader);
-    reproductions->setSortRole(Qt::UserRole);
+    /* breedings */
+    breedings->setHorizontalHeaderLabels(breedingsHeader);
+    breedings->setSortRole(Qt::UserRole);
 
     /* if it is not last generation, get next */
     if(gen < generations.length() - 1)
     {
         Generation *next = generations[++gen];
         // TODO: divide by columns
-        for(int i = 0; i < actual->reproductions.length(); i++)
+        for(int i = 0; i < actual->breedings.length(); i++)
         {
             QString parents;
-            QList<int> parents_sorted = actual->reproductions[i].parents;
+            QList<int> parents_sorted = actual->breedings[i].parents;
             qSort(parents_sorted);
             float par_fit,
                   max_fit = FLT_MIN;
-            for(int j = 0; j < actual->reproductions[i].parents.length(); j++)
+            for(int j = 0; j < actual->breedings[i].parents.length(); j++)
             {
                 parents += QString::number(parents_sorted[j]) + " ";
-                par_fit = actual->population[actual->reproductions[i].parents[j]].fit;
+                par_fit = actual->population[actual->breedings[i].parents[j]].fit;
                 if(par_fit > max_fit)
                     max_fit = par_fit;
             }
 
             QStandardItem *tree_fit = new QStandardItem();
-            float fit_dif = max_fit - next->population[actual->reproductions[i].offspring].fit;
+            float fit_dif = max_fit - next->population[actual->breedings[i].offspring].fit;
             tree_fit->setData(fit_dif, Qt::UserRole);
             tree_fit->setData(QString::number(fit_dif), Qt::DisplayRole);
-            reproductions->setItem(i, 0, tree_fit);
+            breedings->setItem(i, 0, tree_fit);
         
             QStandardItem *tree_id = new QStandardItem();
-            tree_id->setData(actual->reproductions[i].offspring, Qt::UserRole);
-            tree_id->setData(QString::number(actual->reproductions[i].offspring), Qt::DisplayRole);
-            reproductions->setItem(i, 1, tree_id);
+            tree_id->setData(actual->breedings[i].offspring, Qt::UserRole);
+            tree_id->setData(QString::number(actual->breedings[i].offspring), Qt::DisplayRole);
+            breedings->setItem(i, 1, tree_id);
 
             QStandardItem *tree_parents= new QStandardItem();
             tree_parents->setData(parents_sorted[0], Qt::UserRole);
             tree_parents->setData(parents, Qt::DisplayRole);
-            reproductions->setItem(i, 2, tree_parents);;
+            breedings->setItem(i, 2, tree_parents);;
 
         }
         /* set radios */
-        viewRep->setEnabled(true);
+        viewBreed->setEnabled(true);
     }
     else
     {
         /* unset radios */
-        viewRep->setEnabled(false);
+        viewBreed->setEnabled(false);
     }
 
     /* select right view */
@@ -533,7 +533,7 @@ void GPVis::showGeneration(int gen)
             showIndTable();
             break;
         case REPRODUCTIONS:
-            showRepTable();
+            showBreedTable();
             break;
         case FITNESS:
             showFitView();
@@ -558,7 +558,7 @@ void GPVis::redrawTree()
             individualFromTable();
             break;
         case REPRODUCTIONS:
-            reproductionFromTable();
+            breedingFromTable();
             break;
         case FITNESS:
             fitnessFromHistogram();
@@ -658,7 +658,7 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
     restoreScale();
 }
 
-void GPVis::reproductionFromTable()
+void GPVis::breedingFromTable()
 {
     /* preserve refBox position relative to the viewport */
     //if(ref != NULL) refPos += ref->getPos();
@@ -675,10 +675,10 @@ void GPVis::reproductionFromTable()
 
     /* draw invidual */
     scene->clear();
-    renderReproduction(genSpin->value(), par_num, off_num);
+    renderBreeding(genSpin->value(), par_num, off_num);
 }
 
-void GPVis::renderReproduction(int gen, QList<int> parents, int offspring)
+void GPVis::renderBreeding(int gen, QList<int> parents, int offspring)
 {
     QList<Tree*> trees;
 
@@ -765,10 +765,10 @@ void GPVis::showIndTable()
     genSpin->setMaximum(generations.length() - 1);
 }
 
-void GPVis::showRepTable()
+void GPVis::showBreedTable()
 {
     selectedView = REPRODUCTIONS;
-    tableView->setModel(reproductions);
+    tableView->setModel(breedings);
 
     tableView->resizeColumnToContents(1);
     tableView->resizeColumnToContents(2);
@@ -778,7 +778,7 @@ void GPVis::showRepTable()
     tableView->selectionModel()->disconnect(this);
     tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-            this, SLOT(reproductionFromTable()));
+            this, SLOT(breedingFromTable()));
 
     fitnessView->hide();
     tableView->show();

@@ -31,9 +31,9 @@ void Generation::addIndividual(QString individual, float fitness)
     population.append(tree);
 }
 
-void Generation::addReproduction(Reproduction rep)
+void Generation::addBreeding(Breeding breed)
 {
-    reproductions.append(rep);
+    breedings.append(breed);
 }
 
 Tree* Generation::getIndividual(int id)
