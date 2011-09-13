@@ -21,7 +21,7 @@ The input file must obey this format:
     	ops: (<node string>,<node degree>)
     generation:
     	ind:	<fitness> <tree in stack notation>
-    	breed:    <parent1 id> <parent2 id> -> <offspring id>
+    	breed:  <parents ids separated by space> -> <offspring id>
 
 Where `nodes` are nodes, `terms` are terminal nodes, `ind` is an individual and `breed` is a breeding.
 Individual ids and generation numbers are assigned by order of appearance, starting from 0. 
@@ -33,5 +33,7 @@ A little example, showing the input file for simple arithmetic with `<TAB>` as `
     generation:
     <TAB>ind:<TAB>0.1245<TAB>+<SPACE>1<SPACE>2
     <TAB>ind:<TAB>0.2513<TAB>sqrt<SPACE>2<SPACE>+<SPACE>7<SPACE>10
+    <TAB>breed: 0<SPACE>1<SPACE>-><SPACE>0
+    <TAB>breed: 1<SPACE>1<SPACE>-><SPACE>1
 
 Some more examples in the `test/` folder.
