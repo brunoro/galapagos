@@ -31,7 +31,7 @@ A little example, showing the input file for simple arithmetic with `<TAB>` as `
     definition:
     <TAB>nodes:<SPACE>(+,2)<SPACE>(-,2)<SPACE>(*,2)<SPACE>(/,2)<SPACE>(sqrt,1)<SPACE>(x,0)<SPACE>(y,0)
     generation:
-        ind:<TAB>0.1245<TAB>+<SPACE>1<SPACE>2
-        ind:<TAB>0.2513<TAB>sqrt<SPACE>2<SPACE>+<SPACE>7<SPACE>10
+    <TAB>ind:<TAB>0.1245<TAB>+<SPACE>1<SPACE>2
+    <TAB>ind:<TAB>0.2513<TAB>sqrt<SPACE>2<SPACE>+<SPACE>7<SPACE>10
 
 Some more examples in the `test/` folder.
