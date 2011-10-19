@@ -50,13 +50,6 @@ GPVis::GPVis(QWidget *parent)
     genSlider->setOrientation(Qt::Horizontal);
     genSlider->setTickPosition(QSlider::TicksBelow);
 
-    viewInd = new QRadioButton("Population", this);
-    viewInd->setEnabled(false);
-    viewBreed = new QRadioButton("Breeding", this);
-    viewBreed->setEnabled(false);
-    viewFit = new QRadioButton("Fitness space", this);
-    viewFit->setEnabled(false);
-
     consensusUse = new QCheckBox("Non-terminals with fixed positions", this);
     consensusUse->setChecked(true);
     collisionUse = new QCheckBox("Address collisions", this);
@@ -65,12 +58,19 @@ GPVis::GPVis(QWidget *parent)
     consensusDepth->setValue(CONSENSUS_INITIAL_DEPTH);
     consensusDepth->setRange(CONSENSUS_MIN_DEPTH, CONSENSUS_MAX_DEPTH);
 
-    tableView = new QTableView(this);
-    tableView->horizontalHeader()->setStretchLastSection(true);
-    tableView->verticalHeader()->hide();
-    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
-    tableView->setAlternatingRowColors(true);
+    tableInd = new QTableView(this);
+    tableInd->horizontalHeader()->setStretchLastSection(true);
+    tableInd->verticalHeader()->hide();
+    tableInd->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tableInd->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+    tableInd->setAlternatingRowColors(true);
+
+    tableBreed = new QTableView(this);
+    tableBreed->horizontalHeader()->setStretchLastSection(true);
+    tableBreed->verticalHeader()->hide();
+    tableBreed->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tableBreed->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+    tableBreed->setAlternatingRowColors(true);
 
     turnEverythingOff();
 
@@ -89,25 +89,24 @@ GPVis::GPVis(QWidget *parent)
     genLine->addWidget(genSlider);
     genLine->addWidget(genSpin);
 
-    viewLine = new QBoxLayout(QBoxLayout::LeftToRight);
-    viewLine->addWidget(viewInd);
-    viewLine->addWidget(viewBreed);   
-    viewLine->addWidget(viewFit);
-
     fitnessScene = new Histogram(0, 0, ::style->histogramWidth + 2 * ::style->histogramPadding, 
                                        ::style->histogramHeight + 2 * ::style->histogramPadding, this);
     fitnessView = new QGraphicsView(fitnessScene);
     fitnessView->setRenderHint(QPainter::Antialiasing);
     fitnessSelectedSlice = DEFAULT_SLICE;
 
+    tabs = new QTabWidget(this);
+    tabs->addTab(tableInd, "Individuals");
+    tabs->addTab(tableBreed, "Breeding");
+    tabs->addTab(fitnessView, "Fitness space");
+ 
     grid = new QGridLayout(this);
     grid->addWidget(viewport, 0, 0, -1, 1);
     grid->addLayout(fileLine, 0, 1);
     grid->addLayout(conLine, 1, 1);
     grid->addWidget(genLabel, 2, 1);
     grid->addLayout(genLine, 3, 1);
-    grid->addLayout(viewLine, 4, 1);
-    grid->addWidget(tableView, 5, 1);
+    grid->addWidget(tabs, 5, 1);
  
     setLayout(grid);
     
@@ -133,10 +132,6 @@ GPVis::GPVis(QWidget *parent)
     connect(consensusDepth, SIGNAL(valueChanged(int)), this, SLOT(redrawTree()));
     connect(collisionUse, SIGNAL(toggled(bool)), this, SLOT(redrawTree()));
 
-    connect(viewInd, SIGNAL(toggled(bool)), this, SLOT(showIndTable()));
-    connect(viewBreed, SIGNAL(toggled(bool)), this, SLOT(showBreedTable()));
-    connect(viewFit, SIGNAL(toggled(bool)), this, SLOT(showFitView()));
-
     /* change nodes and edges size when zooming viewport */
     connect(viewport, SIGNAL(scaleView(qreal)), this, SLOT(scaleView(qreal)));
 
@@ -154,8 +149,8 @@ GPVis::GPVis(QWidget *parent)
     genSlider->setToolTip("Choose generation");
     genSpin->setToolTip("Navigate through the generations");
 
-    viewInd->setToolTip("View individuals from the chosen generation");
-    viewBreed->setToolTip("View breeding from the chosen generation");  
+    //viewInd->setToolTip("View individuals from the chosen generation");
+    //viewBreed->setToolTip("View breeding from the chosen generation");  
 
     fileOpen->setToolTip("Read chosen file");
     fileSelect->setToolTip("Choose another file to analyse");
@@ -198,12 +193,6 @@ GPVis::~GPVis(){
     if(genSpin){
         delete genSpin; genSpin = NULL;
     }
-    if(viewInd){
-        delete viewInd; viewInd = NULL;
-    }
-    if(viewBreed){
-        delete viewBreed; viewBreed = NULL;
-    }
     if(consensusUse){
         delete consensusUse; consensusUse = NULL;
     }
@@ -213,8 +202,11 @@ GPVis::~GPVis(){
     if(consensusDepth){
         delete consensusDepth; consensusDepth = NULL;
     }
-    if(tableView){
-        delete tableView; tableView = NULL;
+    if(tableInd){
+        delete tableInd; tableBreed = NULL;
+    }
+    if(tableBreed){
+        delete tableBreed; tableBreed = NULL;
     }
     if(viewport){
         delete viewport; viewport = NULL;
@@ -231,9 +223,6 @@ GPVis::~GPVis(){
     if(fileStream){
         delete fileStream; fileStream = NULL;
     }    
-    if(viewLine){
-        delete viewLine; viewLine = NULL;
-    }
     if(fileLine){
         delete fileLine;  fileLine = NULL;
     }
@@ -332,7 +321,6 @@ void GPVis::readLogFile()
 
     /* set up the generation stuff */
     genSpin->setRange(0, generations.length() - 1);
-
     genSlider->setRange(0, generations.length() - 1);
 
     turnEverythingOn();
@@ -341,12 +329,14 @@ void GPVis::readLogFile()
     showGeneration(DEFAULT_GENERATION);
     
     /* set individuals as default view */
-    viewInd->setChecked(true);
     showIndTable();
     
     /* first one shown */
-    tableView->selectRow(DEFAULT_ROW);
-    tableView->sortByColumn(0, Qt::AscendingOrder);
+    tableInd->selectRow(DEFAULT_ROW);
+    tableInd->sortByColumn(0, Qt::AscendingOrder);
+    
+    tableBreed->selectRow(DEFAULT_ROW);
+    tableBreed->sortByColumn(0, Qt::AscendingOrder);
 }
 
 void GPVis::readGeneration()
@@ -386,8 +376,7 @@ void GPVis::readGeneration()
                     break;
                 parents.append(tokens[i].toInt());
             }
-            gen->addBreeding(Breeding(parents,
-                                              tokens[++i].toInt()));
+            gen->addBreeding(Breeding(parents, tokens[++i].toInt()));
         }
     } while(fileBuffer[0] == ('\t') && !(fileStream->atEnd()));
 
@@ -403,11 +392,10 @@ void GPVis::turnEverythingOn(){
     /* enable viewer */
     genSlider->setEnabled(true);
     genSpin->setEnabled(true);
-    tableView->setEnabled(true);
-    tableView->setSortingEnabled(true);
-    viewInd->setEnabled(true);
-    viewBreed->setEnabled(true);
-    viewFit->setEnabled(true);
+    tableInd->setEnabled(true);
+    tableInd->setSortingEnabled(true);
+    tableBreed->setEnabled(true);
+    tableBreed->setSortingEnabled(true);
     consensusUse->setEnabled(true);
     collisionUse->setEnabled(true);
     consensusDepth->setEnabled(true);
@@ -417,11 +405,10 @@ void GPVis::turnEverythingOff(){
     /* disable viewer */
     genSlider->setEnabled(false);
     genSpin->setEnabled(false);
-    tableView->setEnabled(false);
-    tableView->setSortingEnabled(false);
-    viewInd->setEnabled(false);
-    viewBreed->setEnabled(false);
-    viewFit->setEnabled(false);
+    tableInd->setEnabled(false);
+    tableInd->setSortingEnabled(false);
+    tableBreed->setEnabled(false);
+    tableBreed->setSortingEnabled(false);
     consensusUse->setEnabled(false);
     collisionUse->setEnabled(false);
     consensusDepth->setEnabled(false);
@@ -431,13 +418,21 @@ void GPVis::turnEverythingOff(){
 /* builds model from a generation */
 void GPVis::showGeneration(int gen)
 {
-    /* store tableView 'state' */
-    int selectedRow = DEFAULT_ROW;
-    if(tableView->selectionModel())
-        selectedRow = tableView->selectionModel()->currentIndex().row();
+    /* store tableInd state */
+    int selectedRowInd = DEFAULT_ROW;
+    if(tableInd->selectionModel())
+        selectedRowInd = tableInd->selectionModel()->currentIndex().row();
 
-    int sortedColumn = tableView->horizontalHeader()->sortIndicatorSection();
-    Qt::SortOrder sortedOrder = tableView->horizontalHeader()->sortIndicatorOrder();
+    int sortedColumnInd = tableInd->horizontalHeader()->sortIndicatorSection();
+    Qt::SortOrder sortedOrderInd = tableInd->horizontalHeader()->sortIndicatorOrder();
+
+    /* store tableBreed state */
+    int selectedRowBreed = DEFAULT_ROW;
+    if(tableBreed->selectionModel())
+        selectedRowBreed = tableBreed->selectionModel()->currentIndex().row();
+
+    int sortedColumnBreed = tableBreed->horizontalHeader()->sortIndicatorSection();
+    Qt::SortOrder sortedOrderBreed = tableBreed->horizontalHeader()->sortIndicatorOrder();
 
     /* save histogram */
     fitnessSelectedSlice = fitnessScene->getSelectedSlice();
@@ -473,9 +468,6 @@ void GPVis::showGeneration(int gen)
         tree_str->setData(actual->population[i].str, Qt::DisplayRole);
         individuals->setItem(i, 2, tree_str);
     }
-
-    connect(viewBreed, SIGNAL(toggled(bool)), this, SLOT(showBreedTable()));
-
     /* breedings */
     breedings->setHorizontalHeaderLabels(breedingsHeader);
     breedings->setSortRole(Qt::UserRole);
@@ -517,14 +509,19 @@ void GPVis::showGeneration(int gen)
             breedings->setItem(i, 2, tree_parents);;
 
         }
-        /* set radios */
-        viewBreed->setEnabled(true);
     }
-    else
-    {
-        /* unset radios */
-        viewBreed->setEnabled(false);
-    }
+    
+    /* activate views */
+    tableInd->setModel(individuals);
+    connect(tableInd->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            this, SLOT(individualFromTable()));
+    
+    tableBreed->setModel(breedings);
+    connect(tableBreed->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            this, SLOT(breedingFromTable()));
+    
+    connect(fitnessScene, SIGNAL(clickedBar()),
+            this, SLOT(fitnessFromHistogram()));
 
     /* select right view */
     switch(selectedView)
@@ -537,17 +534,22 @@ void GPVis::showGeneration(int gen)
             break;
         case FITNESS:
             showFitView();
-            fitnessScene->selectSlice(fitnessSelectedSlice);
-            fitnessFromHistogram();
             break;
     }
     
     actual = NULL;
     delete actual;
+    
+    /* restore tableInd state */
+    tableInd->sortByColumn(sortedColumnInd, sortedOrderInd);
+    tableInd->selectRow(selectedRowInd);
+    
+    /* restore tableBreed state */
+    tableBreed->sortByColumn(sortedColumnBreed, sortedOrderBreed);
+    tableBreed->selectRow(selectedRowBreed);
 
-    /* restore tableView 'state' */
-    tableView->sortByColumn(sortedColumn, sortedOrder);
-    tableView->selectRow(selectedRow);
+    /* restore fitnessView state */
+    fitnessScene->selectSlice(fitnessSelectedSlice);
 }
 
 void GPVis::redrawTree()
@@ -596,16 +598,13 @@ void GPVis::individualFromTable()
 {
     /* preserve rounded refBox position relative to the viewport */
     if(ref != NULL)
-    {
-        //qDebug() << "SAVE: viewPos\t" << viewport->mapFromScene(ref->scenePos()) << "\t" << ref->scenePos();
         refPos = viewport->mapFromScene(ref->scenePos());
-    }
 
     /* preserve table selection */
-    QList<QModelIndex> rowIndexes = tableView->selectionModel()->selectedRows();
+    QList<QModelIndex> rowIndexes = tableInd->selectionModel()->selectedRows();
     QList<int> inds;
     foreach(QModelIndex rowIndex, rowIndexes)
-        inds.append(tableView->model()->index(rowIndex.row(), 0).data().toInt());
+        inds.append(tableInd->model()->index(rowIndex.row(), 0).data().toInt());
 
     /* draw individual */
     scene->clear();
@@ -660,14 +659,14 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
 
 void GPVis::breedingFromTable()
 {
-    /* preserve refBox position relative to the viewport */
-    //if(ref != NULL) refPos += ref->getPos();
-    if(ref != NULL) refPos = viewport->mapFromScene(ref->mapToScene(ref->getPos()));
+    /* preserve rounded refBox position relative to the viewport */
+    if(ref != NULL)
+        refPos = viewport->mapFromScene(ref->scenePos());
 
     /* preserve table selection */
-    int row = tableView->selectionModel()->currentIndex().row();
-    int off_num = tableView->model()->index(row, 1).data().toInt();
-    QStringList str_par_num = tableView->model()->index(row, 2).data().toString().split(QRegExp("\\s+"));
+    int row = tableBreed->selectionModel()->currentIndex().row();
+    int off_num = tableBreed->model()->index(row, 1).data().toInt();
+    QStringList str_par_num = tableBreed->model()->index(row, 2).data().toString().split(QRegExp("\\s+"));
     QList<int> par_num;
     // TODO: fix last element of str_par_num getting 0
     for(int i = 0; i < str_par_num.length() - 1; i++)
@@ -730,8 +729,9 @@ void GPVis::renderBreeding(int gen, QList<int> parents, int offspring)
 
 void GPVis::fitnessFromHistogram()
 {
-    /* preserve refbox position */
-    if(ref != NULL) refPos = viewport->mapFromScene(ref->mapToScene(ref->getPos()));
+    /* preserve rounded refBox position relative to the viewport */
+    if(ref != NULL)
+        refPos = viewport->mapFromScene(ref->scenePos());
 
     /* get inviduals */
     fitnessSelectedSlice = fitnessScene->getSelectedSlice();
@@ -745,22 +745,10 @@ void GPVis::fitnessFromHistogram()
 void GPVis::showIndTable()
 {
     selectedView = INDIVIDUALS;
-    tableView->setModel(individuals);
 
-    tableView->resizeColumnToContents(0);
-    tableView->resizeColumnToContents(1);
+    tableInd->resizeColumnToContents(0);
+    tableInd->resizeColumnToContents(1);
     
-    fitnessScene->disconnect(this);
-    tableView->selectionModel()->disconnect(this);
-    tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-            this, SLOT(individualFromTable()));
-
-    fitnessView->hide();
-    tableView->show();
-    grid->removeWidget(fitnessView);
-    grid->addWidget(tableView, 5, 1);
-
     genSlider->setMaximum(generations.length() - 1);
     genSpin->setMaximum(generations.length() - 1);
 }
@@ -768,22 +756,10 @@ void GPVis::showIndTable()
 void GPVis::showBreedTable()
 {
     selectedView = REPRODUCTIONS;
-    tableView->setModel(breedings);
 
-    tableView->resizeColumnToContents(1);
-    tableView->resizeColumnToContents(2);
-    tableView->resizeColumnToContents(0);
-
-    fitnessScene->disconnect(this);
-    tableView->selectionModel()->disconnect(this);
-    tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    connect(tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-            this, SLOT(breedingFromTable()));
-
-    fitnessView->hide();
-    tableView->show();
-    grid->removeWidget(fitnessView);
-    grid->addWidget(tableView, 5, 1);
+    tableBreed->resizeColumnToContents(1);
+    tableBreed->resizeColumnToContents(2);
+    tableBreed->resizeColumnToContents(0);
 
     genSlider->setMaximum(generations.length() - 2);
     genSpin->setMaximum(generations.length() - 2);
@@ -792,15 +768,6 @@ void GPVis::showBreedTable()
 void GPVis::showFitView()
 {
     selectedView = FITNESS;
-
-    tableView->selectionModel()->disconnect(this);
-    tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    connect(fitnessScene, SIGNAL(clickedBar()),
-            this, SLOT(fitnessFromHistogram()));
-
-    tableView->hide();
-    fitnessView->show();
-    grid->addWidget(fitnessView, 5, 1);
 }
 
 void GPVis::openFileDialog()

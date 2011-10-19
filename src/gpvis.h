@@ -103,17 +103,15 @@ class GPVis : public QWidget
         QSlider *genSlider;
         QSpinBox *genSpin;
         
-        QBoxLayout *viewLine;
-        QRadioButton *viewInd,
-                     *viewBreed,
-                     *viewFit;
-
         QBoxLayout *conLine;
         QCheckBox *consensusUse;
         QCheckBox *collisionUse;
         QSpinBox *consensusDepth;
 
-        QTableView *tableView;
+        QTabWidget *tabs;
+
+        QTableView *tableInd,
+                   *tableBreed;
 
         QGraphicsView *fitnessView;
         Histogram *fitnessScene;
