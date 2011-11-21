@@ -118,11 +118,13 @@ GPVis::GPVis(QWidget *parent)
     connect(fileSelect, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(fileOpen, SIGNAL(clicked()), this, SLOT(readLogFile()));
 
+    /* generation changes */
     connect(genSlider, SIGNAL(valueChanged(int)), genSpin, SLOT(setValue(int)));
     connect(genSpin, SIGNAL(valueChanged(int)), genSlider, SLOT(setValue(int)));
     connect(genSlider, SIGNAL(valueChanged(int)), this, SLOT(showGeneration(int)));
     
     connect(consensusUse, SIGNAL(toggled(bool)), consensusDepth, SLOT(setEnabled(bool)));
+
     /* temporary, so it won't loop forever */
     connect(consensusUse, SIGNAL(toggled(bool)), collisionUse, SLOT(setChecked(bool)));
     connect(consensusUse, SIGNAL(toggled(bool)), collisionUse, SLOT(setEnabled(bool)));
@@ -148,9 +150,6 @@ GPVis::GPVis(QWidget *parent)
     /* Setting tool tips */
     genSlider->setToolTip("Choose generation");
     genSpin->setToolTip("Navigate through the generations");
-
-    //viewInd->setToolTip("View individuals from the chosen generation");
-    //viewBreed->setToolTip("View breeding from the chosen generation");  
 
     fileOpen->setToolTip("Read chosen file");
     fileSelect->setToolTip("Choose another file to analyse");
@@ -328,15 +327,15 @@ void GPVis::readLogFile()
     /* define first generation read */
     showGeneration(DEFAULT_GENERATION);
     
-    /* set individuals as default view */
-    showIndTable();
-    
     /* first one shown */
-    tableInd->selectRow(DEFAULT_ROW);
-    tableInd->sortByColumn(0, Qt::AscendingOrder);
-    
-    tableBreed->selectRow(DEFAULT_ROW);
     tableBreed->sortByColumn(0, Qt::AscendingOrder);
+    tableBreed->selectRow(DEFAULT_ROW);
+
+    tableInd->sortByColumn(0, Qt::AscendingOrder);
+    tableInd->selectRow(DEFAULT_ROW);
+
+    /* set individuals as default view */
+    showIndTable();    
 }
 
 void GPVis::readGeneration()
@@ -529,7 +528,7 @@ void GPVis::showGeneration(int gen)
         case INDIVIDUALS:
             showIndTable();
             break;
-        case REPRODUCTIONS:
+        case BREEDINGS:
             showBreedTable();
             break;
         case FITNESS:
@@ -559,7 +558,7 @@ void GPVis::redrawTree()
         case INDIVIDUALS:
             individualFromTable();
             break;
-        case REPRODUCTIONS:
+        case BREEDINGS:
             breedingFromTable();
             break;
         case FITNESS:
@@ -596,6 +595,9 @@ void GPVis::restoreScale()
 
 void GPVis::individualFromTable()
 {
+    /* set view state */
+    selectedView = INDIVIDUALS;
+
     /* preserve rounded refBox position relative to the viewport */
     if(ref != NULL)
         refPos = viewport->mapFromScene(ref->scenePos());
@@ -659,6 +661,9 @@ void GPVis::renderIndividual(int gen, QList<int> ind)
 
 void GPVis::breedingFromTable()
 {
+    /* set view state */
+    selectedView = BREEDINGS;
+    
     /* preserve rounded refBox position relative to the viewport */
     if(ref != NULL)
         refPos = viewport->mapFromScene(ref->scenePos());
@@ -729,6 +734,9 @@ void GPVis::renderBreeding(int gen, QList<int> parents, int offspring)
 
 void GPVis::fitnessFromHistogram()
 {
+    /* set view state */
+    selectedView = FITNESS;
+
     /* preserve rounded refBox position relative to the viewport */
     if(ref != NULL)
         refPos = viewport->mapFromScene(ref->scenePos());
@@ -755,7 +763,7 @@ void GPVis::showIndTable()
 
 void GPVis::showBreedTable()
 {
-    selectedView = REPRODUCTIONS;
+    selectedView = BREEDINGS;
 
     tableBreed->resizeColumnToContents(1);
     tableBreed->resizeColumnToContents(2);
