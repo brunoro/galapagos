@@ -10,6 +10,9 @@ INCLUDEPATH += . \
     src
 QT += testlib
 
+QMAKE_CXXFLAGS_DEBUG += -pg
+QMAKE_LFLAGS_DEBUG += -pg
+
 # Input
 HEADERS += src/def.h \
     src/edge.h \
@@ -18,7 +21,7 @@ HEADERS += src/def.h \
     src/tree.h \
     src/fitnessview.h \
     src/generation.h \
-    src/reproduction.h \
+    src/breeding.h \
     src/roundrect.h \
     src/refbox.h \
     src/style.h \
@@ -34,5 +37,5 @@ SOURCES += src/def.cpp \
     src/refbox.cpp \
     src/style.cpp \
     src/generation.cpp \
-    src/reproduction.cpp \
+    src/breeding.cpp \
     src/viewport.cpp

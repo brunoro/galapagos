@@ -70,15 +70,21 @@ void Edge::update()
     float angleRad = translated.angle() * Style::pi / 180;
     translated.translate(offset * sinf(angleRad), offset * cosf(angleRad));
     line->setLine(translated);
+    
+    /* reload style */
+    line->setPen(edgeStyle);
 }
 
 void Edge::scale(qreal factor)
 {
-    QPointF oldLineCenter = line->mapToScene(line->boundingRect().center());
-    line->scale(factor, factor);
-    QTransform lineScale = QTransform::fromScale(1/factor, 1/factor);
-    line->setLine(line->line() * lineScale);
-    QPointF newLineCenter = line->mapToScene(line->boundingRect().center());
-    line->setPos(line->pos() - (newLineCenter - oldLineCenter));
+    /* adjust offset */
+    offset *= factor;
+
+    /* adjust pen */
+    edgeStyle.setWidthF(edgeStyle.widthF() * factor);
+
+    /* show on screen */
+    update();
+
     return;
 }
