@@ -111,7 +111,7 @@ bool Node::collidesWith(Node *other)
     QPointF from = getCoord(),
             to = other->getCoord();
     float dist = sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
-    return (dist <= style->nodeSize.width());
+    return (dist <= bound->boundingRect().width());
 }
 
 void Node::adjustPosition(QPointF origin, Node *other, int level, int step)
@@ -120,7 +120,7 @@ void Node::adjustPosition(QPointF origin, Node *other, int level, int step)
     QPointF from = getCoord(),
             to = other->getCoord();
     float dist = sqrtf(powf(from.x() - to.x(), 2) + powf(from.y() - to.y(), 2));
-    float diff = style->nodeSize.width() - dist;
+    float diff = bound->boundingRect().width() - dist;
 
     /* get new ideal angle */
     float angleDelta = TO_DEGREES(acosf(1 - powf(diff, 2) / (2 * powf(step * level, 2))));
